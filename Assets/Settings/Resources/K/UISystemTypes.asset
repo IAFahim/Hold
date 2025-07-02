@@ -15,5 +15,6 @@ MonoBehaviour:
   description: 
   types:
   - States:
+    - home
     - game
     Component: {fileID: 11400000, guid: 033e65269bdc5a64181ad5e29e25c801, type: 2}

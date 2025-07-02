@@ -20,7 +20,13 @@ namespace BovineLabs.Nerve.Data.States
 
         protected override IEnumerable<NameValue<byte>> SetReset()
         {
-            return new NameValue<byte>[] { new(Init, 0), new(Game, 1), new(HostGame, 2), new(JoinGame, 3) };
+            return new NameValue<byte>[]
+            {
+                new(Init, 0),
+                new(Game, 1),
+                new(HostGame, 2),
+                new(JoinGame, 3)
+            };
         }
     }
 }

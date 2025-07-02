@@ -9,14 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fae8bf25da0a405392fabd78f14fb4e1, type: 3}
-  m_Name: RequiredServer
-  m_EditorClassIdentifier: 
+  m_Script: {fileID: 11500000, guid: 5803516925564d22bba020d7428f2ed4, type: 3}
+  m_Name: SubSceneEditorSet
+  m_EditorClassIdentifier: BovineLabs.Core.Extensions.Authoring::BovineLabs.Core.Authoring.SubScenes.SubSceneEditorSet
   Scenes:
   - {fileID: 102900000, guid: 7826639a4f45ea84b82e431cedbba575, type: 3}
-  - {fileID: 102900000, guid: 73e85a973cc88cf4baa62974e69b4115, type: 3}
-  TargetWorld: 0
-  ID: 5
-  IsRequired: 1
-  WaitForLoad: 1
-  AutoLoad: 0
+  TargetWorld: 255

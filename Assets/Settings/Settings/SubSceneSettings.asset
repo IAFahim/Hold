@@ -16,8 +16,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e3c707164abea5e42aa1d42daade231f, type: 2}
   - {fileID: 11400000, guid: f1265325b0e770f4f84404f936a15372, type: 2}
   - {fileID: 11400000, guid: 75fa04e7017fc6b468aba2e73d362871, type: 2}
+  - {fileID: 11400000, guid: 6ff8f36d8823fda9b93f1d58b0713fee, type: 2}
   - {fileID: 11400000, guid: 2cbc569520fcd5b4abcaf2969b945e2c, type: 2}
   - {fileID: 11400000, guid: 2accca5836df0b64c8e10a33db97c513, type: 2}
-  EditorSceneSets: []
+  EditorSceneSets:
+  - {fileID: 11400000, guid: c495c776ebda22ef6ad247f568a262b1, type: 2}
   AssetSets:
   - {fileID: 11400000, guid: a8bcce69f8e85e643b8b9bbe73e4e4d3, type: 2}

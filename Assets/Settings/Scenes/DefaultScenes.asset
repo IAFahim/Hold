@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae8bf25da0a405392fabd78f14fb4e1, type: 3}
   m_Name: DefaultScenes
   m_EditorClassIdentifier: 
-  ID: 0
   Scenes: []
-  TargetWorld: 13
+  TargetWorld: 1
+  ID: 0
   IsRequired: 0
   WaitForLoad: 1
   AutoLoad: 1

@@ -2,6 +2,7 @@
 //     Copyright (c) BovineLabs. All rights reserved.
 // </copyright>
 
+using BovineLabs.Core;
 using Unity.AppUI.Navigation;
 
 namespace BovineLabs.Sample.UI.Views.Menu
@@ -30,6 +31,9 @@ namespace BovineLabs.Sample.UI.Views.Menu
         public SplashView(SplashViewModel viewModel)
             : base(viewModel)
         {
+            this.Navigate(Actions.go_to_game);
+            BovineLabsBootstrap.Instance.CreateGameWorld();
+            return;
             this.AddToClassList(UssClassName);
 
             var preloader = new Preloader();

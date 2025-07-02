@@ -9,16 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54ba3f40b5e14c2588d348c2cf04f648, type: 3}
-  m_Name: ClientStates
+  m_Script: {fileID: 11500000, guid: fae8bf25da0a405392fabd78f14fb4e1, type: 3}
+  m_Name: Just Game
   m_EditorClassIdentifier: 
-  description: 
-  keys:
-  - name: init
-    value: 0
-  - name: quit
-    value: 1
-  - name: game
-    value: 2
-  - name: in-game-menu
-    value: 10
+  Scenes:
+  - {fileID: 102900000, guid: 7826639a4f45ea84b82e431cedbba575, type: 3}
+  TargetWorld: 0
+  ID: 5
+  IsRequired: 1
+  WaitForLoad: 1
+  AutoLoad: 0

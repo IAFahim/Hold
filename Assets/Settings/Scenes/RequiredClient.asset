@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae8bf25da0a405392fabd78f14fb4e1, type: 3}
   m_Name: RequiredClient
   m_EditorClassIdentifier: 
-  ID: 3
   Scenes:
   - {fileID: 102900000, guid: 12c3ac3f712fa6447934e2c76cb143b3, type: 3}
   - {fileID: 102900000, guid: 7826639a4f45ea84b82e431cedbba575, type: 3}
-  TargetWorld: 4
+  TargetWorld: 0
+  ID: 3
   IsRequired: 1
   WaitForLoad: 1
   AutoLoad: 0
