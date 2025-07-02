@@ -11,7 +11,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90722605537e40eb8d4fcbdc5a581a32, type: 3}
   m_Name: AnchorSettings
-  m_EditorClassIdentifier: BovineLabs.Anchor::BovineLabs.Anchor.AnchorSettings
-  navigationGraph: {fileID: 0}
+  m_EditorClassIdentifier: 
+  navigationGraph: {fileID: 11400000, guid: 897f02cbf7633954eaff780f23edcbc0, type: 2}
   toolbarOnly: 0
-  debugStyleSheets: []
+  debugStyleSheets:
+  - {fileID: -4733365628477956816, guid: 838732ae8b3da2142a2e7714a79df83d, type: 3}

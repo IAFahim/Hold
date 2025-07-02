@@ -11,6 +11,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c9cc203d06d4fd0bc8d41c5d662ab8b, type: 3}
   m_Name: UISystemTypes
-  m_EditorClassIdentifier: BovineLabs.Anchor::BovineLabs.Anchor.UISystemTypes
+  m_EditorClassIdentifier: 
   description: 
-  types: []
+  types:
+  - States:
+    - game
+    Component: {fileID: 11400000, guid: 033e65269bdc5a64181ad5e29e25c801, type: 2}
