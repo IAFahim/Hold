@@ -171,6 +171,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5523294873506209897, guid: 6d34cbd235bfdab48b2915f6f527d66e, type: 3}
+      propertyPath: settings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5523294873506209897, guid: 6d34cbd235bfdab48b2915f6f527d66e, type: 3}
+      propertyPath: 'settings.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: ee3a91bea73aa2841af9cca2e2ff80e1, type: 2}
+    - target: {fileID: 5523294873506209897, guid: 6d34cbd235bfdab48b2915f6f527d66e, type: 3}
+      propertyPath: 'settings.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f6946847e582d2bc4a807015104fa06a, type: 2}
+    - target: {fileID: 5523294873506209897, guid: 6d34cbd235bfdab48b2915f6f527d66e, type: 3}
+      propertyPath: 'settings.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f6946847e582d2bc4a807015104fa06a, type: 2}
+    - target: {fileID: 5523294873506209897, guid: 6d34cbd235bfdab48b2915f6f527d66e, type: 3}
+      propertyPath: 'settings.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f6946847e582d2bc4a807015104fa06a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
