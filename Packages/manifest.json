@@ -2,6 +2,8 @@
   "dependencies": {
     "com.bovinelabs.anchor": "https://gitlab.com/tertle/com.bovinelabs.anchor.git",
     "com.bovinelabs.core": "https://gitlab.com/tertle/com.bovinelabs.core.git#1.4.4",
+    "com.bovinelabs.reaction": "https://gitlab.com/tertle/com.bovinelabs.reaction.git",
+    "com.bovinelabs.stats": "https://gitlab.com/tertle/com.bovinelabs.stats.git",
     "com.unity.entities": "https://github.com/tertle/com.unity.entities.git",
     "com.unity.entities.graphics": "https://github.com/tertle/com.unity.entities.graphics.git",
     "com.unity.ide.rider": "3.0.36",

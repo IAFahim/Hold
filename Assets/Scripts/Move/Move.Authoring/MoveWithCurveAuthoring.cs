@@ -13,7 +13,8 @@ namespace Move.Move.Authoring
         public float duration = 1;
         public float elapsedTime;
         public EEase ease;
-        public EWrapMode wrapMode = EWrapMode.Clamp; 
+        public EWrapMode wrapMode = EWrapMode.Clamp;
+        public bool reverse;
         
 
         public class MoveWithCurveBaker : Baker<MoveWithCurveAuthoring>
@@ -28,7 +29,7 @@ namespace Move.Move.Authoring
                         EndPosition = authoring.endPosition,
                         Duration = authoring.duration,
                         ElapsedTime = authoring.elapsedTime,
-                        Ease = Ease.ToEase(authoring.ease, authoring.wrapMode)
+                        Ease = Ease.ToEase(authoring.ease, authoring.wrapMode, authoring.reverse)
                     });
             }
         }

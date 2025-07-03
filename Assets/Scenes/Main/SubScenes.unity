@@ -160,7 +160,9 @@ MonoBehaviour:
     z: 12.26
   duration: 1
   elapsedTime: 0
-  ease: 32
+  ease: 18
+  wrapMode: 2
+  reverse: 0
 --- !u!23 &301047367
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -34,6 +34,25 @@
       },
       "hash": "fa6d560a6aecddfa908c34fdb46cfb22d1feb036"
     },
+    "com.bovinelabs.reaction": {
+      "version": "https://gitlab.com/tertle/com.bovinelabs.reaction.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.bovinelabs.core": "1.4.3"
+      },
+      "hash": "55c3f7982bcaae164b99eecae459a452818214d0"
+    },
+    "com.bovinelabs.stats": {
+      "version": "https://gitlab.com/tertle/com.bovinelabs.stats.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.bovinelabs.core": "1.4.3",
+        "com.bovinelabs.reaction": "0.5.0"
+      },
+      "hash": "709f566c6a9948207a2de43915710984b95553b3"
+    },
     "com.unity.addressables": {
       "version": "2.6.0",
       "depth": 1,

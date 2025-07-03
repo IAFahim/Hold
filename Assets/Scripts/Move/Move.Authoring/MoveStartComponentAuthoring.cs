@@ -7,7 +7,6 @@ namespace Move.Move.Authoring
 {
     public class MoveStartComponentAuthoring : MonoBehaviour
     {
-        public bool enable;
         public float3 value;
 
         public class MoveStartComponentBaker : Baker<MoveStartComponentAuthoring>
@@ -16,7 +15,6 @@ namespace Move.Move.Authoring
             {
                 var entity = GetEntity(TransformUsageFlags.None);
                 AddComponent(entity, new MoveStartComponent { Value = authoring.value });
-                SetComponentEnabled<MoveStartComponent>(entity, authoring.enable);
             }
         }
     }

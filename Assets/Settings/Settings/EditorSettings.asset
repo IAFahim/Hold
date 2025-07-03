@@ -41,6 +41,12 @@ MonoBehaviour:
     Path: Assets/Settings/Scenes/Editor
   - Key: bl.ar.assetset
     Path: Assets/Settings/Scenes/Assets
+  - Key: bl.ar.statschemaobject
+    Path: Assets/Settings/Schemas/Stats
+  - Key: bl.ar.intrinsicschemaobject
+    Path: Assets/Settings/Schemas/Intrinsics/
+  - Key: bl.ar.conditioneventobject
+    Path: Assets/Settings/Schemas/Events/
   prebakeScenes:
   - {fileID: 102900000, guid: 434fb67dd45f9d041bf501ddf6d84e87, type: 3}
   - {fileID: 102900000, guid: 12c3ac3f712fa6447934e2c76cb143b3, type: 3}
