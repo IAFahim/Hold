@@ -2,11 +2,9 @@
 
 using Move.Move.Data;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 // Your BlobCurve namespace
 
@@ -40,16 +38,13 @@ namespace Move.Move
 
                 // --- Calculate Normalized Time ---
                 // The time value (from 0 to 1) to sample the curve at.
-                float normalizedTime = math.min(mover.ValueRO.ElapsedTime / mover.ValueRO.Duration, 1f);
-
-                // --- Evaluate the Curve ---
-                // Get a reference to the curve data inside the blob asset.
-                ref var curve = ref mover.ValueRO.Curve.Value;
+                float normalizedTime = mover.ValueRO.ElapsedTime / mover.ValueRO.Duration;
+                
 
                 // Evaluate the curve at the normalized time to get the eased progress.
                 // Your BlobCurve.Evaluate is designed to take a 'time' value. Since our
                 // AnimationCurve is authored from t=0 to t=1, normalizedTime is the correct input.
-                float easedT = curve.Evaluate(normalizedTime);
+                mover.ValueRO.Ease.E(normalizedTime, out var easedT);
 
                 // --- Update Position ---
                 // Linearly interpolate between start and end using the eased progress value.

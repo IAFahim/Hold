@@ -1,9 +1,7 @@
 // MoveWithCurve.cs
 
-using BovineLabs.Core.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-// Your BlobCurve namespace
 
 namespace Move.Move.Data
 {
@@ -13,6 +11,6 @@ namespace Move.Move.Data
         public float3 EndPosition;
         public float Duration;
         public float ElapsedTime;
-        public BlobAssetReference<BlobCurve> Curve;
+        public Ease Ease;
     }
 }
