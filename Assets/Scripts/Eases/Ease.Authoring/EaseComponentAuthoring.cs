@@ -7,7 +7,7 @@ namespace Eases.Ease.Authoring
     public class EaseComponentAuthoring : MonoBehaviour
     {
         public EEase ease;
-        [Range(0, 8)] public byte group;
+        [Range(0, 7)] public byte group;
 
 
         public class MoveWithCurveBaker : Baker<EaseComponentAuthoring>

@@ -22,7 +22,7 @@ namespace Eases.Ease.Data
         /// </summary>
         public byte Value;
 
-        [CreateProperty] public byte Leading3Bit => (byte)(5 >> (Value & EaseMask));
+        [CreateProperty] public byte Leading3Bit => (byte)((Value & ~EaseMask) >> 5);
 
         // --- Ease Type (lower 5 bits) ---
         private const byte EaseMask = 0b0001_1111;
@@ -56,7 +56,7 @@ namespace Eases.Ease.Data
         public readonly bool TryEvaluate(float time, float duration, float step, out float easedT)
         {
             time += step;
-            if (time >= duration)
+            if (time > duration)
             {
                 easedT = 1;
                 return false;
