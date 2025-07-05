@@ -13,20 +13,14 @@ using Unity.Transforms;
 namespace Moves.Move
 {
     [BurstCompile]
-    public partial struct MoveSystem : ISystem
+    public partial struct MoveSystem : ISystem, ISystemStartStop
     {
-        private EntityQuery _query;
-        private float _time;
+        private NativeArray<EaseCache> _easeCaches;
+        private NativeArray<float3> _positionCaches;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            _query = new EntityQueryBuilder(Allocator.Temp)
-                .WithAll<LocalTransform>()
-                .WithAll<EaseComponent>()
-                .WithAll<AliveTimeComponent>()
-                .Build(ref state);
-            _time = 0;
         }
 
         [BurstCompile]
@@ -35,31 +29,47 @@ namespace Moves.Move
         }
 
         [BurstCompile]
+        public void OnStopRunning(ref SystemState state)
+        {
+            _easeCaches.Dispose();
+            _positionCaches.Dispose();
+        }
+
+
+        [BurstCompile]
         public unsafe void OnUpdate(ref SystemState state)
         {
-            ref BlobArray<float3> positionPathBlob = ref SystemAPI.GetSingleton<BlobPositionPathComponent>().Blob.Value.Positions;
-            var positionLength = positionPathBlob.Length;
-            var positions = new NativeArray<float3>(positionLength, Allocator.TempJob);
-            for (int i = 0; i < positionLength; i++) positions[i] = positionPathBlob[i];
-            // void* unsafePtr = positionPathBlob.GetUnsafePtr();
-            // NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<float3>(float3* unsafePtr, Allocator.TempJob);
-            // ref var singleRotationBlob = ref SystemAPI.GetSingleton<BlobSingleRotationComponent>().Blob.Value;
-            // ref var uniformScaleBlob = ref SystemAPI.GetSingleton<BlobUniformScaleComponent>().Blob.Value;
-            // ref var stepPlanBlob = ref SystemAPI.GetSingleton<BlobStepPlanComponent>().Blob.Value;
-            var time = SystemAPI.Time.DeltaTime;
-            _time += time;
-            var job = new EaseGroupJobChunk
+            if (!_easeCaches.IsCreated)
             {
-                DeltaTime = time,
-                EaseCache = positions.AsReadOnly(),
-                TimePassed = _time,
-                LocalTransformHandle = SystemAPI.GetComponentTypeHandle<LocalTransform>(),
-                EaseStepPlanHandle = SystemAPI.GetComponentTypeHandle<EaseStepPlanComponent>(),
-                EaseHandle = SystemAPI.GetComponentTypeHandle<EaseComponent>(true),
-                AliveTimeHandle = SystemAPI.GetComponentTypeHandle<AliveTimeComponent>(true),
-            };
+                ref var easeCacheBlob = ref SystemAPI.GetSingleton<BlobEaseCacheComponent>().Blob.Value.Cache;
+                var easeCacheLength = easeCacheBlob.Length;
 
-            state.Dependency = job.ScheduleParallel(_query, state.Dependency);
+                _easeCaches = new NativeArray<EaseCache>(easeCacheLength, Allocator.Persistent);
+                for (int i = 0; i < easeCacheLength; i++) _easeCaches[i] = easeCacheBlob[i];
+            }
+
+            if (!_positionCaches.IsCreated)
+            {
+                ref var positionCacheBlob =
+                    ref SystemAPI.GetSingleton<BlobPositionCacheComponent>().Blob.Value.Positions;
+                var positionCacheLenght = positionCacheBlob.Length;
+                
+                _positionCaches = new NativeArray<float3>(positionCacheLenght, Allocator.Persistent);
+                for (int i = 0; i < positionCacheLenght; i++) _positionCaches[i] = positionCacheBlob[i];
+            }
+
+
+            new EaseGroupJobChunk
+            {
+                DeltaTime = SystemAPI.Time.DeltaTime,
+                EaseCache = _easeCaches.AsReadOnly(),
+                PositionCache = _positionCaches.AsReadOnly(),
+            }.ScheduleParallel();
+        }
+
+        [BurstCompile]
+        public void OnStartRunning(ref SystemState state)
+        {
         }
     }
 }

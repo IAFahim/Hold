@@ -8,27 +8,27 @@ using UnityEngine;
 
 namespace Moves.Move.Authoring.Blobs
 {
-    public class SingleRotationBlobAuthoring : MonoBehaviour
+    public class PlaneRotationCacheBlobAuthoring : MonoBehaviour
     {
         public float[] degree = Array.Empty<float>();
 
-        class Baker : Baker<SingleRotationBlobAuthoring>
+        class Baker : Baker<PlaneRotationCacheBlobAuthoring>
         {
-            public override void Bake(SingleRotationBlobAuthoring authoring)
+            public override void Bake(PlaneRotationCacheBlobAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.None);
 
                 var builder = new BlobBuilder(Allocator.Temp);
-                ref var root = ref builder.ConstructRoot<SingleRotationBlob>();
+                ref var root = ref builder.ConstructRoot<PlaneRotationCacheBlob>();
 
                 int pointCount = authoring.degree.Length;
                 var arrayBuilder = builder.Allocate(ref root.Radians, pointCount);
                 for (int i = 0; i < pointCount; i++) arrayBuilder[i] = math.radians(authoring.degree[i]);
 
-                var blobRef = builder.CreateBlobAssetReference<SingleRotationBlob>(Allocator.Persistent);
+                var blobRef = builder.CreateBlobAssetReference<PlaneRotationCacheBlob>(Allocator.Persistent);
                 AddBlobAsset(ref blobRef, out _);
 
-                AddComponent(entity, new BlobSingleRotationComponent { Blob = blobRef });
+                AddComponent(entity, new BlobPlaneRotationCacheComponent { Blob = blobRef });
                 builder.Dispose();
             }
         }

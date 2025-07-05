@@ -2,8 +2,9 @@ using Unity.Entities;
 
 namespace Moves.Move.Data.Blobs
 {
-    public struct EaseStepPlanComponent : IComponentData
+    public struct EaseLinkComponent : IComponentData
     {
         public byte Current;
+        public float ElapsedTime;
     }
 }

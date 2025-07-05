@@ -1,11 +1,8 @@
-using System.Collections;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using BovineLabs.Core.Collections;
 using Unity.Burst;
-using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Properties;
+using UnityEngine;
 
 namespace Eases.Ease.Data
 {
@@ -15,17 +12,21 @@ namespace Eases.Ease.Data
     /// Layout: [R|WW|EEEEE] (Bit 7: Reversed | Bits 6-5: WrapMode | Bits 4-0: EaseType)
     /// </summary>
     [BurstCompile]
-    public struct EaseComponent : IComponentData
+    public struct Ease
     {
         /// <summary>
         /// The raw byte value storing the ease type and modifier flags.
         /// </summary>
         public byte Value;
 
-        [CreateProperty] public byte Leading3Bit => (byte)((Value & ~EaseMask) >> 5);
-
+#if UNITY_EDITOR
+        [CreateProperty] internal byte Leading3 => (byte)((Value & ~EaseMask) >> 5);
+#endif
         // --- Ease Type (lower 5 bits) ---
         private const byte EaseMask = 0b0001_1111;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public byte Leading3Bit() => (byte)((Value & ~EaseMask) >> 5);
 
         #region Constructors & Operators
 
@@ -33,12 +34,12 @@ namespace Eases.Ease.Data
         /// Creates an Ease struct from its constituent parts. This is the recommended factory method.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EaseComponent New(EEase ease, byte leading3Bit)
+        public static Ease New(EEase ease, byte leading3Bit)
         {
             byte easeByte = (byte)ease;
             var value = easeByte | leading3Bit << 5;
 
-            return new EaseComponent
+            return new Ease
             {
                 Value = (byte)value
             };
@@ -53,18 +54,19 @@ namespace Eases.Ease.Data
         /// </summary>
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly bool TryEvaluate(float time, float duration, float step, out float easedT)
+        public readonly bool TryComplete(ref float elapsedTime, float duration, float step, out float easedT)
         {
-            time += step;
-            if (time > duration)
+            elapsedTime += step;
+            if (elapsedTime > duration)
             {
                 easedT = 1;
-                return false;
+                elapsedTime = 0;
+                return true;
             }
 
-            var progress = time / duration;
+            var progress = elapsedTime / duration;
             Evaluate(progress, out easedT);
-            return true;
+            return false;
         }
 
         [BurstCompile]
@@ -114,16 +116,6 @@ namespace Eases.Ease.Data
         #region Private Easing Functions
 
         private const float PI = math.PI;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static float ApplyLoop(float t) => t - math.floor(t);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static float ApplyPingPong(float t)
-        {
-            float wrapped = ApplyLoop(t);
-            return ((int)math.floor(t) % 2 == 0) ? wrapped : 1f - wrapped;
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static float InSine(float t) => 1f - math.cos((t * PI) * 0.5f);
