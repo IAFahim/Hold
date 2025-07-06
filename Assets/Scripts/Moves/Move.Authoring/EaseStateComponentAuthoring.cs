@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace Moves.Move.Authoring
 {
-    public class EaseLinkComponentAuthoring : MonoBehaviour
+    public class EaseStateComponentAuthoring : MonoBehaviour
     {
         [Range(byte.MinValue, byte.MaxValue)] public byte start;
         public float elapsedTime;
 
-        class Baker : Baker<EaseLinkComponentAuthoring>
+        class Baker : Baker<EaseStateComponentAuthoring>
         {
-            public override void Bake(EaseLinkComponentAuthoring authoring)
+            public override void Bake(EaseStateComponentAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.None);
-                AddComponent(entity, new EaseLinkComponent
+                AddComponent(entity, new EaseStateComponent
                 {
                     Current = authoring.start,
                     ElapsedTime = authoring.elapsedTime

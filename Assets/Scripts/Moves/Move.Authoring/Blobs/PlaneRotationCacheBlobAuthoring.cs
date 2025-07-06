@@ -21,9 +21,9 @@ namespace Moves.Move.Authoring.Blobs
                 var builder = new BlobBuilder(Allocator.Temp);
                 ref var root = ref builder.ConstructRoot<PlaneRotationCacheBlob>();
 
-                int pointCount = authoring.degree.Length;
-                var arrayBuilder = builder.Allocate(ref root.Radians, pointCount);
-                for (int i = 0; i < pointCount; i++) arrayBuilder[i] = math.radians(authoring.degree[i]);
+                int length = authoring.degree.Length;
+                var arrayBuilder = builder.Allocate(ref root.Radians, length);
+                for (int i = 0; i < length; i++) arrayBuilder[i] = math.radians(authoring.degree[i]);
 
                 var blobRef = builder.CreateBlobAssetReference<PlaneRotationCacheBlob>(Allocator.Persistent);
                 AddBlobAsset(ref blobRef, out _);

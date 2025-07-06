@@ -17,6 +17,7 @@ namespace Moves.Move
     {
         private NativeArray<EaseCache> _easeCaches;
         private NativeArray<float3> _positionCaches;
+        private NativeArray<float> _axesCaches;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -33,6 +34,7 @@ namespace Moves.Move
         {
             _easeCaches.Dispose();
             _positionCaches.Dispose();
+            _axesCaches.Dispose();
         }
 
 
@@ -53,9 +55,18 @@ namespace Moves.Move
                 ref var positionCacheBlob =
                     ref SystemAPI.GetSingleton<BlobPositionCacheComponent>().Blob.Value.Positions;
                 var positionCacheLenght = positionCacheBlob.Length;
-                
+
                 _positionCaches = new NativeArray<float3>(positionCacheLenght, Allocator.Persistent);
                 for (int i = 0; i < positionCacheLenght; i++) _positionCaches[i] = positionCacheBlob[i];
+            }
+
+            if (!_axesCaches.IsCreated)
+            {
+                ref var axesCacheBlob = ref SystemAPI.GetSingleton<BlobAxesCacheComponent>().Blob.Value.Axes;
+                var axesCacheLength = axesCacheBlob.Length;
+
+                _axesCaches = new NativeArray<float>(axesCacheLength, Allocator.Persistent);
+                for (int i = 0; i < axesCacheLength; i++) _axesCaches[i] = axesCacheBlob[i];
             }
 
 
@@ -64,6 +75,7 @@ namespace Moves.Move
                 DeltaTime = SystemAPI.Time.DeltaTime,
                 EaseCache = _easeCaches.AsReadOnly(),
                 PositionCache = _positionCaches.AsReadOnly(),
+                AxesCache = _axesCaches.AsReadOnly()
             }.ScheduleParallel();
         }
 
