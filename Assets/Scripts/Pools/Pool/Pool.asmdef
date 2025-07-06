@@ -1,11 +1,11 @@
 {
-    "name": "Animation",
+    "name": "Pool",
     "rootNamespace": "",
     "references": [
-        "Animation.Data",
         "BovineLabs.Anchor",
         "BovineLabs.Core",
         "BovineLabs.Core.Extensions",
+        "Pool.Data",
         "Unity.AppUI",
         "Unity.AppUI.MVVM",
         "Unity.AppUI.Navigation",
@@ -18,10 +18,9 @@
         "Unity.Mathematics",
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
-        "Unity.Transforms",
-        "Unity.Addressables",
-        "Unity.ResourceManager"
+        "Unity.Transforms"
     ],
+    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,

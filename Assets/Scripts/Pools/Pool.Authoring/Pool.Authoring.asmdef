@@ -1,14 +1,12 @@
 {
-    "name": "Animation",
+    "name": "Pool.Authoring",
     "rootNamespace": "",
     "references": [
-        "Animation.Data",
-        "BovineLabs.Anchor",
         "BovineLabs.Core",
+        "BovineLabs.Core.Authoring",
         "BovineLabs.Core.Extensions",
-        "Unity.AppUI",
-        "Unity.AppUI.MVVM",
-        "Unity.AppUI.Navigation",
+        "BovineLabs.Core.Extensions.Authoring",
+        "Pool.Data",
         "Unity.Burst",
         "Unity.Collections",
         "Unity.Entities",
@@ -18,17 +16,18 @@
         "Unity.Mathematics",
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
-        "Unity.Transforms",
-        "Unity.Addressables",
-        "Unity.ResourceManager"
+        "Unity.Transforms"
     ],
+    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": false,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_EDITOR"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }

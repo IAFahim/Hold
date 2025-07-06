@@ -10,21 +10,6 @@ namespace States.States.Data
     {
         public ECharacterState Previous;
         public ECharacterState Current;
-        public static int ClipIndex;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void LoadClipIndexParameter(Animator animator)
-        {
-            // Find the clipIndex param
-            foreach (var parameter in animator.parameters)
-            {
-                if (parameter.name == "ClipIndex")
-                {
-                    ClipIndex = parameter.nameHash;
-                    break;
-                }
-            }
-        }
 
 
         // public (float speed, int clipIndex) Update(Animator animator)
