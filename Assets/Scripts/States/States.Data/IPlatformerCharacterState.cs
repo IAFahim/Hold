@@ -6,13 +6,13 @@ namespace States.States.Data
     public interface IPlatformerCharacterState
     {
         void OnStateEnter(
-            CharacterAnimationState previousState,
+            CharacterStateAnimation previous,
             ref DynamicHashMap<StatKey, StatValue> stats,
             ref DynamicHashMap<IntrinsicKey, int> intrinsic
         );
 
         void OnStateExit(
-            CharacterAnimationState nextState,
+            CharacterStateAnimation next,
             ref DynamicHashMap<StatKey, StatValue> stats,
             ref DynamicHashMap<IntrinsicKey, int> intrinsic
         );

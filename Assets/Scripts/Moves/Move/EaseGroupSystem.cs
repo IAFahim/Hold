@@ -18,6 +18,8 @@ namespace Moves.Move
         private NativeArray<EaseCache> _easeCaches;
         private NativeArray<float3> _positionCaches;
         private NativeArray<float> _axesCaches;
+        private NativeArray<float> _planeRotationCaches;
+        private NativeArray<float> _uniformScaleRotationCaches;
 
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -35,6 +37,8 @@ namespace Moves.Move
             _easeCaches.Dispose();
             _positionCaches.Dispose();
             _axesCaches.Dispose();
+            _planeRotationCaches.Dispose();
+            _uniformScaleRotationCaches.Dispose();
         }
 
 
@@ -60,6 +64,16 @@ namespace Moves.Move
                 for (int i = 0; i < positionCacheLenght; i++) _positionCaches[i] = positionCacheBlob[i];
             }
 
+            if (!_planeRotationCaches.IsCreated)
+            {
+                ref var planeRotationCacheBlob =
+                    ref SystemAPI.GetSingleton<BlobPlaneRotationCacheComponent>().Blob.Value.Radians;
+                var planeRotationCacheLength = planeRotationCacheBlob.Length;
+
+                _planeRotationCaches = new NativeArray<float>(planeRotationCacheLength, Allocator.Persistent);
+                for (int i = 0; i < planeRotationCacheLength; i++) _planeRotationCaches[i] = planeRotationCacheBlob[i];
+            }
+
             if (!_axesCaches.IsCreated)
             {
                 ref var axesCacheBlob = ref SystemAPI.GetSingleton<BlobAxesCacheComponent>().Blob.Value.Axes;
@@ -69,13 +83,24 @@ namespace Moves.Move
                 for (int i = 0; i < axesCacheLength; i++) _axesCaches[i] = axesCacheBlob[i];
             }
 
+            if (!_uniformScaleRotationCaches.IsCreated)
+            {
+                ref var uniformCacheBlob = ref SystemAPI.GetSingleton<BlobUniformScaleComponent>().Blob.Value.Scale;
+                var uniformCacheBlobLength = uniformCacheBlob.Length;
+
+                _uniformScaleRotationCaches = new NativeArray<float>(uniformCacheBlobLength, Allocator.Persistent);
+                for (int i = 0; i < uniformCacheBlobLength; i++) _uniformScaleRotationCaches[i] = uniformCacheBlob[i];
+            }
+
 
             new EaseGroupJobChunk
             {
                 DeltaTime = SystemAPI.Time.DeltaTime,
                 EaseCache = _easeCaches.AsReadOnly(),
                 PositionCache = _positionCaches.AsReadOnly(),
-                AxesCache = _axesCaches.AsReadOnly()
+                AxesCache = _axesCaches.AsReadOnly(),
+                PlaneRotationCache = _planeRotationCaches.AsReadOnly(),
+                UniformScaleCache = _uniformScaleRotationCaches.AsReadOnly()
             }.ScheduleParallel();
         }
 

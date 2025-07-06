@@ -15,7 +15,7 @@ namespace States.States.Authoring
             public override void Bake(CharacterAnimationStateAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.None);
-                AddComponent(entity, new CharacterAnimationState
+                AddComponent(entity, new CharacterStateAnimation
                     {
                         Previous = authoring.previous, Current = authoring.current
                     }

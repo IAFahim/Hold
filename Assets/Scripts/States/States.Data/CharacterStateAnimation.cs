@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using States.States.Data.enums;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -5,14 +6,24 @@ using UnityEngine;
 
 namespace States.States.Data
 {
-    public struct CharacterAnimationState : IComponentData
+    public struct CharacterStateAnimation : IComponentData
     {
         public ECharacterState Previous;
         public ECharacterState Current;
+        public static int ClipIndex;
 
-        public void Init()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void LoadClipIndexParameter(Animator animator)
         {
-            
+            // Find the clipIndex param
+            foreach (var parameter in animator.parameters)
+            {
+                if (parameter.name == "ClipIndex")
+                {
+                    ClipIndex = parameter.nameHash;
+                    break;
+                }
+            }
         }
 
 
