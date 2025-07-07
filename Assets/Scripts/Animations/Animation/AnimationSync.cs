@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Animations.Animation.Data;
+using Animations.Animation.Data.Classes;
 using BovineLabs.Core.LifeCycle;
 using Unity.Entities;
 using Unity.Transforms;

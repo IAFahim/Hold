@@ -1,7 +1,6 @@
-using _src.Scripts.Prefabs.Prefabs.Data;
 using UnityEngine;
 
-namespace Animations.Animation
+namespace Animations.Animation.Data.Classes
 {
     [CreateAssetMenu(menuName = "Game/AssetReference/GameObjectSoGroup")]
     public class AssetReferenceGameObjectSoGroup : ScriptableObject

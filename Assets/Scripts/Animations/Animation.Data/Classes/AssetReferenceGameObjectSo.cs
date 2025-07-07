@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace _src.Scripts.Prefabs.Prefabs.Data
+namespace Animations.Animation.Data.Classes
 {
     [CreateAssetMenu(menuName = "Game/AssetReference/GameObjectSo")]
     public class AssetReferenceGameObjectSo : ScriptableObject, IUID

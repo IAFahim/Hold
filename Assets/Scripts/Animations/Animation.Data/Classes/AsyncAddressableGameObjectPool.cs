@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Animations.Animation.Data.Classes;
 using Unity.Entities;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-namespace Animations.Animation
+namespace Animations.Animation.Data.Classes
 {
     public class AsyncAddressableGameObjectPool : MonoBehaviour
     {
