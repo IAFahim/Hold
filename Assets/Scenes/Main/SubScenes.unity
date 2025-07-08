@@ -366,15 +366,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Move.Authoring::Moves.Move.Authoring.Blobs.StepPlanComponentAuthoring
   jumps:
   - ease: 5
-    easeChanel: 1
+    easeChanel: 3
     next: 1
     duration: 5
   - ease: 0
-    easeChanel: 1
+    easeChanel: 3
     next: 2
     duration: 1
   - ease: 0
-    easeChanel: 1
+    easeChanel: 3
     next: 0
     duration: 1
   positions:
@@ -393,6 +393,9 @@ MonoBehaviour:
     z: 0
   - x: 0
     y: 90
+    z: 0
+  - x: 0
+    y: 95
     z: 0
   scale:
   - 0
