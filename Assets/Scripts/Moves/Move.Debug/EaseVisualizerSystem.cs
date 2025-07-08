@@ -1,6 +1,5 @@
 using Drawing;
 using Moves.Move.Data.Blobs;
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -22,14 +21,6 @@ namespace Moves.Move.Debug
         public void OnUpdate(ref SystemState state)
         {
 #if ALINE && UNITY_EDITOR
-            // Rule 5.2.1: The query now includes the unified BlobEaseCacheComponent.
-            var query = SystemAPI.QueryBuilder().WithAll<EaseStateComponent, LocalTransform, BlobEaseCacheComponent>()
-                .Build();
-            if (query.IsEmpty)
-            {
-                return;
-            }
-
             // Get the Aline command builder for drawing.
             var builder = DrawingManager.GetBuilder();
 
@@ -38,22 +29,19 @@ namespace Moves.Move.Debug
             {
                 Drawing = builder
             };
-
-            state.Dependency = job.ScheduleParallel(query, state.Dependency);
+            state.Dependency = job.ScheduleParallel(state.Dependency);
 
             // Ensure the builder is disposed after the job completes.
             builder.DisposeAfter(state.Dependency);
 #endif
         }
-
-        public void OnDestroy(ref SystemState state)
-        {
-        }
     }
 
     public partial struct EaseVisualizerJob : IJobEntity
     {
-        private const float Segment = 5f;
+        private const int Segment = 5;
+        private const int LoopLimit = 16;
+
         [NativeDisableParallelForRestriction] public CommandBuilder Drawing;
 
         // Define colors for the visualization to make it clear and beautiful.
@@ -64,28 +52,39 @@ namespace Moves.Move.Debug
 
         private const int PathResolution = 30; // Number of segments to draw for the path.
 
-        // The Execute method now takes the BlobEaseCacheComponent to get the path data.
-        public void Execute(Entity entity, in BlobEaseCacheComponent blobComponent, in EaseStateComponent easeState,
-            in LocalTransform transform)
+        private void Execute(
+            in BlobEaseCacheComponent blobComponent,
+            in EaseStateComponent easeState,
+            in LocalTransform transform
+        )
         {
             // Get the blob asset reference from the component.
             ref var blob = ref blobComponent.Blob.Value;
             ref var easeCacheArray = ref blob.Cache;
 
-            if (easeState.Current >= easeCacheArray.Length) return;
-
-            var currentConfig = easeCacheArray[easeState.Current];
-            var nextIndex = currentConfig.Next;
+            var current = easeState.Current;
+            if (current >= easeCacheArray.Length) return;
 
 
-            // Check the flags and call the appropriate visualization method.
-            byte leading3Bit = currentConfig.Ease.Leading3Bit();
-            if ((leading3Bit & 0b001) != 0)
-                VisualizePositionPath(ref blob, easeState.Current, nextIndex, currentConfig);
-            if ((leading3Bit & 0b010) != 0)
-                VisualizeRotationPath(ref blob, transform.Position, easeState.Current, nextIndex, currentConfig);
-            if ((leading3Bit & 0b100) != 0)
-                VisualizeScalePath(ref blob, transform.Position, easeState.Current, nextIndex, currentConfig);
+            int limit = 10;
+            var end = current;
+            while (limit != LoopLimit)
+            {
+                var currentConfig = easeCacheArray[current];
+                var nextIndex = currentConfig.Next;
+
+                // Check the flags and call the appropriate visualization method.
+                byte leading3Bit = currentConfig.Ease.Leading3Bit();
+                if ((leading3Bit & 0b001) != 0)
+                    VisualizePositionPath(ref blob, current, nextIndex, currentConfig);
+                if ((leading3Bit & 0b010) != 0)
+                    VisualizeRotationPath(ref blob, transform.Position, current, nextIndex, currentConfig);
+                if ((leading3Bit & 0b100) != 0)
+                    VisualizeScalePath(ref blob, transform.Position, current, nextIndex, currentConfig);
+                current = nextIndex;
+                if (end == current) break;
+                limit++;
+            }
         }
 
         private void VisualizePositionPath(ref EaseCacheBlob blob, byte currentIndex, byte nextIndex,
@@ -123,8 +122,6 @@ namespace Moves.Move.Debug
             }
         }
 
-        
-
         private void VisualizeRotationPath(ref EaseCacheBlob blob, float3 anchorPos, byte currentIndex, byte nextIndex,
             in EaseCache currentConfig)
         {
@@ -149,7 +146,7 @@ namespace Moves.Move.Debug
                 // Draw 4 intermediate points on the arc to show the easing curve shape.
                 for (int i = 1; i <= Segment - 1; i++)
                 {
-                    float progress = i / Segment;
+                    float progress = i / (float)Segment;
                     currentConfig.Ease.Evaluate(progress, out var t);
                     var rot = math.slerp(startRot, endRot, t);
                     var dir = math.mul(rot, forwardVector);
@@ -188,7 +185,7 @@ namespace Moves.Move.Debug
             // Draw 4 intermediate wire boxes to show the scale easing.
             for (int i = 1; i <= Segment - 1; i++)
             {
-                float progress = i / Segment;
+                float progress = i / (float)Segment;
                 currentConfig.Ease.Evaluate(progress, out var t);
                 var scale = math.lerp(startScale, endScale, t);
                 Drawing.WireBox(anchorPos, new float3(scale), MidColor);

@@ -366,11 +366,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Move.Authoring::Moves.Move.Authoring.Blobs.StepPlanComponentAuthoring
   jumps:
   - ease: 5
-    easeChanel: 3
+    easeChanel: 1
     next: 1
     duration: 5
   - ease: 0
-    easeChanel: 3
+    easeChanel: 1
+    next: 2
+    duration: 1
+  - ease: 0
+    easeChanel: 1
     next: 0
     duration: 1
   positions:
@@ -379,6 +383,9 @@ MonoBehaviour:
     z: 0
   - x: 15
     y: 0
+    z: 0
+  - x: 15
+    y: 15
     z: 0
   rotation:
   - x: 0
@@ -671,144 +678,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1254970408}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &2135306639
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2135306641}
-  - component: {fileID: 2135306640}
-  - component: {fileID: 2135306643}
-  - component: {fileID: 2135306642}
-  - component: {fileID: 2135306644}
-  - component: {fileID: 2135306645}
-  m_Layer: 0
-  m_Name: Ease Settings
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2135306640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135306639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcba1ef339b344878ed888bf739aa568, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Move.Authoring::Moves.Move.Authoring.PositionPathAuthoring
-  positions:
-  - x: 0
-    y: 0
-    z: 0
-  - x: 15
-    y: 0
-    z: 0
---- !u!4 &2135306641
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135306639}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2135306642
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135306639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6adb3d0551e4969a75b6b736e393448, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Move.Authoring::Moves.Move.Authoring.Blobs.UniformScaleBlobAuthoring
-  scale:
-  - 0
-  - 1
---- !u!114 &2135306643
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135306639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dba23dc55554e2f995d01bf98342715, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Move.Authoring::Moves.Move.Authoring.Blobs.SingleRotationBlobAuthoring
-  degree:
-  - 0
-  - 90
---- !u!114 &2135306644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135306639}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b753cd7fdfb4ae3a69d5508f291113b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Move.Authoring::Moves.Move.Authoring.Blobs.StepPlanComponentAuthoring
-  jumps:
-  - ease: 5
-    easeChanel: 3
-    next: 1
-    duration: 5
-  - ease: 0
-    easeChanel: 3
-    next: 0
-    duration: 1
-  positions:
-  - x: 0
-    y: 0
-    z: 0
-  - x: 15
-    y: 0
-    z: 0
-  rotation:
-  - x: 0
-    y: 0
-    z: 0
-  - x: 0
-    y: 90
-    z: 0
-  scale:
-  - 0
-  - 5
---- !u!114 &2135306645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2135306639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db6bba7cf07f4c259ed1fffc60fdd8ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Move.Authoring::Moves.Move.Authoring.Blobs.BlobAxesCacheComponentAuthoring
-  axes:
-  - 0
-  - 5
 --- !u!1001 &4710679667548714511
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -874,5 +743,4 @@ SceneRoots:
   - {fileID: 301047369}
   - {fileID: 161891923}
   - {fileID: 691890539}
-  - {fileID: 2135306641}
   - {fileID: 604314089}
