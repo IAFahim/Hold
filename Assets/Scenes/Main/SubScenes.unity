@@ -236,6 +236,7 @@ GameObject:
   - component: {fileID: 301047372}
   - component: {fileID: 301047373}
   - component: {fileID: 301047374}
+  - component: {fileID: 301047375}
   m_Layer: 0
   m_Name: Ease
   m_TagString: Untagged
@@ -263,8 +264,6 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -286,7 +285,6 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -354,6 +352,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: Move.Data::Moves.Move.Data.Blobs.EaseStepComponentAuthoring
   start: 0
   elapsedTime: 0
+--- !u!114 &301047375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301047365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b753cd7fdfb4ae3a69d5508f291113b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Move.Authoring::Moves.Move.Authoring.Blobs.StepPlanComponentAuthoring
+  jumps:
+  - ease: 5
+    easeChanel: 3
+    next: 1
+    duration: 5
+  - ease: 0
+    easeChanel: 3
+    next: 0
+    duration: 1
+  positions:
+  - x: 0
+    y: 0
+    z: 0
+  - x: 15
+    y: 0
+    z: 0
+  rotation:
+  - x: 0
+    y: 0
+    z: 0
+  - x: 0
+    y: 90
+    z: 0
+  scale:
+  - 0
+  - 5
 --- !u!1 &604314087
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,8 +517,6 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -504,7 +538,6 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -605,8 +638,6 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -628,7 +659,6 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -679,7 +709,7 @@ MonoBehaviour:
     y: 0
     z: 0
   - x: 15
-    y: 12
+    y: 0
     z: 0
 --- !u!4 &2135306641
 Transform:
@@ -733,20 +763,37 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2135306639}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b753cd7fdfb4ae3a69d5508f291113b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Move.Authoring::Moves.Move.Authoring.Blobs.StepPlanComponentAuthoring
   jumps:
   - ease: 5
-    easeChanel: 7
+    easeChanel: 3
     next: 1
     duration: 5
   - ease: 0
-    easeChanel: 7
+    easeChanel: 3
     next: 0
     duration: 1
+  positions:
+  - x: 0
+    y: 0
+    z: 0
+  - x: 15
+    y: 0
+    z: 0
+  rotation:
+  - x: 0
+    y: 0
+    z: 0
+  - x: 0
+    y: 90
+    z: 0
+  scale:
+  - 0
+  - 5
 --- !u!114 &2135306645
 MonoBehaviour:
   m_ObjectHideFlags: 0

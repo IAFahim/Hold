@@ -12,20 +12,18 @@ namespace Moves.Move
     public partial struct EaseGroupJobChunk : IJobEntity
     {
         [ReadOnly] public float DeltaTime;
-        [ReadOnly] public NativeArray<EaseCache>.ReadOnly EaseCache;
-        [ReadOnly] public NativeArray<float3>.ReadOnly PositionCache;
-        [ReadOnly] public NativeArray<float>.ReadOnly AxesCache;
-        [ReadOnly] public NativeArray<float>.ReadOnly PlaneRotationCache;
-        [ReadOnly] public NativeArray<float>.ReadOnly UniformScaleCache;
-
 
         [BurstCompile]
-        public void Execute(
+        private void Execute(
+            in BlobEaseCacheComponent ease,
             ref LocalTransform transform,
             ref EaseStateComponent easeState
         )
         {
-            var currentConfig = EaseCache[easeState.Current];
+            var current = easeState.Current;
+            
+            ref var easeCacheBlob = ref ease.Blob.Value;
+            var currentConfig = easeCacheBlob.Cache[current];
             var isComplete = currentConfig.Ease.TryComplete(
                 ref easeState.ElapsedTime,
                 currentConfig.Duration,
@@ -33,149 +31,70 @@ namespace Moves.Move
                 out var t
             );
 
-            switch (currentConfig.Ease.Leading3Bit())
+            var leading3Bit = currentConfig.Ease.Leading3Bit();
+
+            if ((leading3Bit & 0b001) != 0)
             {
-                case 0:
-                    EaseLerpPositionX(ref transform, easeState, currentConfig, t);
-                    break;
-                
-                case 1:
-                    EaseLerpPositionY(ref transform, easeState, currentConfig, t);
-                    break;
-
-                case 2:
-                    EaseLerpPositionZ(ref transform, easeState, currentConfig, t);
-                    break;
-
-                case 3:
-                    EaseLerpPositionXYZ(ref transform, easeState, currentConfig, t);
-                    break;
-
-                case 4:
-                    EaseLerpRotationX(ref transform, easeState, currentConfig, t);
-                    break;
-                
-                case 5:
-                    EaseLerpRotationY(ref transform, easeState, currentConfig, t);
-                    break;
-                
-                case 6:
-                    EaseLerpRotationZ(ref transform, easeState, currentConfig, t);
-                    break;
-                
-                case 7:
-                    EaseLerpUniformScale(ref transform, easeState, currentConfig, t);
-                    break;
+                EaseLerpPositionXYZ(ref transform, ref easeCacheBlob, current, t);
             }
 
-            if (isComplete)
+            if ((leading3Bit & 0b010) != 0)
             {
-                easeState.Current = currentConfig.Next;
-                easeState.ElapsedTime = 0f; // Reset timer for the next ease
+                EaseLerpRotation(ref transform, ref easeCacheBlob, current, t);
             }
-        }
-        
-        // --- Mapping Methods ---
 
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EaseAxesMap(EaseStateComponent easeState, EaseCache currentConfig, out float start, out float end)
-        {
-            start = AxesCache[easeState.Current];
-            end = AxesCache[currentConfig.Next];
-        }
-        
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EaseMapFloat3(EaseStateComponent easeState, EaseCache currentConfig, out float3 start, out float3 end)
-        {
-            start = PositionCache[easeState.Current];
-            end = PositionCache[currentConfig.Next];
-        }
-        
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EasePlaneRotationMap(EaseStateComponent easeState, EaseCache currentConfig, out float start, out float end)
-        {
-            start = PlaneRotationCache[easeState.Current];
-            end = PlaneRotationCache[currentConfig.Next];
+            if ((leading3Bit & 0b100) != 0)
+            {
+                EaseLerpUniformScale(ref transform, ref easeCacheBlob, current, t);
+            }
+
+            if (!isComplete) return;
+            easeState.Current = currentConfig.Next;
+            easeState.ElapsedTime = 0f; // Reset timer for the next ease
         }
 
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EaseUniformScaleMap(EaseStateComponent easeState, EaseCache currentConfig, out float start, out float end)
+        private void EaseLerpPositionXYZ(
+            ref LocalTransform transform,
+            ref EaseCacheBlob easeCacheBlob,
+            in byte current,
+            float t
+        )
         {
-            start = UniformScaleCache[easeState.Current];
-            end = UniformScaleCache[currentConfig.Next];
-        }
-
-        // --- Position Easing ---
-
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EaseLerpPositionX(ref LocalTransform transform, EaseStateComponent easeState, EaseCache currentConfig, float t)
-        {
-            EaseAxesMap(easeState, currentConfig, out var start, out var end);
-            transform.Position.x = math.lerp(start, end, t);
-        }
-
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EaseLerpPositionY(ref LocalTransform transform, EaseStateComponent easeState, EaseCache currentConfig, float t)
-        {
-            EaseAxesMap(easeState, currentConfig, out var start, out var end);
-            transform.Position.y = math.lerp(start, end, t);
-        }
-
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EaseLerpPositionZ(ref LocalTransform transform, EaseStateComponent easeState, EaseCache currentConfig, float t)
-        {
-            EaseAxesMap(easeState, currentConfig, out var start, out var end);
-            transform.Position.z = math.lerp(start, end, t);
-        }
-
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EaseLerpPositionXYZ(ref LocalTransform transform, EaseStateComponent easeState, EaseCache currentConfig, float t)
-        {
-            EaseMapFloat3(easeState, currentConfig, out var start, out var end);
+            var next = easeCacheBlob.Cache[current].Next;
+            var start = easeCacheBlob.Positions[current];
+            var end = easeCacheBlob.Positions[next];
             transform.Position = math.lerp(start, end, t);
         }
-        
-        // --- Rotation Easing ---
 
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EaseLerpRotationX(ref LocalTransform transform, EaseStateComponent easeState, EaseCache currentConfig, float t)
+        private void EaseLerpRotation(
+            ref LocalTransform transform,
+            ref EaseCacheBlob easeCacheBlob,
+            in byte current,
+            float t
+        )
         {
-            EasePlaneRotationMap(easeState, currentConfig, out var start, out var end);
-            transform.Rotation = quaternion.RotateX(math.lerp(start, end, t));
+            var next = easeCacheBlob.Cache[current].Next;
+            var start = easeCacheBlob.Quaternion[current];
+            var end = easeCacheBlob.Quaternion[next];
+            transform.Rotation = math.slerp(start, end, t);
         }
 
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EaseLerpRotationY(ref LocalTransform transform, EaseStateComponent easeState, EaseCache currentConfig, float t)
+        private void EaseLerpUniformScale(
+            ref LocalTransform transform,
+            ref EaseCacheBlob easeCacheBlob,
+            in byte current,
+            float t
+        )
         {
-            EasePlaneRotationMap(easeState, currentConfig, out var start, out var end);
-            transform.Rotation = quaternion.RotateY(math.lerp(start, end, t));
-        }
-
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EaseLerpRotationZ(ref LocalTransform transform, EaseStateComponent easeState, EaseCache currentConfig, float t)
-        {
-            EasePlaneRotationMap(easeState, currentConfig, out var start, out var end);
-            transform.Rotation = quaternion.RotateZ(math.lerp(start, end, t));
-        }
-        
-        // --- Scale Easing ---
-
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void EaseLerpUniformScale(ref LocalTransform transform, EaseStateComponent easeState, EaseCache currentConfig, float t)
-        {
-            EaseUniformScaleMap(easeState, currentConfig, out var start, out var end);
+            var next = easeCacheBlob.Cache[current].Next;
+            var start = easeCacheBlob.Scale[current];
+            var end = easeCacheBlob.Scale[next];
             transform.Scale = math.lerp(start, end, t);
         }
     }

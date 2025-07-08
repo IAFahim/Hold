@@ -19,7 +19,9 @@
         "Unity.Mathematics",
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
-        "Unity.Transforms"
+        "Unity.Transforms",
+        "ALINE",
+        "Ease.Data"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
@@ -31,6 +33,12 @@
     "defineConstraints": [
         "UNITY_EDITOR || BL_DEBUG"
     ],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.arongranberg.aline",
+            "expression": "1.0.0",
+            "define": "ALINE"
+        }
+    ],
     "noEngineReferences": false
 }

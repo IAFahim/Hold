@@ -7,27 +7,27 @@ using UnityEngine;
 
 namespace Moves.Move.Authoring.Blobs
 {
-    public class PositionCacheBlobAuthoring : MonoBehaviour
+    public class PositionBlobAuthoring : MonoBehaviour
     {
         public float3[] positions = Array.Empty<float3>();
 
-        class Baker : Baker<PositionCacheBlobAuthoring>
+        class Baker : Baker<PositionBlobAuthoring>
         {
-            public override void Bake(PositionCacheBlobAuthoring authoring)
+            public override void Bake(PositionBlobAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.None);
 
                 var builder = new BlobBuilder(Allocator.Temp);
-                ref var root = ref builder.ConstructRoot<PositionCacheBlob>();
+                ref var root = ref builder.ConstructRoot<PositionBlob>();
 
                 int pointCount = authoring.positions.Length;
                 var arrayBuilder = builder.Allocate(ref root.Positions, pointCount);
                 for (int i = 0; i < pointCount; i++) arrayBuilder[i] = authoring.positions[i];
 
-                var blobRef = builder.CreateBlobAssetReference<PositionCacheBlob>(Allocator.Persistent);
+                var blobRef = builder.CreateBlobAssetReference<PositionBlob>(Allocator.Persistent);
                 AddBlobAsset(ref blobRef, out _);
 
-                AddComponent(entity, new BlobPositionCacheComponent { Blob = blobRef });
+                AddComponent(entity, new BlobPositionComponent { Blob = blobRef });
                 builder.Dispose();
             }
         }
