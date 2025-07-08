@@ -1,9 +1,9 @@
-using States.States.Data;
-using States.States.Data.enums;
+using Animations.Animation.Data;
+using Animations.Animation.Data.enums;
 using Unity.Entities;
 using UnityEngine;
 
-namespace States.States.Authoring
+namespace Animations.Animation.Authoring
 {
     public class CharacterAnimationStateAuthoring : MonoBehaviour
     {

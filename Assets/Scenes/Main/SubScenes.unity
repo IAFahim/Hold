@@ -412,6 +412,7 @@ GameObject:
   - component: {fileID: 604314088}
   - component: {fileID: 604314090}
   - component: {fileID: 604314091}
+  - component: {fileID: 604314092}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -472,6 +473,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BovineLabs.Core.Authoring::BovineLabs.Core.Authoring.TransformAuthoring
   TransformUsageFlags: 2
+--- !u!114 &604314092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 604314087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5370a1f66549679b3e8f0cc3b801fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  previous: 0
+  current: 2
 --- !u!1 &691890538
 GameObject:
   m_ObjectHideFlags: 0

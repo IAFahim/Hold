@@ -1,4 +1,4 @@
-namespace States.States.Data.enums
+namespace Animations.Animation.Data.enums
 {
     public enum ECharacterState : byte
     {
@@ -16,5 +16,6 @@ namespace States.States.Data.enums
         Climbing,
         FlyingNoCollisions,
         RopeSwing,
+        Sliding
     }
 }
