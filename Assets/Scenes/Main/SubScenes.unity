@@ -409,10 +409,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 604314089}
+  - component: {fileID: 604314093}
+  - component: {fileID: 604314094}
   - component: {fileID: 604314088}
+  - component: {fileID: 604314092}
   - component: {fileID: 604314090}
   - component: {fileID: 604314091}
-  - component: {fileID: 604314092}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -485,11 +487,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf5370a1f66549679b3e8f0cc3b801fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  previous: 0
-  current: 2
   animation: 0
   speed:
     value: 15360
+--- !u!114 &604314093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 604314087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7305cdf55c354c0eb811d408fe38ad23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AddStats: 1
+  StatDefaults:
+  - Stat: {fileID: 11400000, guid: 25630948b0897bffca2ee2ebd5c2b3b5, type: 2}
+    ModifyType: 0
+    Value: 0
+  StatDefaultGroups: []
+  StatsCanBeModified: 1
+  AddIntrinsics: 1
+  IntrinsicDefaults:
+  - Intrinsic: {fileID: 11400000, guid: 83cbb00073553e018b10800f602d514d, type: 2}
+    Value: 0
+  IntrinsicDefaultGroups: []
+  Initialize:
+    CopyFrom: 3
+--- !u!114 &604314094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 604314087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb241c334c8d4ac3a084ddfa336ac599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  previous: 0
+  current: 0
 --- !u!1 &691890538
 GameObject:
   m_ObjectHideFlags: 0

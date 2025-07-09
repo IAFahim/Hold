@@ -1,4 +1,4 @@
-namespace Animations.Animation.Data.enums
+namespace States.States.Data.enums
 {
     public enum ECharacterState : byte
     {

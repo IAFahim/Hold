@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Animations.Animation.Data
 {
-    public struct AnimatorHybridLink : ICleanupComponentData
+    public struct AnimatorHybridLinkComponent : ICleanupComponentData
     {
         public UnityObjectRef<Animator> Ref;
     }

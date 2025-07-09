@@ -3,6 +3,7 @@ using Animations.Animation.Data;
 using Animations.Animation.Data.Classes;
 using Animations.Animation.Data.enums;
 using BovineLabs.Core.LifeCycle;
+using States.States.Data;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -21,6 +22,32 @@ namespace Animations.Animation
             EntityCommandBuffer ecb = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>()
                 .ValueRW.CreateCommandBuffer(state.WorldUnmanaged);
 
+
+            foreach (var (hybridLink, animationState, characterState, entity) in
+                     SystemAPI.Query<
+                             RefRO<AnimatorHybridLinkComponent>,
+                             RefRO<AnimationStateComponent>,
+                             RefRO<CharacterStateComponent>
+                         >()
+                         .WithPresent<DestroyEntity>()
+                         .WithEntityAccess()
+                    )
+            {
+                var destroyEntity = SystemAPI.IsComponentEnabled<DestroyEntity>(entity);
+                if (destroyEntity)
+                {
+                    AsyncAddressableGameObjectPool.Instance.ReturnAsset(hybridLink.ValueRO.Ref.Value.gameObject);
+                    ecb.RemoveComponent<AnimatorHybridLinkComponent>(entity);
+                    ecb.DestroyEntity(entity);
+                }
+                else
+                { 
+                    if (characterState.ValueRO.Current == characterState.ValueRO.Previous) return;
+                    hybridLink.ValueRO.Ref.Value.SetInteger(ClipIndex, (int)animationState.ValueRO.Animation);
+                    hybridLink.ValueRO.Ref.Value.speed = animationState.ValueRO.Speed;
+                }
+            }
+
             foreach (
                 var (animationComponent, localTransform, entity) in
                 SystemAPI.Query<RefRO<AnimatorAssetIndexDisposeComponent>, RefRO<LocalTransform>>()
@@ -33,48 +60,24 @@ namespace Animations.Animation
                         localTransform.ValueRO.Rotation,
                         out GameObject gameObject
                     )) continue;
-                ecb.AddComponent(entity, new AnimatorHybridLink
+                ecb.AddComponent(entity, new AnimatorHybridLinkComponent
                 {
                     Ref = gameObject.GetComponent<Animator>()
                 });
                 ecb.RemoveComponent<AnimatorAssetIndexDisposeComponent>(entity);
             }
-
-            foreach (var (animatorComponent, characterState, entity) in
-                     SystemAPI.Query<
-                             RefRO<AnimatorHybridLink>,
-                             RefRO<CharacterStateAnimation>
-                         >()
-                         .WithPresent<DestroyEntity>()
-                         .WithEntityAccess()
-                    )
-            {
-                var destroyEntity = SystemAPI.IsComponentEnabled<DestroyEntity>(entity);
-                if (destroyEntity)
-                {
-                    AsyncAddressableGameObjectPool.Instance.ReturnAsset(animatorComponent.ValueRO.Ref.Value.gameObject);
-                    ecb.RemoveComponent<AnimatorHybridLink>(entity);
-                    ecb.DestroyEntity(entity);
-                }
-                else
-                {
-                    animatorComponent.ValueRO.Ref.Value.speed = characterState.ValueRO.Speed;
-                    if (characterState.ValueRO.Current == characterState.ValueRO.Previous) return;
-                    animatorComponent.ValueRO.Ref.Value.SetInteger(ClipIndex, (int)characterState.ValueRO.Animation);
-                }
-            }
         }
 
         public void OnStopRunning(ref SystemState state)
         {
-            foreach (var animatorComponent in SystemAPI.Query<RefRO<AnimatorHybridLink>>())
+            foreach (var animatorComponent in SystemAPI.Query<RefRO<AnimatorHybridLinkComponent>>())
             {
                 ReturnToPool(animatorComponent);
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void ReturnToPool(RefRO<AnimatorHybridLink> animatorComponent)
+        private static void ReturnToPool(RefRO<AnimatorHybridLinkComponent> animatorComponent)
         {
             AsyncAddressableGameObjectPool.Instance.ReturnAsset(animatorComponent.ValueRO.Ref.Value.gameObject);
         }

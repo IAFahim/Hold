@@ -20,7 +20,8 @@ MonoBehaviour:
   - Player
   - Camera
   cursorPosition: {fileID: 7556732453195264739, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}
-  settings: []
+  settings:
+  - rid: 2174056863577407488
   debugSettings:
   - rid: 851261738636017880
   references:
@@ -32,3 +33,8 @@ MonoBehaviour:
         Name: InputCoreDebug
         TimeScaleDouble: {fileID: 107681519262277100, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}
         TimeScaleHalve: {fileID: -4690484464984532955, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}
+    - rid: 2174056863577407488
+      type: {class: InputComponent/Settings, ns: BovineLabs.Core.Input, asm: RawInput}
+      data:
+        MoveDelta: {fileID: 5545367079167114310, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}
+        Name: InputComponent

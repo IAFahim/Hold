@@ -180,8 +180,6 @@ MeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -203,7 +201,6 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -294,7 +291,7 @@ PrefabInstance:
     - target: {fileID: 5523294873506209897, guid: 6d34cbd235bfdab48b2915f6f527d66e, type: 3}
       propertyPath: 'settings.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: f6946847e582d2bc4a807015104fa06a, type: 2}
+      objectReference: {fileID: 11400000, guid: 338179b5941adf67da329fb9d4594444, type: 2}
     - target: {fileID: 5523294873506209897, guid: 6d34cbd235bfdab48b2915f6f527d66e, type: 3}
       propertyPath: 'settings.Array.data[2]'
       value: 
