@@ -58,36 +58,9 @@ namespace Animations.Animation
                 }
                 else
                 {
-                    // float2 moveVector = new float2();
-                    // float velocityMagnitude = 0;
-                    // bool isSprinting = false;
-                    // float groundSprintMaxSpeed = 0;
-                    // float groundRunMaxSpeed = 0;
-                    // float crouchedMaxSpeed = 0;
-                    // float climbingSpeed = 0;
-                    // float ledgeMoveSpeed = 0;
-                    // float swimmingMaxSpeed = 0;
-                    // quaternion rotation = quaternion.identity;
-                    // float3 lastKnownWallNormal = 0;
-
-                    characterState.ValueRO.Update(
-                        characterState.ValueRO.moveVector,
-                        characterState.ValueRO.velocityMagnitude,
-                        characterState.ValueRO.isSprinting,
-                        characterState.ValueRO.groundSprintMaxSpeed,
-                        characterState.ValueRO.groundRunMaxSpeed,
-                        characterState.ValueRO.crouchedMaxSpeed,
-                        characterState.ValueRO.climbingSpeed,
-                        characterState.ValueRO.ledgeMoveSpeed,
-                        characterState.ValueRO.swimmingMaxSpeed,
-                        characterState.ValueRO.rotation,
-                        characterState.ValueRO.lastKnownWallNormal,
-                        out float speed,
-                        out EAnimationState animationState
-                    );
-                    animatorComponent.ValueRO.Ref.Value.speed = speed;
+                    animatorComponent.ValueRO.Ref.Value.speed = characterState.ValueRO.Speed;
                     if (characterState.ValueRO.Current == characterState.ValueRO.Previous) return;
-                    animatorComponent.ValueRO.Ref.Value.SetInteger(ClipIndex, (int)animationState);
+                    animatorComponent.ValueRO.Ref.Value.SetInteger(ClipIndex, (int)characterState.ValueRO.Animation);
                 }
             }
         }

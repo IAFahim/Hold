@@ -365,7 +365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Move.Authoring::Moves.Move.Authoring.Blobs.StepPlanComponentAuthoring
   jumps:
-  - ease: 5
+  - ease: 4
     easeChanel: 3
     next: 1
     duration: 5
@@ -376,26 +376,26 @@ MonoBehaviour:
   - ease: 0
     easeChanel: 3
     next: 0
-    duration: 1
+    duration: 5
   positions:
   - x: 0
     y: 0
     z: 0
-  - x: 15
+  - x: -2.5
     y: 0
-    z: 0
-  - x: 15
-    y: 15
-    z: 0
+    z: 5
+  - x: 0
+    y: 0
+    z: 10
   rotation:
   - x: 0
     y: 0
     z: 0
   - x: 0
-    y: 90
+    y: 180
     z: 0
   - x: 0
-    y: 95
+    y: 0
     z: 0
   scale:
   - 0
@@ -487,6 +487,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   previous: 0
   current: 2
+  animation: 0
+  speed:
+    value: 15360
 --- !u!1 &691890538
 GameObject:
   m_ObjectHideFlags: 0

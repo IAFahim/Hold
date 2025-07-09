@@ -10,6 +10,8 @@ namespace Animations.Animation.Data
     {
         public ECharacterState Previous;
         public ECharacterState Current;
+        public EAnimationState Animation;
+        public half Speed;
 
         public float2 moveVector;
         public float velocityMagnitude;
@@ -24,7 +26,7 @@ namespace Animations.Animation.Data
         public float3 lastKnownWallNormal;
 
         [BurstCompile]
-        public readonly void Update(
+        public readonly void GetAnimationState(
             float2 moveVector,
             float velocityMagnitude,
             bool isSprinting,
@@ -36,35 +38,32 @@ namespace Animations.Animation.Data
             float swimmingMaxSpeed,
             quaternion rotation,
             float3 lastKnownWallNormal,
-            out float speed,
-            out EAnimationState state
+            out CharacterStateAnimation characterState
         )
         {
-            speed = 1f;
-            state = EAnimationState.Idle;
-
-            switch (Current)
+            characterState = this;
+            switch (characterState.Current)
             {
                 case ECharacterState.GroundMove:
                 {
                     if (math.lengthsq(moveVector) < 0.0001f)
                     {
-                        speed = 1f;
-                        state = EAnimationState.Idle;
+                        characterState.Speed = new half(1);
+                        characterState.Animation = EAnimationState.Idle;
                     }
                     else
                     {
                         if (isSprinting)
                         {
-                            float velocityRatio = velocityMagnitude / groundSprintMaxSpeed;
-                            speed = velocityRatio;
-                            state = EAnimationState.Sprint;
+                            var velocityRatio = (half)(velocityMagnitude / groundSprintMaxSpeed);
+                            characterState.Speed = velocityRatio;
+                            characterState.Animation = EAnimationState.Sprint;
                         }
                         else
                         {
-                            float velocityRatio = velocityMagnitude / groundRunMaxSpeed;
-                            speed = velocityRatio;
-                            state = EAnimationState.Run;
+                            var velocityRatio = (half)(velocityMagnitude / groundRunMaxSpeed);
+                            characterState.Speed = velocityRatio;
+                            characterState.Animation = EAnimationState.Run;
                         }
                     }
                 }
@@ -73,61 +72,62 @@ namespace Animations.Animation.Data
                 {
                     if (math.lengthsq(moveVector) < 0.0001f)
                     {
-                        speed = 1f;
-                        state = EAnimationState.CrouchIdle;
+                        characterState.Speed = new half(1);
+                        characterState.Animation = EAnimationState.CrouchIdle;
                     }
                     else
                     {
-                        float velocityRatio = velocityMagnitude / crouchedMaxSpeed;
-                        speed = velocityRatio;
-                        state = EAnimationState.CrouchMove;
+                        half velocityRatio = (half)(velocityMagnitude / crouchedMaxSpeed);
+                        characterState.Speed = velocityRatio;
+                        characterState.Animation = EAnimationState.CrouchMove;
                     }
                 }
                     break;
                 case ECharacterState.AirMove:
                 {
-                    speed = 1f;
-                    state = EAnimationState.InAir;
+                    characterState.Speed = new half(1);
+                    characterState.Animation = EAnimationState.InAir;
                 }
                     break;
                 case ECharacterState.Dashing:
                 {
-                    speed = 1f;
-                    state = EAnimationState.Dash;
+                    characterState.Speed = new half(1);
+                    characterState.Animation = EAnimationState.Dash;
                 }
                     break;
                 case ECharacterState.WallRun:
                 {
                     float3 rightVector = math.mul(rotation, new float3(1f, 0f, 0f));
                     bool wallIsOnTheLeft = math.dot(rightVector, lastKnownWallNormal) > 0f;
-                    speed = 1f;
-                    state = wallIsOnTheLeft ? EAnimationState.WallRunLeft : EAnimationState.WallRunRight;
+                    characterState.Speed = new half(1);
+                    characterState.Animation =
+                        wallIsOnTheLeft ? EAnimationState.WallRunLeft : EAnimationState.WallRunRight;
                 }
                     break;
                 case ECharacterState.RopeSwing:
                 {
-                    speed = 1f;
-                    state = EAnimationState.RopeHang;
+                    characterState.Speed = new half(1);
+                    characterState.Animation = EAnimationState.RopeHang;
                 }
                     break;
                 case ECharacterState.Climbing:
                 {
-                    float velocityRatio = climbingSpeed > 0f ? velocityMagnitude / climbingSpeed : 0f;
-                    speed = velocityRatio;
-                    state = EAnimationState.ClimbingMove;
+                    half velocityRatio = (half)(climbingSpeed > 0f ? velocityMagnitude / climbingSpeed : 0f);
+                    characterState.Speed = velocityRatio;
+                    characterState.Animation = EAnimationState.ClimbingMove;
                 }
                     break;
                 case ECharacterState.LedgeGrab:
                 {
-                    float velocityRatio = ledgeMoveSpeed > 0f ? velocityMagnitude / ledgeMoveSpeed : 0f;
-                    speed = velocityRatio;
-                    state = EAnimationState.LedgeGrabMove;
+                    half velocityRatio = (half)(ledgeMoveSpeed > 0f ? velocityMagnitude / ledgeMoveSpeed : 0f);
+                    characterState.Speed = velocityRatio;
+                    characterState.Animation = EAnimationState.LedgeGrabMove;
                 }
                     break;
                 case ECharacterState.LedgeStandingUp:
                 {
-                    speed = 1f;
-                    state = EAnimationState.LedgeStandUp;
+                    characterState.Speed = new half(1);
+                    characterState.Animation = EAnimationState.LedgeStandUp;
                 }
                     break;
                 case ECharacterState.Swimming:
@@ -135,32 +135,34 @@ namespace Animations.Animation.Data
                     float velocityRatio = swimmingMaxSpeed > 0f ? velocityMagnitude / swimmingMaxSpeed : 0f;
                     if (velocityRatio < 0.1f)
                     {
-                        speed = 1f;
-                        state = EAnimationState.SwimmingIdle;
+                        characterState.Speed = new half(1);
+                        characterState.Animation = EAnimationState.SwimmingIdle;
                     }
                     else
                     {
-                        speed = velocityRatio;
-                        state = EAnimationState.SwimmingMove;
+                        characterState.Speed = (half)velocityRatio;
+                        characterState.Animation = EAnimationState.SwimmingMove;
                     }
                 }
                     break;
                 case ECharacterState.Sliding:
                 {
-                    speed = 1f;
-                    state = EAnimationState.Sliding;
+                    characterState.Speed = new half(1);
+                    characterState.Animation = EAnimationState.Sliding;
                 }
                     break;
                 case ECharacterState.Rolling:
                 case ECharacterState.FlyingNoCollisions:
                 {
-                    speed = 1f;
-                    state = EAnimationState.Idle;
+                    characterState.Speed = new half(1);
+                    characterState.Animation = EAnimationState.Idle;
                 }
                     break;
                 default:
-                    speed = 1f;
-                    state = EAnimationState.Idle;
+                {
+                    characterState.Speed = new half(1);
+                    characterState.Animation = EAnimationState.Idle;
+                }
                     break;
             }
         }

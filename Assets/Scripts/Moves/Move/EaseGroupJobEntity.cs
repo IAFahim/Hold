@@ -80,7 +80,7 @@ namespace Moves.Move
             var next = easeCacheBlob.Cache[current].Next;
             var start = easeCacheBlob.Quaternion[current];
             var end = easeCacheBlob.Quaternion[next];
-            transform.Rotation = math.slerp(start, end, t);
+            transform.Rotation = math.nlerp(start, end, t);
         }
 
         [BurstCompile]
