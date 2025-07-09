@@ -23,8 +23,9 @@ namespace Animations.Animation
                 .ValueRW.CreateCommandBuffer(state.WorldUnmanaged);
 
 
-            foreach (var (hybridLink, animationState, characterState, entity) in
+            foreach (var (localTransform, hybridLink, animationState, characterState, entity) in
                      SystemAPI.Query<
+                             RefRO<LocalTransform>,
                              RefRO<AnimatorHybridLinkComponent>,
                              RefRO<AnimationStateComponent>,
                              RefRO<CharacterStateComponent>
@@ -41,7 +42,11 @@ namespace Animations.Animation
                     ecb.DestroyEntity(entity);
                 }
                 else
-                { 
+                {
+                    hybridLink.ValueRO.Ref.Value.transform.SetLocalPositionAndRotation(
+                        localTransform.ValueRO.Position,
+                        localTransform.ValueRO.Rotation
+                    );
                     if (characterState.ValueRO.Current == characterState.ValueRO.Previous) return;
                     hybridLink.ValueRO.Ref.Value.SetInteger(ClipIndex, (int)animationState.ValueRO.Animation);
                     hybridLink.ValueRO.Ref.Value.speed = animationState.ValueRO.Speed;

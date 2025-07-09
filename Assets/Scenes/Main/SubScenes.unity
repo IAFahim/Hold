@@ -506,13 +506,13 @@ MonoBehaviour:
   StatDefaults:
   - Stat: {fileID: 11400000, guid: 25630948b0897bffca2ee2ebd5c2b3b5, type: 2}
     ModifyType: 0
-    Value: 0
+    Value: 5
   StatDefaultGroups: []
   StatsCanBeModified: 1
   AddIntrinsics: 1
   IntrinsicDefaults:
   - Intrinsic: {fileID: 11400000, guid: 83cbb00073553e018b10800f602d514d, type: 2}
-    Value: 0
+    Value: 5000
   IntrinsicDefaultGroups: []
   Initialize:
     CopyFrom: 3
@@ -529,7 +529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   previous: 0
-  current: 0
+  current: 1
 --- !u!1 &691890538
 GameObject:
   m_ObjectHideFlags: 0

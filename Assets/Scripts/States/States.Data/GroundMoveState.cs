@@ -1,9 +1,8 @@
 using System;
-using Animations.Animation.Data;
-using BovineLabs.Core.Input;
 using BovineLabs.Core.Iterators;
 using BovineLabs.Stats.Data;
 using Unity.Burst;
+using Unity.Mathematics;
 using Unity.Transforms;
 
 namespace States.States.Data
@@ -12,18 +11,26 @@ namespace States.States.Data
     [BurstCompile]
     public struct GroundMoveState
     {
+        public float velocity;
 
         [BurstCompile]
-        public static void OnStateEnter(
-            ref LocalTransform localTransform,
+        public static void OnStateEnter(ref LocalTransform localTransform,
             ref CharacterStateComponent characterState,
-            in InputComponent inputComponent,
+            in float2 moveDelta,
+            float deltaTime,
             ref DynamicHashMap<StatKey, StatValue> stats,
             ref DynamicHashMap<IntrinsicKey, int> intrinsic
         )
         {
-            var moveDelta = inputComponent.MoveDelta;
-            localTransform.Position.xz += moveDelta;
+            var velocityMagnitude = intrinsic.GetValue(1) / 1000;
+            localTransform.Position.xz += moveDelta * velocityMagnitude * deltaTime;
+
+            // Only update rotation if there is movement to avoid snapping back to a default rotation.
+            if (math.lengthsq(moveDelta) > 0.0001f)
+            {
+                var moveDirection = new float3(moveDelta.x, 0f, moveDelta.y);
+                localTransform.Rotation = quaternion.LookRotation(moveDirection, math.up());
+            }
         }
     }
 }

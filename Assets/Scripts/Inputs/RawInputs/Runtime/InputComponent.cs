@@ -6,7 +6,7 @@ namespace BovineLabs.Core.Input
 {
     public partial struct InputComponent : IComponentData
     {
-        [InputActionDelta] public float2 MoveDelta;
+        [InputAction] public float2 Move;
     }
 }
 #endif

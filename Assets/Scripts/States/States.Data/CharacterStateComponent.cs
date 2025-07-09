@@ -1,5 +1,8 @@
+using System.Runtime.CompilerServices;
 using Animations.Animation.Data;
 using Animations.Animation.Data.enums;
+using BovineLabs.Core.Iterators;
+using BovineLabs.Stats.Data;
 using States.States.Data.enums;
 using Unity.Burst;
 using Unity.Entities;
@@ -12,13 +15,14 @@ namespace States.States.Data
     {
         public ECharacterState Previous;
         public ECharacterState Current;
-        
+
+
         [BurstCompile]
         public readonly void GetAnimationState(
             float2 moveVector,
-            float velocityMagnitude,
+            ref DynamicHashMap<StatKey, StatValue> stats,
+            ref DynamicHashMap<IntrinsicKey, int> intrinsic,
             bool isSprinting,
-            float groundSprintMaxSpeed,
             float groundRunMaxSpeed,
             float crouchedMaxSpeed,
             float climbingSpeed,
@@ -29,6 +33,9 @@ namespace States.States.Data
             out AnimationStateComponent animationStateComponent
         )
         {
+            
+            var velocityMagnitude = intrinsic.GetValue(1) / 1000;
+            var groundSprintMaxSpeed = stats.GetValue(1);
             switch (Current)
             {
                 case ECharacterState.GroundMove:
@@ -40,6 +47,7 @@ namespace States.States.Data
                     }
                     else
                     {
+                        
                         if (isSprinting)
                         {
                             var velocityRatio = (half)(velocityMagnitude / groundSprintMaxSpeed);
@@ -48,7 +56,7 @@ namespace States.States.Data
                         }
                         else
                         {
-                            var velocityRatio = (half)(velocityMagnitude / groundRunMaxSpeed);
+                            var velocityRatio = (half)(velocityMagnitude / groundSprintMaxSpeed);
                             animationStateComponent.Speed = velocityRatio;
                             animationStateComponent.Animation = EAnimationState.Run;
                         }
