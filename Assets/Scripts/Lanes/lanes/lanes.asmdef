@@ -1,11 +1,11 @@
 {
-    "name": "Inputs",
+    "name": "lanes",
     "rootNamespace": "",
     "references": [
         "BovineLabs.Anchor",
         "BovineLabs.Core",
         "BovineLabs.Core.Extensions",
-        "Inputs.Data",
+        "lanes.Data",
         "Unity.AppUI",
         "Unity.AppUI.MVVM",
         "Unity.AppUI.Navigation",
@@ -19,9 +19,8 @@
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
         "Unity.Transforms",
-        "RawInput",
+        "Inputs",
         "Move.Data",
-        "lanes.Data",
         "Behavior.Data"
     ],
     "optionalUnityReferences": [],

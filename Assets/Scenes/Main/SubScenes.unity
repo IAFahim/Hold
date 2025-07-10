@@ -415,6 +415,8 @@ GameObject:
   - component: {fileID: 604314090}
   - component: {fileID: 604314091}
   - component: {fileID: 604314095}
+  - component: {fileID: 604314096}
+  - component: {fileID: 604314097}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -544,7 +546,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value:
     x: 0
-    y: 0
+    y: 0.1
+--- !u!114 &604314096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 604314087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67c739c4aad448eaa485f4211d592676, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &604314097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 604314087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41a64f9d8a6345ba9beff233c1bc7fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enable: 1
 --- !u!1 &691890538
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,6 +781,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1254970408}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &2013356586
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2013356588}
+  - component: {fileID: 2013356587}
+  m_Layer: 0
+  m_Name: Line Settings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2013356587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013356586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec5b540756f80737983279b0a9d4799, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfLanes: 3
+  laneWidth: 2
+--- !u!4 &2013356588
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013356586}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4710679667548714511
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -820,3 +893,4 @@ SceneRoots:
   - {fileID: 161891923}
   - {fileID: 691890539}
   - {fileID: 604314089}
+  - {fileID: 2013356588}
