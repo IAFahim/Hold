@@ -30,9 +30,9 @@
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.entities": "1.4.0-exp.2"
+        "com.unity.entities": "1.4.0-pre.3"
       },
-      "hash": "fa6d560a6aecddfa908c34fdb46cfb22d1feb036"
+      "hash": "2f38d5605886f155220a7f4b8e0ae08e5530e274"
     },
     "com.bovinelabs.reaction": {
       "version": "https://gitlab.com/tertle/com.bovinelabs.reaction.git",
@@ -41,7 +41,7 @@
       "dependencies": {
         "com.bovinelabs.core": "1.4.3"
       },
-      "hash": "55c3f7982bcaae164b99eecae459a452818214d0"
+      "hash": "6ca2385bc5bb7a73403e4583ac0388ea8ea50281"
     },
     "com.bovinelabs.stats": {
       "version": "https://gitlab.com/tertle/com.bovinelabs.stats.git",
@@ -51,7 +51,7 @@
         "com.bovinelabs.core": "1.4.3",
         "com.bovinelabs.reaction": "0.5.0"
       },
-      "hash": "709f566c6a9948207a2de43915710984b95553b3"
+      "hash": "35a1722cd634bdeba13af9da06a33c68c8c36788"
     },
     "com.unity.addressables": {
       "version": "2.6.0",

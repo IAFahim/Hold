@@ -36,5 +36,5 @@ MonoBehaviour:
     - rid: 2174056863577407488
       type: {class: InputComponent/Settings, ns: BovineLabs.Core.Input, asm: RawInput}
       data:
-        Move: {fileID: -1680190386980627800, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}
         Name: InputComponent
+        SwipeDelta: {fileID: 3805968455020179260, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}

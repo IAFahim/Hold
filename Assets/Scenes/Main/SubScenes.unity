@@ -173,7 +173,6 @@ MonoBehaviour:
     conditions: []
     chanceToTrigger: 1
     doNotReset: 0
-    cancelActiveOnFail: 0
 --- !u!114 &161891921
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,6 +414,7 @@ GameObject:
   - component: {fileID: 604314092}
   - component: {fileID: 604314090}
   - component: {fileID: 604314091}
+  - component: {fileID: 604314095}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -530,6 +530,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   previous: 0
   current: 1
+--- !u!114 &604314095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 604314087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cca17ff3eb847f29e9c6b0d9647d10e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  value:
+    x: 0
+    y: 0
 --- !u!1 &691890538
 GameObject:
   m_ObjectHideFlags: 0

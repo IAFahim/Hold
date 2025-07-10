@@ -3,6 +3,7 @@ using Animations.Animation.Data;
 using BovineLabs.Core.Input;
 using BovineLabs.Core.Iterators;
 using BovineLabs.Stats.Data;
+using Moves.Move.Data;
 using States.States.Data;
 using States.States.Data.enums;
 using Unity.Burst;
@@ -23,11 +24,9 @@ namespace States.States
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var inputComponent = SystemAPI.GetSingleton<InputComponent>();
             new StateJobEntity
             {
                 DeltaTime = SystemAPI.Time.DeltaTime,
-                InputComponent = inputComponent
             }.ScheduleParallel();
         }
 
@@ -40,28 +39,31 @@ namespace States.States
     [BurstCompile]
     public partial struct StateJobEntity : IJobEntity
     {
-        [ReadOnly] public InputComponent InputComponent;
-        [ReadOnly]  public float DeltaTime;
+        [ReadOnly] public float DeltaTime;
 
         [BurstCompile]
         private void Execute(
             ref LocalTransform localTransform,
             ref CharacterStateComponent characterState,
             ref AnimationStateComponent animationState,
+            in GroundMoveDirectionComponent groundMoveDirection,
             ref DynamicBuffer<Stat> stats,
             ref DynamicBuffer<Intrinsic> intrinsic
         )
         {
             var statsMap = stats.AsMap();
             var intrinsicMap = intrinsic.AsMap();
-            OnStart(ref localTransform, ref characterState, ref statsMap, ref intrinsicMap);
-            characterState.GetAnimationState(InputComponent.Move, ref statsMap, ref intrinsicMap, false, 10, 10, 10, 10, 10, localTransform.Rotation, new float3(0, 0, 0), out var animationStateComponent);
+            OnStart(ref localTransform, ref characterState, groundMoveDirection, ref statsMap, ref intrinsicMap);
+            characterState.GetAnimationState(groundMoveDirection.Value, ref statsMap, ref intrinsicMap, false, 10, 10,
+                10, 10,
+                10, localTransform.Rotation, new float3(0, 0, 0), out var animationStateComponent);
             animationState = animationStateComponent;
         }
 
         private void OnStart(
             ref LocalTransform localTransform,
             ref CharacterStateComponent characterState,
+            in GroundMoveDirectionComponent groundMoveDirection,
             ref DynamicHashMap<StatKey, StatValue> statsMap,
             ref DynamicHashMap<IntrinsicKey, int> intrinsicMap
         )
@@ -71,11 +73,14 @@ namespace States.States
                 case ECharacterState.Uninitialized:
                     break;
                 case ECharacterState.GroundMove:
-                    GroundMoveState.OnStateEnter(ref localTransform,
+                    GroundMoveState.OnStateEnter(
+                        ref localTransform,
                         ref characterState,
-                        InputComponent.Move, DeltaTime,
-                        ref statsMap, ref intrinsicMap
-                        );
+                        groundMoveDirection.Value,
+                        DeltaTime,
+                        ref statsMap,
+                        ref intrinsicMap
+                    );
                     break;
                 case ECharacterState.Crouched:
                     break;
