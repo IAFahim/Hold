@@ -19,7 +19,7 @@ MonoBehaviour:
   - UI
   - Player
   - Camera
-  cursorPosition: {fileID: 7556732453195264739, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}
+  cursorPosition: {fileID: -5630151704836100654, guid: 7879de97618fbbc4a8b786dcab847f57, type: 3}
   settings:
   - rid: 2174056863577407488
   debugSettings:
