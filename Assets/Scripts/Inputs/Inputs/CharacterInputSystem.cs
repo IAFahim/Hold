@@ -1,54 +1,68 @@
 using Behaviors.Behavior.Data;
 using BovineLabs.Core.Input;
-using Lanes;
-using Lanes.lanes.Data;
-using Lanes.Lines.Data;
-using Moves.Move.Data;
+using Focuses.Focuses.Data;
+using Inputs.Inputs.Data;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace Inputs.Inputs
 {
+    /// <summary>
+    /// Processes raw swipe input from the input system and translates it into a high-level
+    /// character input command (e.g., Up, Down, Left, Right).
+    /// This system ensures that input is only processed when not interacting with UI.
+    /// </summary>
+    [BurstCompile]
     public partial struct CharacterInputSystem : ISystem
     {
+        /// <inheritdoc/>
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
         }
 
-        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var inputComponent = SystemAPI.GetSingleton<InputComponent>();
-            var laneDefinition = SystemAPI.GetSingleton<LaneDefinition>();
+            var inputCommon = SystemAPI.GetSingleton<InputCommon>();
 
-            foreach (var (laneMover, groundMoveDirection)
-                     in SystemAPI.Query<
-                         RefRW<LaneMover>,
-                         RefRW<GroundMoveDirectionComponent>
-                     >().WithAll<PlayerTag>())
+            var playerEntity = SystemAPI.GetSingletonRW<FocusSingletonComponent>().ValueRW.Entity;
+            ref var characterInput = ref SystemAPI.GetComponentRW<CharacterInputComponent>(playerEntity).ValueRW;
+
+            // If there's no input or the input is over a UI element, reset the character input and do nothing.
+            // This prevents unintended character movement while interacting with menus.
+            if (!inputCommon.AnyButtonPress || !inputCommon.InputOverUI)
             {
-                if (inputComponent.SwipeDelta.x < 0)
-                {
-                    laneMover.ValueRW.TargetLane = math.max(0, laneMover.ValueRO.TargetLane - 1);
-                }
-                else if (0 < inputComponent.SwipeDelta.x)
-                {
-                    laneMover.ValueRW.TargetLane =
-                        math.min(laneDefinition.NumberOfLanes - 1, laneMover.ValueRO.TargetLane + 1);
-                }
-                else
-                {
-                    var currentPosition = groundMoveDirection.ValueRW.Value;
-                    var targetPositionX = (laneMover.ValueRO.TargetLane - (laneDefinition.NumberOfLanes - 1) * 0.5f) *
-                                          laneDefinition.LaneWidth;
+                characterInput.Value = ECharacterInput.None;
+                return;
+            }
 
-                    groundMoveDirection.ValueRW.Value.x = math.lerp(currentPosition.x, targetPositionX, 0.1f);
-                }
+            var inputComponent = SystemAPI.GetSingleton<InputComponent>();
+            var swipeDelta = inputComponent.SwipeDelta;
+
+            // Determine the dominant axis of the swipe to convert it into a directional command.
+            var absX = math.abs(swipeDelta.x);
+            var absY = math.abs(swipeDelta.y);
+
+            if (absX > absY)
+            {
+                // Horizontal swipe is dominant.
+                characterInput.Value = swipeDelta.x > 0 ? ECharacterInput.Right : ECharacterInput.Left;
+            }
+            else if (absY > absX)
+            {
+                // Vertical swipe is dominant.
+                characterInput.Value = swipeDelta.y > 0 ? ECharacterInput.Jump : ECharacterInput.Slide;
+            }
+            else
+            {
+                // No dominant direction (e.g., a very small or perfectly diagonal swipe).
+                characterInput.Value = ECharacterInput.None;
             }
         }
 
+        /// <inheritdoc/>
         [BurstCompile]
         public void OnDestroy(ref SystemState state)
         {

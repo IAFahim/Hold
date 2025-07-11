@@ -1,11 +1,11 @@
 
 using Unity.Entities;
 
-namespace Lanes.Lines.Data
+namespace Lanes.lanes.Data
 {
     public struct LaneDefinition : IComponentData
     {
-        public int NumberOfLanes;
-        public float LaneWidth;
+        public float leftLane;
+        public float rightLane;
     }
 }

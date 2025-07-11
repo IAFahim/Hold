@@ -21,7 +21,8 @@
         "Unity.Transforms",
         "Inputs",
         "Move.Data",
-        "Behavior.Data"
+        "Behavior.Data",
+        "RawInput"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

@@ -1,14 +1,9 @@
 {
-    "name": "Inputs",
+    "name": "Focuses.Data",
     "rootNamespace": "",
     "references": [
-        "BovineLabs.Anchor",
         "BovineLabs.Core",
         "BovineLabs.Core.Extensions",
-        "Inputs.Data",
-        "Unity.AppUI",
-        "Unity.AppUI.MVVM",
-        "Unity.AppUI.Navigation",
         "Unity.Burst",
         "Unity.Collections",
         "Unity.Entities",
@@ -18,14 +13,9 @@
         "Unity.Mathematics",
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
-        "Unity.Transforms",
-        "RawInput",
-        "Move.Data",
-        "lanes.Data",
-        "Behavior.Data",
-        "BovineLabs.Core.Input",
-        "Focuses.Data"
+        "Unity.Transforms"
     ],
+    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
