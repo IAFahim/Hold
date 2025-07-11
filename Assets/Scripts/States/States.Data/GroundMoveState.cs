@@ -23,7 +23,8 @@ namespace States.States.Data
         )
         {
             var velocityMagnitude = intrinsic.GetValue(1) / 1000;
-            localTransform.Position.xz += moveDelta * velocityMagnitude * deltaTime;
+            var normalize = math.normalize(moveDelta);
+            localTransform.Position.xz += normalize * velocityMagnitude * deltaTime;
 
             // Only update rotation if there is movement to avoid snapping back to a default rotation.
             if (math.lengthsq(moveDelta) > 0.0001f)

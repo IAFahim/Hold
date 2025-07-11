@@ -1,7 +1,7 @@
-using Behaviors.Behavior.Data;
 using BovineLabs.Core.Input;
 using Focuses.Focuses.Data;
 using Inputs.Inputs.Data;
+using Moves.Move.Data;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -23,6 +23,9 @@ namespace Inputs.Inputs
         {
         }
 
+
+        /// <inheritdoc/>
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var inputCommon = SystemAPI.GetSingleton<InputCommon>();
@@ -32,11 +35,13 @@ namespace Inputs.Inputs
 
             // If there's no input or the input is over a UI element, reset the character input and do nothing.
             // This prevents unintended character movement while interacting with menus.
-            if (!inputCommon.AnyButtonPress || !inputCommon.InputOverUI)
+            var groundCharacter = SystemAPI.GetComponentRW<GroundMoveDirectionComponent>(playerEntity);
+            if (!inputCommon.AnyButtonPress)
             {
-                characterInput.Value = ECharacterInput.None;
+                Clear(ref characterInput);
                 return;
             }
+
 
             var inputComponent = SystemAPI.GetSingleton<InputComponent>();
             var swipeDelta = inputComponent.SwipeDelta;
@@ -44,23 +49,42 @@ namespace Inputs.Inputs
             // Determine the dominant axis of the swipe to convert it into a directional command.
             var absX = math.abs(swipeDelta.x);
             var absY = math.abs(swipeDelta.y);
+            if (absX + absY == 0)
+            {
+                Clear(ref characterInput);
+                return;
+            }
 
             if (absX > absY)
             {
-                // Horizontal swipe is dominant.
-                characterInput.Value = swipeDelta.x > 0 ? ECharacterInput.Right : ECharacterInput.Left;
+                if (0 < swipeDelta.x)
+                {
+                    characterInput.Value = ECharacterInput.Right;
+                    groundCharacter.ValueRW.Value.x = 1;
+                    Debug.Log(ECharacterInput.Right);
+                    return;
+                }
+
+                characterInput.Value = ECharacterInput.Left;
+                groundCharacter.ValueRW.Value.x = -1;
+                Debug.Log(ECharacterInput.Left);
+                return;
             }
-            else if (absY > absX)
+
+            if (swipeDelta.y > 0)
             {
-                // Vertical swipe is dominant.
-                characterInput.Value = swipeDelta.y > 0 ? ECharacterInput.Jump : ECharacterInput.Slide;
+                characterInput.Value = ECharacterInput.Jump;
+                return;
             }
-            else
-            {
-                // No dominant direction (e.g., a very small or perfectly diagonal swipe).
-                characterInput.Value = ECharacterInput.None;
-            }
+
+            characterInput.Value = ECharacterInput.Slide;
         }
+
+        private void Clear(ref CharacterInputComponent characterInput)
+        {
+            characterInput.Value = ECharacterInput.None;
+        }
+
 
         /// <inheritdoc/>
         [BurstCompile]
