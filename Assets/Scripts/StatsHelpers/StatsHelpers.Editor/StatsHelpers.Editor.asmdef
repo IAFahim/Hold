@@ -1,0 +1,46 @@
+{
+    "name": "StatsHelpers.Editor",
+    "rootNamespace": "",
+    "references": [
+        "BovineLabs.Core",
+        "BovineLabs.Core.Editor",
+        "BovineLabs.Core.Extensions",
+        "BovineLabs.Core.Extensions.Editor",
+        "StatsHelpers",
+        "StatsHelpers.Authoring",
+        "StatsHelpers.Data",
+        "Unity.Burst",
+        "Unity.Collections",
+        "Unity.Entities",
+        "Unity.Entities.Graphics",
+        "Unity.Entities.Hybrid",
+        "Unity.InputSystem",
+        "Unity.Mathematics",
+        "Unity.Mathematics.Extensions",
+        "Unity.Physics",
+        "Unity.Transforms",
+        "ALINE",
+        "BovineLabs.Stats.Data",
+        "BovineLabs.Stats.Authoring",
+        "Unity.Addressables",
+        "BovineLabs.Reaction.Authoring",
+        "BovineLabs.Core.Authoring"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.arongranberg.aline",
+            "expression": "1.0.0",
+            "define": "ALINE"
+        }
+    ],
+    "noEngineReferences": false
+}
