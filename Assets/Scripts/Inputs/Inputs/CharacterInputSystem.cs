@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using BovineLabs.Core.Input;
 using Focuses.Focuses.Data;
 using Inputs.Inputs.Data;
@@ -5,6 +6,7 @@ using Moves.Move.Data;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace Inputs.Inputs
@@ -24,26 +26,27 @@ namespace Inputs.Inputs
         }
 
 
+
         /// <inheritdoc/>
-        [BurstCompile]
+        // [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             var inputCommon = SystemAPI.GetSingleton<InputCommon>();
 
             var playerEntity = SystemAPI.GetSingletonRW<FocusSingletonComponent>().ValueRW.Entity;
             ref var characterInput = ref SystemAPI.GetComponentRW<CharacterInputComponent>(playerEntity).ValueRW;
+            var localTransform = SystemAPI.GetComponentRO<LocalTransform>(playerEntity).ValueRO;
 
             // If there's no input or the input is over a UI element, reset the character input and do nothing.
             // This prevents unintended character movement while interacting with menus.
-            var groundCharacter = SystemAPI.GetComponentRW<GroundMoveDirectionComponent>(playerEntity);
-            if (!inputCommon.AnyButtonPress)
+            var inputComponent = SystemAPI.GetSingleton<InputComponent>();
+            if (!inputComponent.Click)
             {
                 Clear(ref characterInput);
                 return;
             }
 
 
-            var inputComponent = SystemAPI.GetSingleton<InputComponent>();
             var swipeDelta = inputComponent.SwipeDelta;
 
             // Determine the dominant axis of the swipe to convert it into a directional command.
@@ -59,30 +62,48 @@ namespace Inputs.Inputs
             {
                 if (0 < swipeDelta.x)
                 {
-                    characterInput.Value = ECharacterInput.Right;
-                    groundCharacter.ValueRW.Value.x = 1;
-                    Debug.Log(ECharacterInput.Right);
+                    characterInput.Value |= ECharacterInput.Right;
+                    if (localTransform.Position.x == 0)
+                    {
+                        characterInput.ClearLine();
+                        
+                        characterInput.Value |= ECharacterInput.GoToRight;
+                    }
+                    else if (localTransform.Position.x < 0)
+                    {
+                        characterInput.ClearLine();
+                        characterInput.Value |= ECharacterInput.GoToMiddle;
+                    }
                     return;
                 }
 
-                characterInput.Value = ECharacterInput.Left;
-                groundCharacter.ValueRW.Value.x = -1;
-                Debug.Log(ECharacterInput.Left);
+                characterInput.Value |= ECharacterInput.Left;
+                if (localTransform.Position.x == 0)
+                {
+                    characterInput.ClearLine();
+                    characterInput.Value |= ECharacterInput.GoToLeft;
+                }
+                else if (localTransform.Position.x > 0)
+                {
+                    characterInput.ClearLine();
+                    characterInput.Value |= ECharacterInput.GoToMiddle;
+                }
                 return;
             }
 
             if (swipeDelta.y > 0)
             {
-                characterInput.Value = ECharacterInput.Jump;
+                characterInput.Value |= ECharacterInput.Jump;
                 return;
             }
 
-            characterInput.Value = ECharacterInput.Slide;
+            characterInput.Value |= ECharacterInput.Slide;
         }
+
 
         private void Clear(ref CharacterInputComponent characterInput)
         {
-            characterInput.Value = ECharacterInput.None;
+            characterInput.ClearDirection();
         }
 
 

@@ -22,7 +22,8 @@
         "Animation.Data",
         "RawInput",
         "BovineLabs.Stats.Data",
-        "Move.Data"
+        "Move.Data",
+        "Inputs.Data"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

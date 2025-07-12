@@ -16,11 +16,9 @@ namespace States.States.Data
     {
         public ECharacterState Previous;
         public ECharacterState Current;
-
-        /// <summary>
-        /// Determines the appropriate animation state based on the character's current state and dynamics.
-        /// </summary>
+        
         [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly void GetAnimationState(
             float2 moveVector,
             ref DynamicHashMap<StatKey, StatValue> stats,
@@ -74,14 +72,19 @@ namespace States.States.Data
         }
 
         [BurstCompile]
-        private readonly AnimationStateComponent GetGroundMoveAnimationState(float2 moveVector, bool isSprinting,
-            ref DynamicHashMap<IntrinsicKey, int> intrinsic, ref DynamicHashMap<StatKey, StatValue> stats)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private readonly AnimationStateComponent GetGroundMoveAnimationState(
+            float2 moveVector,
+            bool isSprinting,
+            ref DynamicHashMap<IntrinsicKey, int> intrinsic,
+            ref DynamicHashMap<StatKey, StatValue> stats
+        )
         {
             if (math.lengthsq(moveVector) < 0.0001f)
             {
                 return GetStaticAnimationState(EAnimationState.Idle);
             }
-        
+
             var velocityRatio = (half)(VelocityMagnitude(ref intrinsic) / GroundSprintMaxSpeed(ref stats));
             return new AnimationStateComponent
             {
@@ -89,16 +92,20 @@ namespace States.States.Data
                 Animation = isSprinting ? EAnimationState.Sprint : EAnimationState.Run,
             };
         }
-        
+
         [BurstCompile]
-        private readonly AnimationStateComponent GetCrouchedAnimationState(float2 moveVector,
-            ref DynamicHashMap<IntrinsicKey, int> intrinsic, ref DynamicHashMap<StatKey, StatValue> stats)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private readonly AnimationStateComponent GetCrouchedAnimationState(
+            float2 moveVector,
+            ref DynamicHashMap<IntrinsicKey, int> intrinsic,
+            ref DynamicHashMap<StatKey, StatValue> stats
+        )
         {
             if (math.lengthsq(moveVector) < 0.0001f)
             {
                 return GetStaticAnimationState(EAnimationState.CrouchIdle);
             }
-        
+
             var crouchedMaxSpeed = stats.GetValue(EStat.CrouchedMaxSpeed.ToKey());
             var velocityRatio = (half)(crouchedMaxSpeed > 0 ? VelocityMagnitude(ref intrinsic) / crouchedMaxSpeed : 0);
             return new AnimationStateComponent
@@ -107,10 +114,13 @@ namespace States.States.Data
                 Animation = EAnimationState.CrouchMove,
             };
         }
-        
+
         [BurstCompile]
-        private readonly AnimationStateComponent GetWallRunAnimationState(quaternion rotation,
-            float3 lastKnownWallNormal)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private readonly AnimationStateComponent GetWallRunAnimationState(
+            quaternion rotation,
+            float3 lastKnownWallNormal
+        )
         {
             var rightVector = math.mul(rotation, new float3(1f, 0f, 0f));
             var wallIsOnTheLeft = math.dot(rightVector, lastKnownWallNormal) > 0f;
@@ -118,8 +128,9 @@ namespace States.States.Data
                 ? EAnimationState.WallRunLeft
                 : EAnimationState.WallRunRight);
         }
-        
+
         [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private readonly AnimationStateComponent GetClimbingAnimationState(
             ref DynamicHashMap<IntrinsicKey, int> intrinsic,
             ref DynamicHashMap<StatKey, StatValue> stats)
@@ -132,8 +143,9 @@ namespace States.States.Data
                 Animation = EAnimationState.ClimbingMove,
             };
         }
-        
+
         [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private readonly AnimationStateComponent GetLedgeGrabAnimationState(
             ref DynamicHashMap<IntrinsicKey, int> intrinsic,
             ref DynamicHashMap<StatKey, StatValue> stats)
@@ -146,28 +158,28 @@ namespace States.States.Data
                 Animation = EAnimationState.LedgeGrabMove,
             };
         }
-        
+
         [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private readonly AnimationStateComponent GetSwimmingAnimationState(
             ref DynamicHashMap<IntrinsicKey, int> intrinsic,
-            ref DynamicHashMap<StatKey, StatValue> stats)
+            ref DynamicHashMap<StatKey, StatValue> stats
+        )
         {
             var swimmingMaxSpeed = stats.GetValue(EStat.SwimmingMaxSpeed.ToKey());
             var velocityRatio = swimmingMaxSpeed > 0f ? VelocityMagnitude(ref intrinsic) / swimmingMaxSpeed : 0f;
-        
-            if (velocityRatio < 0.1f)
-            {
-                return GetStaticAnimationState(EAnimationState.SwimmingIdle);
-            }
-        
+
+            if (velocityRatio < 0.1f) return GetStaticAnimationState(EAnimationState.SwimmingIdle);
+
             return new AnimationStateComponent
             {
                 Speed = (half)velocityRatio,
                 Animation = EAnimationState.SwimmingMove,
             };
         }
-        
+
         [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private readonly AnimationStateComponent GetStaticAnimationState(EAnimationState animation)
         {
             return new AnimationStateComponent
@@ -176,14 +188,14 @@ namespace States.States.Data
                 Animation = animation,
             };
         }
-        
+
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private readonly float VelocityMagnitude(ref DynamicHashMap<IntrinsicKey, int> intrinsic)
         {
             return intrinsic.GetValue(EIntrinsic.Speed.ToKey(out var factor)) / factor;
         }
-        
+
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private readonly float GroundSprintMaxSpeed(ref DynamicHashMap<StatKey, StatValue> stat)

@@ -1,8 +1,10 @@
 using System;
+using System.Runtime.CompilerServices;
 using Animations.Animation.Data;
 using BovineLabs.Core.Input;
 using BovineLabs.Core.Iterators;
 using BovineLabs.Stats.Data;
+using Inputs.Inputs.Data;
 using Moves.Move.Data;
 using States.States.Data;
 using States.States.Data.enums;
@@ -45,24 +47,75 @@ namespace States.States
         private void Execute(
             ref LocalTransform localTransform,
             ref CharacterStateComponent characterState,
+            ref CharacterInputComponent characterInput,
             ref AnimationStateComponent animationState,
-            in GroundMoveDirectionComponent groundMoveDirection,
             ref DynamicBuffer<Stat> stats,
             ref DynamicBuffer<Intrinsic> intrinsic
         )
         {
             var statsMap = stats.AsMap();
             var intrinsicMap = intrinsic.AsMap();
-            OnStart(ref localTransform, ref characterState, groundMoveDirection, ref statsMap, ref intrinsicMap);
-            characterState.GetAnimationState(groundMoveDirection.Value, ref statsMap, ref intrinsicMap, false,
+            Apply3LineConstrain(ref characterInput, ref localTransform, out var moveDirection);
+            OnStart(ref localTransform, ref characterState, moveDirection, ref statsMap, ref intrinsicMap);
+            characterState.GetAnimationState(moveDirection, ref statsMap, ref intrinsicMap, false,
                 localTransform.Rotation, new float3(0, 0, 0), out var animationStateComponent);
             animationState = animationStateComponent;
+        }
+
+
+        private static readonly float LaneBoundary = 3.3f;
+        private static readonly float Tolerance = 0.05f;
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void Apply3LineConstrain(
+            ref CharacterInputComponent characterInput,
+            ref LocalTransform localTransform,
+            out float2 moveDirection
+        )
+        {
+            moveDirection = new(0, 1);
+            var positionX = localTransform.Position.x;
+            var target = 0f;
+            if (characterInput.GetLine() == 3)
+                target = -LaneBoundary;
+            else if (characterInput.GetLine() == 2)
+            {
+                if (math.abs(positionX) < Tolerance)
+                {
+                    localTransform.Position.x = 0;
+                    characterInput.ClearLine();
+                    return;
+                }
+
+                target = 0;
+            }
+            else if (characterInput.GetLine() == 1) target = LaneBoundary;
+
+            
+            moveDirection.x = -positionX +target;
+            if (positionX < -LaneBoundary)
+            {
+                localTransform.Position.x = -LaneBoundary;
+                characterInput.ClearLine();
+                return;
+            }
+
+            if (positionX > LaneBoundary)
+            {
+                localTransform.Position.x = LaneBoundary;
+                characterInput.ClearLine();
+                return;
+            }
+
+            
+            
         }
 
         private void OnStart(
             ref LocalTransform localTransform,
             ref CharacterStateComponent characterState,
-            in GroundMoveDirectionComponent groundMoveDirection,
+            in float2 moveDirection,
             ref DynamicHashMap<StatKey, StatValue> statsMap,
             ref DynamicHashMap<IntrinsicKey, int> intrinsicMap
         )
@@ -74,10 +127,8 @@ namespace States.States
                 case ECharacterState.GroundMove:
                     GroundMoveState.OnStateEnter(
                         ref localTransform,
-                        ref characterState,
-                        groundMoveDirection.Value,
+                        moveDirection,
                         DeltaTime,
-                        ref statsMap,
                         ref intrinsicMap
                     );
                     break;

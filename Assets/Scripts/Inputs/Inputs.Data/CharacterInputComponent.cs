@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using Moves.Move.Data;
 using Unity.Burst;
 using Unity.Entities;
 
@@ -98,6 +99,32 @@ namespace Inputs.Inputs.Data
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly bool IsSlideActive() => IsActive(ECharacterInput.Slide);
+
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void ClearDirection()
+        {
+            Value &= ~ECharacterInput.Direction;
+        }
+        
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public byte GetLine()
+        {
+             return (byte)(Value & ~ECharacterInput.Direction);
+        }
+        
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void ClearLine()
+        {
+            Value &= ECharacterInput.ClearLane;
+        }
+        
+        
+
+        
     }
 
     /// <summary>
@@ -106,10 +133,16 @@ namespace Inputs.Inputs.Data
     [Flags]
     public enum ECharacterInput : byte
     {
-        None  = 0,
-        Left  = 1 << 0, // 0b0001
-        Right = 1 << 1, // 0b0010
-        Jump  = 1 << 2, // 0b0100
-        Slide = 1 << 3, // 0b1000
+        None = 0,
+        Left = 0b0001_0000,
+        Right = 0b0010_0000,
+        Jump = 0b0100_0000,
+        Slide = 0b1000_0000,
+        Direction = Left | Right | Jump | Slide,
+        GoToLeft = 3,
+        GoToMiddle = 2,
+        GoToRight = 1,
+        ClearLane = 0b1111_1100,
+        Reached = 0b0000_1000,
     }
 }
