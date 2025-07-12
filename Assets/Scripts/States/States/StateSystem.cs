@@ -57,16 +57,15 @@ namespace States.States
             var intrinsicMap = intrinsic.AsMap();
             Apply3LineConstrain(ref characterInput, ref localTransform, out var moveDirection);
             OnStart(ref localTransform, ref characterState, moveDirection, ref statsMap, ref intrinsicMap);
-            characterState.GetAnimationState(moveDirection, ref statsMap, ref intrinsicMap, false,
+            characterState.GetAnimationState(moveDirection, ref statsMap, ref intrinsicMap,
+                characterInput.IsSprinting(),
                 localTransform.Rotation, new float3(0, 0, 0), out var animationStateComponent);
             animationState = animationStateComponent;
         }
 
 
-        private static readonly float LaneBoundary = 3.3f;
-        private static readonly float Tolerance = 0.05f;
+        private static readonly float LaneBoundary = 2.5f;
 
-        [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void Apply3LineConstrain(
             ref CharacterInputComponent characterInput,
@@ -77,23 +76,19 @@ namespace States.States
             moveDirection = new(0, 1);
             var positionX = localTransform.Position.x;
             var target = 0f;
-            if (characterInput.GetLine() == 3)
+            if (characterInput.IsGoingToLeftLine())
                 target = -LaneBoundary;
-            else if (characterInput.GetLine() == 2)
+            else if (characterInput.IsGoingToMiddleLine())
             {
-                if (math.abs(positionX) < Tolerance)
-                {
-                    localTransform.Position.x = 0;
-                    characterInput.ClearLine();
-                    return;
-                }
-
                 target = 0;
             }
-            else if (characterInput.GetLine() == 1) target = LaneBoundary;
+            else if (characterInput.IsGoingToRightLine())
+            {
+                target = LaneBoundary;
+            }
 
-            
-            moveDirection.x = -positionX +target;
+
+            moveDirection.x = -positionX + target;
             if (positionX < -LaneBoundary)
             {
                 localTransform.Position.x = -LaneBoundary;
@@ -107,9 +102,6 @@ namespace States.States
                 characterInput.ClearLine();
                 return;
             }
-
-            
-            
         }
 
         private void OnStart(

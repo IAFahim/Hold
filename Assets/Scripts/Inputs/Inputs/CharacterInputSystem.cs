@@ -26,7 +26,6 @@ namespace Inputs.Inputs
         }
 
 
-
         /// <inheritdoc/>
         // [BurstCompile]
         public void OnUpdate(ref SystemState state)
@@ -62,48 +61,57 @@ namespace Inputs.Inputs
             {
                 if (0 < swipeDelta.x)
                 {
-                    characterInput.Value |= ECharacterInput.Right;
-                    if (localTransform.Position.x == 0)
+                    characterInput.SetRight();
+                    if (localTransform.Position.x < 0)
                     {
-                        characterInput.ClearLine();
-                        
-                        characterInput.Value |= ECharacterInput.GoToRight;
+                        if (characterInput.IsGoingToMiddleLine())
+                        {
+                            characterInput.GoToRightLine();
+                            return;
+                        }
+
+                        characterInput.GoToMiddleLine();
                     }
-                    else if (localTransform.Position.x < 0)
+                    else
                     {
-                        characterInput.ClearLine();
-                        characterInput.Value |= ECharacterInput.GoToMiddle;
+                        characterInput.GoToRightLine();
                     }
+
                     return;
                 }
 
-                characterInput.Value |= ECharacterInput.Left;
-                if (localTransform.Position.x == 0)
+                characterInput.SetLeft();
+                if (0 < localTransform.Position.x)
                 {
-                    characterInput.ClearLine();
-                    characterInput.Value |= ECharacterInput.GoToLeft;
+                    if (characterInput.IsGoingToMiddleLine())
+                    {
+                        characterInput.GoToLeftLine();
+                        return;
+                    }
+
+                    characterInput.GoToMiddleLine();
                 }
-                else if (localTransform.Position.x > 0)
+                else
                 {
-                    characterInput.ClearLine();
-                    characterInput.Value |= ECharacterInput.GoToMiddle;
+                    characterInput.GoToLeftLine();
                 }
+
                 return;
             }
 
             if (swipeDelta.y > 0)
             {
-                characterInput.Value |= ECharacterInput.Jump;
+                characterInput.SetJump();
                 return;
             }
 
-            characterInput.Value |= ECharacterInput.Slide;
+            characterInput.SetSlide();
         }
 
 
         private void Clear(ref CharacterInputComponent characterInput)
         {
-            characterInput.ClearDirection();
+            characterInput.ClearFirst4Bit();
         }
 
 

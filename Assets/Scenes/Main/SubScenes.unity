@@ -507,13 +507,16 @@ MonoBehaviour:
   StatDefaults:
   - Stat: {fileID: 11400000, guid: 25630948b0897bffca2ee2ebd5c2b3b5, type: 2}
     ModifyType: 0
-    Value: 3
+    Value: 5
+  - Stat: {fileID: 11400000, guid: 0968efe871dbac45183db9ac07b26c35, type: 2}
+    ModifyType: 0
+    Value: 10
   StatDefaultGroups: []
   StatsCanBeModified: 1
   AddIntrinsics: 1
   IntrinsicDefaults:
   - Intrinsic: {fileID: 11400000, guid: 83cbb00073553e018b10800f602d514d, type: 2}
-    Value: 3000
+    Value: 5000
   IntrinsicDefaultGroups: []
   Initialize:
     CopyFrom: 3
@@ -543,7 +546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69cf05774314419e84138b7b12dc50e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterInputComponent: 0
+  input: 2
 --- !u!114 &604314099
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@ namespace States.States.Data
     [BurstCompile]
     public struct GroundMoveState
     {
+        private const float rotationSpeed = 10f; // Add rotation speed parameter
+
         [BurstCompile]
         public static void OnStateEnter(
             ref LocalTransform localTransform,
@@ -20,7 +22,6 @@ namespace States.States.Data
             ref DynamicHashMap<IntrinsicKey, int> intrinsic
         )
         {
-
             var velocityMagnitude = intrinsic.GetValue(EIntrinsic.Speed.ToKey(out var factor)) / factor;
             var normalize = math.normalize(moveDirection);
             localTransform.Position.xz += normalize * velocityMagnitude * deltaTime;
@@ -29,7 +30,14 @@ namespace States.States.Data
             if (math.lengthsq(moveDirection) > 0.0001f)
             {
                 var moveDirectionF3 = new float3(moveDirection.x, 0f, moveDirection.y);
-                localTransform.Rotation = quaternion.LookRotation(moveDirectionF3, math.up());
+                var targetRotation = quaternion.LookRotation(moveDirectionF3, math.up());
+
+                // Smoothly interpolate between current and target rotation
+                localTransform.Rotation = math.nlerp(
+                    localTransform.Rotation,
+                    targetRotation,
+                    rotationSpeed * deltaTime
+                );
             }
         }
     }

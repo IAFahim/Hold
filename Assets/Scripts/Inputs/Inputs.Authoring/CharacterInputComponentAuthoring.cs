@@ -6,14 +6,17 @@ namespace Inputs.Inputs.Authoring
 {
     public class CharacterInputComponentAuthoring : MonoBehaviour
     {
-        public ECharacterInput CharacterInputComponent;
+        [SerializeField] private byte input = CharacterInputComponent.MiddleLane;
 
         public class CharacterInputComponentBaker : Baker<CharacterInputComponentAuthoring>
         {
             public override void Bake(CharacterInputComponentAuthoring authoring)
             {
-                var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddComponent(entity, new CharacterInputComponent { Value = authoring.CharacterInputComponent });
+                var entity = GetEntity(TransformUsageFlags.None);
+                AddComponent(entity, new CharacterInputComponent
+                {
+                    Value = authoring.input
+                });
             }
         }
     }

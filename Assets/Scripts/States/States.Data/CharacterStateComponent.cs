@@ -85,7 +85,8 @@ namespace States.States.Data
                 return GetStaticAnimationState(EAnimationState.Idle);
             }
 
-            var velocityRatio = (half)(VelocityMagnitude(ref intrinsic) / GroundSprintMaxSpeed(ref stats));
+            var maxSpeed = isSprinting ? GroundSprintMaxSpeed(ref stats) : GroundMaxSpeed(ref stats);
+            var velocityRatio = (half)(VelocityMagnitude(ref intrinsic) / maxSpeed);
             return new AnimationStateComponent
             {
                 Speed = velocityRatio,
@@ -135,7 +136,7 @@ namespace States.States.Data
             ref DynamicHashMap<IntrinsicKey, int> intrinsic,
             ref DynamicHashMap<StatKey, StatValue> stats)
         {
-            var climbingSpeed = stats.GetValue(EStat.ClimbingSpeed.ToKey());
+            var climbingSpeed = stats.GetValue(EStat.CrouchedMaxSpeed.ToKey());
             var velocityRatio = (half)(climbingSpeed > 0f ? VelocityMagnitude(ref intrinsic) / climbingSpeed : 0f);
             return new AnimationStateComponent
             {
@@ -201,6 +202,13 @@ namespace States.States.Data
         private readonly float GroundSprintMaxSpeed(ref DynamicHashMap<StatKey, StatValue> stat)
         {
             return stat.GetValue(EStat.GroundSprintMaxSpeed.ToKey());
+        }
+        
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private readonly float GroundMaxSpeed(ref DynamicHashMap<StatKey, StatValue> stat)
+        {
+            return stat.GetValue(EStat.GroundMaxSpeed.ToKey());
         }
     }
 }

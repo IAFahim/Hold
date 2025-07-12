@@ -19,130 +19,155 @@ namespace Inputs.Inputs.Data
     [BurstCompile]
     public struct CharacterInputComponent : IComponentData
     {
-        /// <summary>
-        /// The bitmask representing the current inputs.
-        /// </summary>
-        public ECharacterInput Value;
+        public byte Value;
+        private const byte Right = 0b0001_0000;
+        private const byte Slide = 0b0010_0000;
+        private const byte Jump = 0b0100_0000;
+        private const byte Left = 0b1000_0000;
+        
+        private const byte Sprint = 0b0000_1000;
+        private const byte Couch = 0b0000_0100;
 
-        // --- Setters ---
-
-        /// <summary>
-        /// Sets the state of a specific input flag.
-        /// </summary>
-        /// <param name="flag">The input flag to modify.</param>
-        /// <param name="isActive">The desired state for the flag.</param>
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetActive(ECharacterInput flag, bool isActive)
+        public void ClearFirst4Bit()
         {
-            if (isActive)
-            {
-                Value |= flag;
-            }
-            else
-            {
-                Value &= ~flag;
-            }
+            Value &= 0b0000_1111;
         }
 
-        /// <summary>Sets the Left input state.</summary>
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetLeftActive(bool isActive) => SetActive(ECharacterInput.Left, isActive);
-
-        /// <summary>Sets the Right input state.</summary>
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetRightActive(bool isActive) => SetActive(ECharacterInput.Right, isActive);
-
-        /// <summary>Sets the Jump input state.</summary>
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetJumpActive(bool isActive) => SetActive(ECharacterInput.Jump, isActive);
-
-        /// <summary>Sets the Slide input state.</summary>
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetSlideActive(bool isActive) => SetActive(ECharacterInput.Slide, isActive);
-
-
-        // --- Getters ---
-
-        /// <summary>
-        /// Checks if a specific input flag is active.
-        /// </summary>
-        /// <param name="flag">The input flag to check.</param>
-        /// <returns>True if the flag is set in the value.</returns>
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly bool IsActive(ECharacterInput flag)
+        public void SetRight()
         {
-            return (Value & flag) == flag;
+            ClearFirst4Bit();
+            Value |= Right;
         }
 
-        /// <summary>Checks if the Left input is active.</summary>
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly bool IsLeftActive() => IsActive(ECharacterInput.Left);
-
-        /// <summary>Checks if the Right input is active.</summary>
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly bool IsRightActive() => IsActive(ECharacterInput.Right);
-
-        /// <summary>Checks if the Jump input is active.</summary>
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly bool IsJumpActive() => IsActive(ECharacterInput.Jump);
-
-        /// <summary>Checks if the Slide input is active.</summary>
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly bool IsSlideActive() => IsActive(ECharacterInput.Slide);
-
-
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ClearDirection()
+        public bool IsRightActivatedThisFrame()
         {
-            Value &= ~ECharacterInput.Direction;
+            return (Value & Right) != 0;
+        }
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsLeftActivatedThisFrame()
+        {
+            return (Value & Left) != 0;
+        }
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsJumpActivatedThisFrame()
+        {
+            return (Value & Jump) != 0;
+        }
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsSlideActivatedThisFrame()
+        {
+            return (Value & Slide) != 0;
         }
         
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public byte GetLine()
+        public bool IsSprinting()
         {
-             return (byte)(Value & ~ECharacterInput.Direction);
+            return (Value & Sprint) != 0;
+        }
+        
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsCrouching()
+        {
+            return (Value & Couch) != 0;
+        }
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetLeft()
+        {
+            ClearFirst4Bit();
+            Value |= Left;
+        }
+
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetJump()
+        {
+            ClearFirst4Bit();
+            Value |= Jump;
+        }
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetSlide()
+        {
+            ClearFirst4Bit();
+            Value |= Slide;
+        }
+        
+
+        private const byte LeftLane = 0b0000_0001;
+        public const byte MiddleLane = 0b0000_0010;
+        private const byte RightLane = 0b0000_0011;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsGoingToLeftLine()
+        {
+            var last4Only = Value & 0b0000_1111;
+            return last4Only == LeftLane;
+        }
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsGoingToMiddleLine()
+        {
+            var last4Only = Value & 0b0000_1111;
+            return last4Only == MiddleLane;
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsGoingToRightLine()
+        {
+            var last4Only = Value & 0b0000_1111;
+            return last4Only == RightLane;
         }
         
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ClearLine()
         {
-            Value &= ECharacterInput.ClearLane;
+            Value &= 0b1111_1100;
+        }
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void GoToRightLine()
+        {
+            ClearLine();
+            Value |= RightLane;
+        }
+        
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void GoToLeftLine()
+        {
+            ClearLine();
+            Value |= LeftLane;
+        }
+        
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void GoToMiddleLine()
+        {
+            ClearLine();
+            Value |= MiddleLane;
         }
         
         
-
-        
-    }
-
-    /// <summary>
-    /// A bitmask enum representing character inputs.
-    /// </summary>
-    [Flags]
-    public enum ECharacterInput : byte
-    {
-        None = 0,
-        Left = 0b0001_0000,
-        Right = 0b0010_0000,
-        Jump = 0b0100_0000,
-        Slide = 0b1000_0000,
-        Direction = Left | Right | Jump | Slide,
-        GoToLeft = 3,
-        GoToMiddle = 2,
-        GoToRight = 1,
-        ClearLane = 0b1111_1100,
-        Reached = 0b0000_1000,
     }
 }
