@@ -1,7 +1,7 @@
 ﻿using System;
 using Unity.Mathematics;
 
-namespace _src.Scripts.StatsHelpers.StatsHelpers.Data
+namespace StatsHelpers.StatsHelpers.Data
 {
     [Serializable]
     public struct KvIntrinsic

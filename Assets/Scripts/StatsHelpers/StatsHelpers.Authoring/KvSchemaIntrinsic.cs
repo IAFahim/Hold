@@ -1,7 +1,7 @@
 ﻿using System;
 using BovineLabs.Stats.Authoring;
 
-namespace _src.Scripts.StatsHelpers.StatsHelpers.Authoring
+namespace StatsHelpers.StatsHelpers.Authoring
 {
     [Serializable]
     public struct KvSchemaIntrinsic

@@ -4,6 +4,7 @@ using Animations.Animation.Data.enums;
 using BovineLabs.Core.Iterators;
 using BovineLabs.Stats.Data;
 using States.States.Data.enums;
+using StatsHelpers.StatsHelpers.Data;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -23,7 +24,6 @@ namespace States.States.Data
             ref DynamicHashMap<StatKey, StatValue> stats,
             ref DynamicHashMap<IntrinsicKey, int> intrinsic,
             bool isSprinting,
-            float groundRunMaxSpeed,
             float crouchedMaxSpeed,
             float climbingSpeed,
             float ledgeMoveSpeed,
@@ -33,9 +33,6 @@ namespace States.States.Data
             out AnimationStateComponent animationStateComponent
         )
         {
-            
-            var velocityMagnitude = intrinsic.GetValue(1) / 1000;
-            var groundSprintMaxSpeed = stats.GetValue(1);
             switch (Current)
             {
                 case ECharacterState.GroundMove:
@@ -47,16 +44,17 @@ namespace States.States.Data
                     }
                     else
                     {
-                        
                         if (isSprinting)
                         {
-                            var velocityRatio = (half)(velocityMagnitude / groundSprintMaxSpeed);
+                            var velocityRatio =
+                                (half)(VelocityMagnitude(ref intrinsic) / GroundSprintMaxSpeed(ref stats));
                             animationStateComponent.Speed = velocityRatio;
                             animationStateComponent.Animation = EAnimationState.Sprint;
                         }
                         else
                         {
-                            var velocityRatio = (half)(velocityMagnitude / groundSprintMaxSpeed);
+                            var velocityRatio =
+                                (half)(VelocityMagnitude(ref intrinsic) / GroundSprintMaxSpeed(ref stats));
                             animationStateComponent.Speed = velocityRatio;
                             animationStateComponent.Animation = EAnimationState.Run;
                         }
@@ -72,7 +70,7 @@ namespace States.States.Data
                     }
                     else
                     {
-                        half velocityRatio = (half)(velocityMagnitude / crouchedMaxSpeed);
+                        half velocityRatio = (half)(VelocityMagnitude(ref intrinsic) / crouchedMaxSpeed);
                         animationStateComponent.Speed = velocityRatio;
                         animationStateComponent.Animation = EAnimationState.CrouchMove;
                     }
@@ -107,14 +105,16 @@ namespace States.States.Data
                     break;
                 case ECharacterState.Climbing:
                 {
-                    half velocityRatio = (half)(climbingSpeed > 0f ? velocityMagnitude / climbingSpeed : 0f);
+                    half velocityRatio =
+                        (half)(climbingSpeed > 0f ? VelocityMagnitude(ref intrinsic) / climbingSpeed : 0f);
                     animationStateComponent.Speed = velocityRatio;
                     animationStateComponent.Animation = EAnimationState.ClimbingMove;
                 }
                     break;
                 case ECharacterState.LedgeGrab:
                 {
-                    half velocityRatio = (half)(ledgeMoveSpeed > 0f ? velocityMagnitude / ledgeMoveSpeed : 0f);
+                    half velocityRatio =
+                        (half)(ledgeMoveSpeed > 0f ? VelocityMagnitude(ref intrinsic) / ledgeMoveSpeed : 0f);
                     animationStateComponent.Speed = velocityRatio;
                     animationStateComponent.Animation = EAnimationState.LedgeGrabMove;
                 }
@@ -127,7 +127,8 @@ namespace States.States.Data
                     break;
                 case ECharacterState.Swimming:
                 {
-                    float velocityRatio = swimmingMaxSpeed > 0f ? velocityMagnitude / swimmingMaxSpeed : 0f;
+                    float velocityRatio =
+                        swimmingMaxSpeed > 0f ? VelocityMagnitude(ref intrinsic) / swimmingMaxSpeed : 0f;
                     if (velocityRatio < 0.1f)
                     {
                         animationStateComponent.Speed = new half(1);
@@ -160,6 +161,20 @@ namespace States.States.Data
                 }
                     break;
             }
+        }
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private readonly float VelocityMagnitude(ref DynamicHashMap<IntrinsicKey, int> intrinsic)
+        {
+            return intrinsic.GetValue(EIntrinsic.Speed.ToKey(out var factor)) / factor;
+        }
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private readonly float GroundSprintMaxSpeed(ref DynamicHashMap<StatKey, StatValue> stat)
+        {
+            return stat.GetValue(EStat.GroundSprintMaxSpeed.ToKey());
         }
     }
 }

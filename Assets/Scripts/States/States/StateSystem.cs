@@ -55,7 +55,7 @@ namespace States.States
             var intrinsicMap = intrinsic.AsMap();
             OnStart(ref localTransform, ref characterState, groundMoveDirection, ref statsMap, ref intrinsicMap);
             characterState.GetAnimationState(groundMoveDirection.Value, ref statsMap, ref intrinsicMap, false, 10, 10,
-                10, 10,
+                10,
                 10, localTransform.Rotation, new float3(0, 0, 0), out var animationStateComponent);
             animationState = animationStateComponent;
         }

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: StatSettings
   m_EditorClassIdentifier: BovineLabs.Stats.Authoring::BovineLabs.Stats.Authoring.StatSettings
   statSchemas:
-  - {fileID: 11400000, guid: 4d2102e6bf31d61eab04e09bee109481, type: 2}
   - {fileID: 11400000, guid: 25630948b0897bffca2ee2ebd5c2b3b5, type: 2}
+  - {fileID: 11400000, guid: 4d2102e6bf31d61eab04e09bee109481, type: 2}
   intrinsicSchemas:
   - {fileID: 11400000, guid: 83cbb00073553e018b10800f602d514d, type: 2}
   - {fileID: 11400000, guid: 19cc6e094ea94487fa087f3b7a23dcec, type: 2}

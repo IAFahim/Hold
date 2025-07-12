@@ -2,7 +2,7 @@
 using BovineLabs.Stats.Authoring;
 using Unity.Mathematics;
 
-namespace _src.Scripts.StatsHelpers.StatsHelpers.Authoring
+namespace StatsHelpers.StatsHelpers.Authoring
 {
     [Serializable]
     public struct KvSchemaStat
