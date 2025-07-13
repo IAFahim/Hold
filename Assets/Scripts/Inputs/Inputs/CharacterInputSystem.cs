@@ -11,6 +11,7 @@ namespace Inputs.Inputs
     [BurstCompile]
     public partial struct CharacterInputSystem : ISystem
     {
+
         /// <inheritdoc/>
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -32,6 +33,7 @@ namespace Inputs.Inputs
                 Clear(ref characterInput);
                 return;
             }
+
 
 
             var swipeDelta = inputComponent.SwipeDelta;

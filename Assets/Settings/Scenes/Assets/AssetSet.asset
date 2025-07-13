@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Assets:
   - {fileID: 5312726377768110618, guid: 3953facbde49a4547a66d70d17f67704, type: 3}
+  - {fileID: 1956969733436325248, guid: fd2f1707406516df1812080fbf868078, type: 3}
   TargetWorld: 2

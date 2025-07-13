@@ -1,4 +1,4 @@
-## **0. General Principles & Philosophy**
+~~~~## **0. General Principles & Philosophy**
 
 These are the overarching principles that guide the architecture and style of the codebase.
 
