@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace CinemachineLink.CinemachineLink.Debug
 {
-    [DefaultExecutionOrder(-1000000000)]
-    [ExecuteAlways]
+    [DefaultExecutionOrder(1000000000)]
+    [ExecuteInEditMode]
     public class PlayModeGameObjectToggle : MonoBehaviour
     {
         [Header("GameObjects to disable in Play Mode")]
