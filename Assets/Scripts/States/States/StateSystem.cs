@@ -92,14 +92,12 @@ namespace States.States
             if (positionX < -LaneBoundary)
             {
                 localTransform.Position.x = -LaneBoundary;
-                characterInput.ClearLine();
                 return;
             }
 
             if (positionX > LaneBoundary)
             {
                 localTransform.Position.x = LaneBoundary;
-                characterInput.ClearLine();
                 return;
             }
         }
