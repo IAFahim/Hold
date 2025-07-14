@@ -54,6 +54,8 @@ namespace Inputs.Inputs
             }
         }
 
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void HandleHorizontalSwipe(float swipeDeltaX, float currentX,
             ref CharacterInputComponent characterInput)
         {
@@ -105,8 +107,10 @@ namespace Inputs.Inputs
 
             characterInput.SetSlide();
         }
-
-
+        
+        
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void Clear(ref CharacterInputComponent characterInput)
         {
             characterInput.ClearFirst4Bit();
