@@ -15,4 +15,5 @@ MonoBehaviour:
   Assets:
   - {fileID: 5312726377768110618, guid: 3953facbde49a4547a66d70d17f67704, type: 3}
   - {fileID: 1956969733436325248, guid: 3c8c899b5ef46ed5cbc9f51c04ac32d7, type: 3}
+  - {fileID: 4702801040036915478, guid: f83544046c59bdc6690dd9faa0286c9c, type: 3}
   TargetWorld: 2
