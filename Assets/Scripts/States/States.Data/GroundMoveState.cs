@@ -23,13 +23,13 @@ namespace States.States.Data
 
             var velocityMagnitude = intrinsic.GetValue(EIntrinsic.Speed.ToKey(out var factor)) / factor;
             var normalize = math.normalize(moveDirection);
-            localTransform.Position.xz += normalize * velocityMagnitude * deltaTime;
+            // localTransform.Position.xz += normalize * velocityMagnitude * deltaTime;
 
             // Only update rotation if there is movement to avoid snapping back to a default rotation.
             if (math.abs(moveDirection.x)> 0.01f)
             {
                 var moveDirectionF3 = new float3(moveDirection.x, 0f, moveDirection.y);
-                localTransform.Rotation = quaternion.LookRotation(moveDirectionF3, math.up());
+                // localTransform.Rotation = quaternion.LookRotation(moveDirectionF3, math.up());
             }
         }
     }
