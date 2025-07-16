@@ -59,28 +59,21 @@ namespace Inputs.Inputs.Data
 
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IsJumpActivatedThisFrame()
+        public readonly bool IsJumping()
         {
             return (Value & Jump) != 0;
-        }
-
-        [BurstCompile]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IsSlideActivatedThisFrame()
-        {
-            return (Value & Slide) != 0;
         }
         
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IsSprinting()
+        public readonly bool IsSprinting()
         {
             return (Value & Sprint) != 0;
         }
         
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IsCrouching()
+        public readonly bool IsCrouching()
         {
             return (Value & Couch) != 0;
         }

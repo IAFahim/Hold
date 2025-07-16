@@ -1,8 +1,9 @@
+using Moves.Move.Data;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Moves.Move.Data
+namespace Moves.Move.Authoring
 {
     public class MoveDirectionComponentAuthoring : MonoBehaviour
     {
