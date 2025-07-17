@@ -2,7 +2,7 @@ using System.Runtime.CompilerServices;
 using Animations.Animation.Data;
 using Animations.Animation.Data.enums;
 using BovineLabs.Core.Iterators;
-using BovineLabs.Stats.Data;
+using BovineLabs.Essence.Data;
 using States.States.Data.enums;
 using StatsHelpers.StatsHelpers.Data;
 using Unity.Burst;

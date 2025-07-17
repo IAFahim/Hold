@@ -1,8 +1,7 @@
 using Animations.Animation.Data;
 using BovineLabs.Core.Input;
 using BovineLabs.Core.Iterators;
-using BovineLabs.Stats.Data;
-using Unity.Burst;
+using BovineLabs.Essence.Data;
 using Unity.Transforms;
 
 namespace States.States.Data

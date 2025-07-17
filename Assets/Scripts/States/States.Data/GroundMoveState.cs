@@ -1,7 +1,8 @@
 using System;
 using BovineLabs.Core.Iterators;
-using BovineLabs.Stats.Data;
+using BovineLabs.Essence.Data;
 using Moves.Move.Data;
+using StatsHelpers.StatsHelpers.Data;
 using Unity.Burst;
 using Unity.Mathematics;
 using Unity.Transforms;

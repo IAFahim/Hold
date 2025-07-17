@@ -4,7 +4,7 @@
 
 using System;
 using System.Runtime.CompilerServices;
-using BovineLabs.Stats.Data;
+using BovineLabs.Essence.Data;
 
 public enum EStat : byte
 {

@@ -21,9 +21,9 @@
         "Unity.Transforms",
         "Animation.Data",
         "RawInput",
-        "BovineLabs.Stats.Data",
         "Move.Data",
-        "Inputs.Data"
+        "Inputs.Data",
+        "BovineLabs.Essence.Data"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using Animations.Animation.Data;
 using BovineLabs.Core.Input;
 using BovineLabs.Core.Iterators;
-using BovineLabs.Stats.Data;
+using BovineLabs.Essence.Data;
 using Inputs.Inputs.Data;
 using Moves.Move.Data;
 using States.States.Data;

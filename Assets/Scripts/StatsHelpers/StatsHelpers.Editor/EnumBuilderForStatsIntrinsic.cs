@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using BovineLabs.Stats.Authoring;
+using BovineLabs.Essence.Authoring;
 using UnityEditor;
 using UnityEngine;
 

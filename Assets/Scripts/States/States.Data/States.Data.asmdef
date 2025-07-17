@@ -15,11 +15,11 @@
         "Unity.Physics",
         "Unity.Transforms",
         "BovineLabs.Reaction.Data",
-        "BovineLabs.Stats.Data",
         "Animation.Data",
         "Move.Data",
         "RawInput",
-        "StatsHelpers.Data"
+        "StatsHelpers.Data",
+        "BovineLabs.Essence.Data"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
