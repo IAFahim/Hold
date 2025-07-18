@@ -1,5 +1,3 @@
-using Inputs.Inputs.Data;
-using Moves.Move.Data;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -14,8 +12,19 @@ using Unity.CharacterController;
 [UpdateBefore(typeof(FixedStepSimulationSystemGroup))]
 public partial class PlatformerPlayerInputsSystem : SystemBase
 {
+    private InputActions.PlayerActions _defaultActionsMap;
+    private InputActions.CameraActions _camActionsMap;
+
     protected override void OnCreate()
     {
+        var inputActions = new InputActions();
+        inputActions.Enable();
+        inputActions.Player.Enable();
+        _defaultActionsMap = inputActions.Player;
+        
+        inputActions.Camera.Enable();
+        _camActionsMap = inputActions.Camera;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -27,51 +36,43 @@ public partial class PlatformerPlayerInputsSystem : SystemBase
     {
         uint fixedTick = SystemAPI.GetSingleton<FixedTickSystem.Singleton>().Tick;
 
-        foreach (var (playerInputs, characterInput, moveDirection) in SystemAPI
-                     .Query<RefRW<PlatformerPlayerInputs>, RefRO<CharacterInputComponent>,
-                         RefRO<MoveDirectionComponent>>())
+        foreach (var (playerInputs, player) in SystemAPI.Query<RefRW<PlatformerPlayerInputs>, PlatformerPlayer>())
         {
-            playerInputs.ValueRW.Move = moveDirection.ValueRO.GroundDirection;
-            playerInputs.ValueRW.Look = new float2(0, 0); //TODO: Add move delta
-            if (math.lengthsq(moveDirection.ValueRO.GroundDirection) > math.lengthsq(new float2(0, 0)))
+            playerInputs.ValueRW.Move = Vector2.ClampMagnitude(_defaultActionsMap.Move.ReadValue<Vector2>(), 1f);
+            playerInputs.ValueRW.Look = _camActionsMap.Look.ReadValue<Vector2>();
+            if (math.lengthsq(_defaultActionsMap.Look.ReadValue<Vector2>()) > math.lengthsq(_camActionsMap.Look.ReadValue<Vector2>()))
             {
-                playerInputs.ValueRW.Look = new float2(0, 0) * SystemAPI.Time.DeltaTime;
+                playerInputs.ValueRW.Look = _defaultActionsMap.Look.ReadValue<Vector2>() * SystemAPI.Time.DeltaTime;
             }
+            playerInputs.ValueRW.CameraZoom = _camActionsMap.Zoom.ReadValue<float>();
+            playerInputs.ValueRW.SprintHeld = _defaultActionsMap.Sprint.IsPressed();
+            playerInputs.ValueRW.RollHeld = _defaultActionsMap.Roll.IsPressed();
+            playerInputs.ValueRW.JumpHeld = _defaultActionsMap.Jump.IsPressed();
 
-            playerInputs.ValueRW.CameraZoom = 10;
-            playerInputs.ValueRW.SprintHeld = characterInput.ValueRO.IsSprinting();
-            playerInputs.ValueRW.RollHeld = false;
-            playerInputs.ValueRW.JumpHeld = characterInput.ValueRO.IsJumping();
-
-            if (characterInput.ValueRO.IsJumping())
+            if (_defaultActionsMap.Jump.WasPressedThisFrame())
             {
                 playerInputs.ValueRW.JumpPressed.Set(fixedTick);
             }
-
-            // if (_defaultActionsMap.Dash.WasPressedThisFrame())
-            // {
-            //     playerInputs.ValueRW.DashPressed.Set(fixedTick);
-            // }
-            //
-            // if (_defaultActionsMap.Crouch.WasPressedThisFrame())
-            // {
-            //     playerInputs.ValueRW.CrouchPressed.Set(fixedTick);
-            // }
-            //
-            // if (_defaultActionsMap.Rope.WasPressedThisFrame())
-            // {
-            //     playerInputs.ValueRW.RopePressed.Set(fixedTick);
-            // }
-            //
-            // if (_defaultActionsMap.Climb.WasPressedThisFrame())
-            // {
-            //     playerInputs.ValueRW.ClimbPressed.Set(fixedTick);
-            // }
-            //
-            // if (_defaultActionsMap.FlyNoCollisions.WasPressedThisFrame())
-            // {
-            //     playerInputs.ValueRW.FlyNoCollisionsPressed.Set(fixedTick);
-            // }
+            if (_defaultActionsMap.Dash.WasPressedThisFrame())
+            {
+                playerInputs.ValueRW.DashPressed.Set(fixedTick);
+            }
+            if (_defaultActionsMap.Crouch.WasPressedThisFrame())
+            {
+                playerInputs.ValueRW.CrouchPressed.Set(fixedTick);
+            }
+            if (_defaultActionsMap.Rope.WasPressedThisFrame())
+            {
+                playerInputs.ValueRW.RopePressed.Set(fixedTick);
+            }
+            if (_defaultActionsMap.Climb.WasPressedThisFrame())
+            {
+                playerInputs.ValueRW.ClimbPressed.Set(fixedTick);
+            }
+            if (_defaultActionsMap.FlyNoCollisions.WasPressedThisFrame())
+            {
+                playerInputs.ValueRW.FlyNoCollisionsPressed.Set(fixedTick);
+            }
         }
     }
 }
@@ -92,14 +93,12 @@ public partial struct PlatformerPlayerVariableStepControlSystem : ISystem
 
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
-    {
-    }
+    { }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (playerInputs, player) in SystemAPI.Query<PlatformerPlayerInputs, PlatformerPlayer>()
-                     .WithAll<Simulate>())
+        foreach (var (playerInputs, player) in SystemAPI.Query<PlatformerPlayerInputs, PlatformerPlayer>().WithAll<Simulate>())
         {
             if (SystemAPI.HasComponent<OrbitCameraControl>(player.ControlledCamera))
             {
@@ -132,8 +131,7 @@ public partial struct PlatformerPlayerFixedStepControlSystem : ISystem
 
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
-    {
-    }
+    { }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
@@ -143,13 +141,10 @@ public partial struct PlatformerPlayerFixedStepControlSystem : ISystem
         foreach (var (playerInputs, player) in SystemAPI.Query<RefRW<PlatformerPlayerInputs>, PlatformerPlayer>()
                      .WithAll<Simulate>())
         {
-            if (SystemAPI.HasComponent<PlatformerCharacterControl>(player.ControlledCharacter) &&
-                SystemAPI.HasComponent<PlatformerCharacterStateMachine>(player.ControlledCharacter))
+            if (SystemAPI.HasComponent<PlatformerCharacterControl>(player.ControlledCharacter) && SystemAPI.HasComponent<PlatformerCharacterStateMachine>(player.ControlledCharacter))
             {
-                PlatformerCharacterControl characterControl =
-                    SystemAPI.GetComponent<PlatformerCharacterControl>(player.ControlledCharacter);
-                PlatformerCharacterStateMachine stateMachine =
-                    SystemAPI.GetComponent<PlatformerCharacterStateMachine>(player.ControlledCharacter);
+                PlatformerCharacterControl characterControl = SystemAPI.GetComponent<PlatformerCharacterControl>(player.ControlledCharacter);
+                PlatformerCharacterStateMachine stateMachine = SystemAPI.GetComponent<PlatformerCharacterStateMachine>(player.ControlledCharacter);
 
                 // Get camera rotation data, since our movement is relative to it
                 quaternion cameraRotation = quaternion.identity;
@@ -158,8 +153,7 @@ public partial struct PlatformerPlayerFixedStepControlSystem : ISystem
                     cameraRotation = SystemAPI.GetComponent<LocalTransform>(player.ControlledCamera).Rotation;
                 }
 
-                stateMachine.GetMoveVectorFromPlayerInput(stateMachine.CurrentState, in playerInputs.ValueRO,
-                    cameraRotation, out characterControl.MoveVector);
+                stateMachine.GetMoveVectorFromPlayerInput(stateMachine.CurrentState, in playerInputs.ValueRO, cameraRotation, out characterControl.MoveVector);
 
                 characterControl.JumpHeld = playerInputs.ValueRW.JumpHeld;
                 characterControl.RollHeld = playerInputs.ValueRW.RollHeld;
