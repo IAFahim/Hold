@@ -119,11 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &14636053 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4260105767809303429, guid: e57eaae6195aaa243b4339327f1f99a5, type: 3}
-  m_PrefabInstance: {fileID: 377522820}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &377522820
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -237,16 +232,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sun Axis
       objectReference: {fileID: 0}
+    - target: {fileID: 4702801040036915478, guid: f83544046c59bdc6690dd9faa0286c9c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f83544046c59bdc6690dd9faa0286c9c, type: 3}
---- !u!1 &1353061773 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4702801040036915478, guid: f83544046c59bdc6690dd9faa0286c9c, type: 3}
-  m_PrefabInstance: {fileID: 1353061772}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1939503695
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,7 +257,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1939503696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,11 +270,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c53b097083a44a2ab0d2d7c8eac8433d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameObjectsToToggle:
-  - {fileID: 14636053}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 1353061773}
 --- !u!4 &1939503697
 Transform:
   m_ObjectHideFlags: 0

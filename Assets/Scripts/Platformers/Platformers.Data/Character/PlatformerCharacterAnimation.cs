@@ -51,7 +51,7 @@ public static class PlatformerCharacterAnimationHandler
             {
                 if (math.length(characterControl.MoveVector) < 0.01f)
                 {
-                    animator.speed = 1f;
+                    // animator.speed = 1f;
                     animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.IdleClip);
                 }
                 else
@@ -59,13 +59,13 @@ public static class PlatformerCharacterAnimationHandler
                     if (characterComponent.IsSprinting)
                     {
                         float velocityRatio = velocityMagnitude / characterComponent.GroundSprintMaxSpeed;
-                        animator.speed = velocityRatio;
+                        // animator.speed = velocityRatio;
                         animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.SprintClip);
                     }
                     else
                     {
                         float velocityRatio = velocityMagnitude / characterComponent.GroundRunMaxSpeed;
-                        animator.speed = velocityRatio;
+                        // animator.speed = velocityRatio;
                         animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.RunClip);
                     }
                 }
@@ -75,59 +75,59 @@ public static class PlatformerCharacterAnimationHandler
             {
                 if (math.length(characterControl.MoveVector) < 0.01f)
                 {
-                    animator.speed = 1f;
+                    // animator.speed = 1f;
                     animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.CrouchIdleClip);
                 }
                 else
                 {
                     float velocityRatio = velocityMagnitude / characterComponent.CrouchedMaxSpeed;
-                    animator.speed = velocityRatio;
+                    // animator.speed = velocityRatio;
                     animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.CrouchMoveClip);
                 }
             }
                 break;
             case CharacterState.AirMove:
             {
-                animator.speed = 1f;
+                // animator.speed = 1f;
                 animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.InAirClip);
             }
                 break;
             case CharacterState.Dashing:
             {
-                animator.speed = 1f;
+                // animator.speed = 1f;
                 animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.DashClip);
             }
                 break;
             case CharacterState.WallRun:
             {
                 bool wallIsOnTheLeft = math.dot(MathUtilities.GetRightFromRotation(localTransform.Rotation), characterComponent.LastKnownWallNormal) > 0f;
-                animator.speed = 1f;
+                // animator.speed = 1f;
                 animator.SetInteger(characterAnimation.ClipIndexParameterHash, wallIsOnTheLeft ? characterAnimation.WallRunLeftClip : characterAnimation.WallRunRightClip);
             }
                 break;
             case CharacterState.RopeSwing:
             {
-                animator.speed = 1f;
+                // animator.speed = 1f;
                 animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.RopeHangClip);
             }
                 break;
             case CharacterState.Climbing:
             {
                 float velocityRatio = velocityMagnitude / characterComponent.ClimbingSpeed;
-                animator.speed = velocityRatio;
+                // animator.speed = velocityRatio;
                 animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.ClimbingMoveClip);
             }
                 break;
             case CharacterState.LedgeGrab:
             {
                 float velocityRatio = velocityMagnitude / characterComponent.LedgeMoveSpeed;
-                animator.speed = velocityRatio;
+                // animator.speed = velocityRatio;
                 animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.LedgeGrabMoveClip);
             }
                 break;
             case CharacterState.LedgeStandingUp:
             {
-                animator.speed = 1f;
+                // animator.speed = 1f;
                 //animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.LedgeStandUpClip);
             }
                 break;
@@ -136,12 +136,12 @@ public static class PlatformerCharacterAnimationHandler
                 float velocityRatio = velocityMagnitude / characterComponent.SwimmingMaxSpeed;
                 if (velocityRatio < 0.1f)
                 {
-                    animator.speed = 1f;
+                    // animator.speed = 1f;
                     animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.SwimmingIdleClip);
                 }
                 else
                 {
-                    animator.speed = velocityRatio;
+                    // animator.speed = velocityRatio;
                     animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.SwimmingMoveClip);
                 }
             }
@@ -149,7 +149,7 @@ public static class PlatformerCharacterAnimationHandler
             case CharacterState.Rolling:
             case CharacterState.FlyingNoCollisions:
             {
-                animator.speed = 1f;
+                // animator.speed = 1f;
                 animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.IdleClip);
             }
                 break;

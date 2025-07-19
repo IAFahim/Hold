@@ -54,8 +54,7 @@ public partial class PlatformerCharacterHybridSystem : SystemBase
             {
                 // Transform
                 LocalToWorld meshRootLTW = SystemAPI.GetComponent<LocalToWorld>(characterComponent.MeshRootEntity);
-                hybridLink.Object.transform.position = meshRootLTW.Position;
-                hybridLink.Object.transform.rotation = meshRootLTW.Rotation;
+                hybridLink.Object.transform.SetLocalPositionAndRotation(meshRootLTW.Position, meshRootLTW.Rotation);
 
                 // Animation
                 if (hybridLink.Animator)
