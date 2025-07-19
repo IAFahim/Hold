@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 1309643623}
   - component: {fileID: 1309643622}
   - component: {fileID: 1309643625}
+  - component: {fileID: 1309643626}
   m_Layer: 0
   m_Name: Input
   m_TagString: Untagged
@@ -314,6 +315,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Animation.Data::Animations.Animation.Data.Classes.AsyncAddressableGameObjectPool
   assetGroup: {fileID: 11400000, guid: d990e6c885264f60f8353ebefedb6080, type: 2}
+--- !u!114 &1309643626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309643619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e01bef119421c0d499018c08e88bb388, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UXMLs.Service::_src.Scripts.UiServices.UXMLs.Service.UxmlServiceBehaviour
+  values:
+  - Key: joystick
+    Asset: {fileID: 9197481963319205126, guid: 5c656a0298064754913ca6e4614ff9b9, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

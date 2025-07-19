@@ -36,26 +36,10 @@ public class JoystickController : MonoBehaviour
 
         root.styleSheets.Add(joystickUSS); // add joystick uss file to root, it is needed to apply joystick styles
         root.Insert(0, joystickTouchArea); // add joystick touchable node to root
-
-        joystickTouchArea.RegisterCallback<PointerDownEvent>((ev) =>
-        {
-            ShowJoystick(ev);
-        });
-
-        joystickTouchArea.RegisterCallback<PointerMoveEvent>((ev) =>
-        {
-            UpdateJoystick(ev);
-        });
-
-        joystickTouchArea.RegisterCallback<PointerUpEvent>((ev) =>
-        {
-            HideJoystick(ev);
-        });
-
-        joystickTouchArea.RegisterCallback<PointerLeaveEvent>((ev) =>
-        {
-            HideJoystick(ev);
-        });
+        joystickTouchArea.RegisterCallback<PointerDownEvent>(ShowJoystick);
+        joystickTouchArea.RegisterCallback<PointerMoveEvent>(UpdateJoystick);
+        joystickTouchArea.RegisterCallback<PointerUpEvent>(HideJoystick);
+        joystickTouchArea.RegisterCallback<PointerLeaveEvent>(HideJoystick);
 
     }
 

@@ -24,7 +24,8 @@
         "Unity.NetCode",
         "Unity.Physics",
         "Unity.ResourceManager",
-        "Unity.Transforms"
+        "Unity.Transforms",
+        "UXMLs.Service"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

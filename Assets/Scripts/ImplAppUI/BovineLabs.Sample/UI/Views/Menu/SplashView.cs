@@ -2,6 +2,7 @@
 //     Copyright (c) BovineLabs. All rights reserved.
 // </copyright>
 
+using _src.Scripts.UiServices.UXMLs.Service;
 using BovineLabs.Core;
 using Unity.AppUI.Navigation;
 
@@ -28,11 +29,14 @@ namespace BovineLabs.Sample.UI.Views.Menu
 
         /// <summary> Initializes a new instance of the <see cref="SplashView"/> class. </summary>
         /// <param name="viewModel"> The view model. </param>
-        public SplashView(SplashViewModel viewModel)
+        public SplashView(SplashViewModel viewModel, IUxmlService uxmlService)
             : base(viewModel)
         {
             this.Navigate(Actions.go_to_game);
             BovineLabsBootstrap.Instance.CreateGameWorld();
+            var visualTreeAsset = uxmlService.GetAsset("joystick");
+            this.Add(visualTreeAsset.Instantiate());
+            this.AddToClassList("Joystick");
             return;
             this.AddToClassList(UssClassName);
 
