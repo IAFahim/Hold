@@ -12,9 +12,9 @@ namespace Animations.Animation
             if (!FSM) FSM = GetComponent<FakeStopMotion>();
         }
 
-        private void OnAnimatorMove()
-        {
-            transform.position += FSM.velocity * Time.deltaTime;
-        }
+        // private void OnAnimatorMove()
+        // {
+        //     transform.position += FSM.velocity * Time.deltaTime;
+        // }
     }
 }

@@ -1146,8 +1146,6 @@ GameObject:
   - component: {fileID: 3482759376885619007}
   - component: {fileID: 7400843449472140101}
   - component: {fileID: 5237031703156972318}
-  - component: {fileID: 7543026691287196638}
-  - component: {fileID: 2356589682321204111}
   m_Layer: 0
   m_Name: CharacterMesh
   m_TagString: Untagged
@@ -1208,34 +1206,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Platformers.Data::PlatformerPlayerAuthoring
   ControlledCharacter: {fileID: 0}
   ControlledCamera: {fileID: 0}
---- !u!114 &7543026691287196638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4260105767809303429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47ef862a36884934b519cb0fcf795c1e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Animation::Animations.Animation.FakeStopMotion
-  animator: {fileID: 7400843449472140101}
-  fps: 8
-  velocity: {x: 0, y: 0, z: 0}
---- !u!114 &2356589682321204111
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4260105767809303429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e44eb44fae34d4eb045b1613f797386, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Animation::Animations.Animation.StopMotionSmoothMovement
-  FSM: {fileID: 7543026691287196638}
 --- !u!1 &4260715355395123013
 GameObject:
   m_ObjectHideFlags: 0

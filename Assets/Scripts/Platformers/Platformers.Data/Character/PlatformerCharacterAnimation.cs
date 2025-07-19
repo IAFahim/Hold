@@ -11,8 +11,6 @@ using Unity.CharacterController;
 [Serializable]
 public struct PlatformerCharacterAnimation : IComponentData
 {
-    [HideInInspector] public int ClipIndexParameterHash;
-
     [HideInInspector] public int IdleClip;
     [HideInInspector] public int RunClip;
     [HideInInspector] public int SprintClip;
@@ -37,6 +35,8 @@ public static class PlatformerCharacterAnimationHandler
 {
     public static void UpdateAnimation(
         Animator animator,
+        int clipIndexParameterHash,
+        float stopMotionFactor,
         ref PlatformerCharacterAnimation characterAnimation,
         in KinematicCharacterBody characterBody,
         in PlatformerCharacterComponent characterComponent,
@@ -45,28 +45,29 @@ public static class PlatformerCharacterAnimationHandler
         in LocalTransform localTransform)
     {
         float velocityMagnitude = math.length(characterBody.RelativeVelocity);
+        float speed = 1;
         switch (characterStateMachine.CurrentState)
         {
             case CharacterState.GroundMove:
             {
                 if (math.length(characterControl.MoveVector) < 0.01f)
                 {
-                    // animator.speed = 1f;
-                    animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.IdleClip);
+                    speed = 1f;
+                    animator.SetInteger(clipIndexParameterHash, characterAnimation.IdleClip);
                 }
                 else
                 {
                     if (characterComponent.IsSprinting)
                     {
                         float velocityRatio = velocityMagnitude / characterComponent.GroundSprintMaxSpeed;
-                        // animator.speed = velocityRatio;
-                        animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.SprintClip);
+                        speed = velocityRatio;
+                        animator.SetInteger(clipIndexParameterHash, characterAnimation.SprintClip);
                     }
                     else
                     {
                         float velocityRatio = velocityMagnitude / characterComponent.GroundRunMaxSpeed;
-                        // animator.speed = velocityRatio;
-                        animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.RunClip);
+                        speed = velocityRatio;
+                        animator.SetInteger(clipIndexParameterHash, characterAnimation.RunClip);
                     }
                 }
             }
@@ -75,60 +76,62 @@ public static class PlatformerCharacterAnimationHandler
             {
                 if (math.length(characterControl.MoveVector) < 0.01f)
                 {
-                    // animator.speed = 1f;
-                    animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.CrouchIdleClip);
+                    speed = 1f;
+                    animator.SetInteger(clipIndexParameterHash, characterAnimation.CrouchIdleClip);
                 }
                 else
                 {
                     float velocityRatio = velocityMagnitude / characterComponent.CrouchedMaxSpeed;
-                    // animator.speed = velocityRatio;
-                    animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.CrouchMoveClip);
+                    speed = velocityRatio;
+                    animator.SetInteger(clipIndexParameterHash, characterAnimation.CrouchMoveClip);
                 }
             }
                 break;
             case CharacterState.AirMove:
             {
-                // animator.speed = 1f;
-                animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.InAirClip);
+                speed = 1f;
+                animator.SetInteger(clipIndexParameterHash, characterAnimation.InAirClip);
             }
                 break;
             case CharacterState.Dashing:
             {
-                // animator.speed = 1f;
-                animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.DashClip);
+                speed = 1f;
+                animator.SetInteger(clipIndexParameterHash, characterAnimation.DashClip);
             }
                 break;
             case CharacterState.WallRun:
             {
-                bool wallIsOnTheLeft = math.dot(MathUtilities.GetRightFromRotation(localTransform.Rotation), characterComponent.LastKnownWallNormal) > 0f;
-                // animator.speed = 1f;
-                animator.SetInteger(characterAnimation.ClipIndexParameterHash, wallIsOnTheLeft ? characterAnimation.WallRunLeftClip : characterAnimation.WallRunRightClip);
+                bool wallIsOnTheLeft = math.dot(MathUtilities.GetRightFromRotation(localTransform.Rotation),
+                    characterComponent.LastKnownWallNormal) > 0f;
+                speed = 1f;
+                animator.SetInteger(clipIndexParameterHash,
+                    wallIsOnTheLeft ? characterAnimation.WallRunLeftClip : characterAnimation.WallRunRightClip);
             }
                 break;
             case CharacterState.RopeSwing:
             {
-                // animator.speed = 1f;
-                animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.RopeHangClip);
+                speed = 1f;
+                animator.SetInteger(clipIndexParameterHash, characterAnimation.RopeHangClip);
             }
                 break;
             case CharacterState.Climbing:
             {
                 float velocityRatio = velocityMagnitude / characterComponent.ClimbingSpeed;
-                // animator.speed = velocityRatio;
-                animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.ClimbingMoveClip);
+                speed = velocityRatio;
+                animator.SetInteger(clipIndexParameterHash, characterAnimation.ClimbingMoveClip);
             }
                 break;
             case CharacterState.LedgeGrab:
             {
                 float velocityRatio = velocityMagnitude / characterComponent.LedgeMoveSpeed;
-                // animator.speed = velocityRatio;
-                animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.LedgeGrabMoveClip);
+                speed = velocityRatio;
+                animator.SetInteger(clipIndexParameterHash, characterAnimation.LedgeGrabMoveClip);
             }
                 break;
             case CharacterState.LedgeStandingUp:
             {
-                // animator.speed = 1f;
-                //animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.LedgeStandUpClip);
+                speed = 1f;
+                //animator.SetInteger(ClipIndexParameterHash, characterAnimation.LedgeStandUpClip);
             }
                 break;
             case CharacterState.Swimming:
@@ -136,25 +139,26 @@ public static class PlatformerCharacterAnimationHandler
                 float velocityRatio = velocityMagnitude / characterComponent.SwimmingMaxSpeed;
                 if (velocityRatio < 0.1f)
                 {
-                    // animator.speed = 1f;
-                    animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.SwimmingIdleClip);
+                    speed = 1f;
+                    animator.SetInteger(clipIndexParameterHash, characterAnimation.SwimmingIdleClip);
                 }
                 else
                 {
-                    // animator.speed = velocityRatio;
-                    animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.SwimmingMoveClip);
+                    speed = velocityRatio;
+                    animator.SetInteger(clipIndexParameterHash, characterAnimation.SwimmingMoveClip);
                 }
             }
                 break;
             case CharacterState.Rolling:
             case CharacterState.FlyingNoCollisions:
             {
-                // animator.speed = 1f;
-                animator.SetInteger(characterAnimation.ClipIndexParameterHash, characterAnimation.IdleClip);
+                speed = 1f;
+                animator.SetInteger(clipIndexParameterHash, characterAnimation.IdleClip);
             }
                 break;
         }
 
+        animator.speed = speed * stopMotionFactor;
         characterAnimation.LastAnimationCharacterState = characterStateMachine.CurrentState;
     }
 }

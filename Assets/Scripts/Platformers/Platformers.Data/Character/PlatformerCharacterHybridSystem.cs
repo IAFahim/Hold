@@ -10,9 +10,24 @@ using UnityEngine;
 [UpdateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
 public partial class PlatformerCharacterHybridSystem : SystemBase
 {
+    public static readonly int ClipIndex = Animator.StringToHash("ClipIndex");
+
+    public int fps = 8;
+    private float _time;
+    
     protected override void OnUpdate()
     {
-        EntityCommandBuffer ecb = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW.CreateCommandBuffer(World.Unmanaged); 
+        _time += SystemAPI.Time.DeltaTime;
+        var updateTime = 1f / fps;
+        float stopMotionFactor = 0;
+        
+        if (_time > updateTime)
+        {
+            _time -= updateTime;
+            stopMotionFactor = updateTime / Time.deltaTime;
+        }
+        
+        EntityCommandBuffer ecb = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW.CreateCommandBuffer(World.Unmanaged);
         
         // Create
         foreach (var (characterAnimation, hybridData, entity) in SystemAPI.Query<RefRW<PlatformerCharacterAnimation>, PlatformerCharacterHybridData>()
@@ -27,16 +42,6 @@ public partial class PlatformerCharacterHybridSystem : SystemBase
                 Object = tmpObject,
                 Animator = animator,
             });
-
-            // Find the clipIndex param
-            for (int i = 0; i < animator.parameters.Length; i++)
-            {
-                if (animator.parameters[i].name == "ClipIndex")
-                {
-                    characterAnimation.ValueRW.ClipIndexParameterHash = animator.parameters[i].nameHash;
-                    break;
-                }
-            }
         }
         
         // Update
@@ -57,17 +62,16 @@ public partial class PlatformerCharacterHybridSystem : SystemBase
                 hybridLink.Object.transform.SetLocalPositionAndRotation(meshRootLTW.Position, meshRootLTW.Rotation);
 
                 // Animation
-                if (hybridLink.Animator)
-                {
-                    PlatformerCharacterAnimationHandler.UpdateAnimation(
-                        hybridLink.Animator,
-                        ref characterAnimation.ValueRW,
-                        in characterBody,
-                        in characterComponent,
-                        in characterStateMachine,
-                        in characterControl,
-                        in characterTransform);
-                }
+                PlatformerCharacterAnimationHandler.UpdateAnimation(
+                    hybridLink.Animator,
+                    ClipIndex,
+                    stopMotionFactor,
+                    ref characterAnimation.ValueRW,
+                    in characterBody,
+                    in characterComponent,
+                    in characterStateMachine,
+                    in characterControl,
+                    in characterTransform);
 
                 // Mesh enabling
                 if (characterStateMachine.CurrentState == CharacterState.Rolling)
