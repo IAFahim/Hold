@@ -30,10 +30,6 @@ public partial struct SceneInitializationSystem : ISystem
         {
             ref SceneInitialization sceneInitializer = ref SystemAPI.GetSingletonRW<SceneInitialization>().ValueRW;
 
-            // Cursor
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-
             // Spawn player
             Entity playerEntity = state.EntityManager.Instantiate(sceneInitializer.PlayerPrefabEntity);
 

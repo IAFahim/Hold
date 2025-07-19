@@ -25,8 +25,6 @@ public partial class PlatformerPlayerInputsSystem : SystemBase
         inputActions.Camera.Enable();
         _camActionsMap = inputActions.Camera;
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 
         RequireForUpdate<FixedTickSystem.Singleton>();
         RequireForUpdate(SystemAPI.QueryBuilder().WithAll<PlatformerPlayer, PlatformerPlayerInputs>().Build());
