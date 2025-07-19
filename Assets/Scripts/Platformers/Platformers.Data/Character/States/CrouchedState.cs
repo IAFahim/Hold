@@ -95,7 +95,7 @@ public struct CrouchedState : IPlatformerCharacterState
         ref PlatformerCharacterControl characterControl = ref aspect.CharacterControl.ValueRW;
         ref PlatformerCharacterStateMachine stateMachine = ref aspect.StateMachine.ValueRW;
         
-        if (characterControl.CrouchPressed)
+        if (characterControl.IsCrouchPressed())
         {
             if (aspect.CanStandUp(ref context, ref baseContext))
             {
@@ -112,13 +112,13 @@ public struct CrouchedState : IPlatformerCharacterState
             }
         }
 
-        if (characterControl.RollHeld)
+        if (characterControl.IsRollHeld())
         {
             stateMachine.TransitionToState(CharacterState.Rolling, ref context, ref baseContext, in aspect);
             return true;
         }
 
-        if (characterControl.DashPressed)
+        if (characterControl.IsDashPressed())
         {
             stateMachine.TransitionToState(CharacterState.Dashing, ref context, ref baseContext, in aspect);
             return true;

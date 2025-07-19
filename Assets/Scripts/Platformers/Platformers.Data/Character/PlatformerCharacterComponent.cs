@@ -144,23 +144,6 @@ public struct PlatformerCharacterComponent : IComponentData
     public bool IsOnStickySurface;
 }
 
-[Serializable]
-public struct PlatformerCharacterControl : IComponentData
-{
-    public float3 MoveVector;
-    
-    public bool JumpHeld;
-    public bool RollHeld;
-    public bool SprintHeld;
-    
-    public bool JumpPressed;
-    public bool DashPressed;
-    public bool CrouchPressed;
-    public bool RopePressed;
-    public bool ClimbPressed;
-    public bool FlyNoCollisionsPressed;
-}
-
 public struct PlatformerCharacterInitialized : IComponentData
 { }
 

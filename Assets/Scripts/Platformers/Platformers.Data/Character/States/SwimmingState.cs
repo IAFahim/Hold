@@ -154,7 +154,7 @@ public struct SwimmingState : IPlatformerCharacterState
 
             // Handle jumping out of water when close to water surface
             HasJumpedWhileSwimming = false;
-            if (characterControl.JumpPressed && character.DistanceFromWaterSurface > kDistanceFromSurfaceToAllowJumping)
+            if (characterControl.IsJumpPressed() && character.DistanceFromWaterSurface > kDistanceFromSurfaceToAllowJumping)
             {
                 CharacterControlUtilities.StandardJump(ref characterBody, characterBody.GroundingUp * character.SwimmingJumpSpeed, true, characterBody.GroundingUp);
                 HasJumpedWhileSwimming = true;

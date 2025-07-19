@@ -27,7 +27,7 @@ namespace Animations.Animation
             
             _time += Time.deltaTime;
             var updateTime = 1f / fps;
-            animator.speed = 0.1f;
+            animator.speed = 0f;
             
             if (_time > updateTime)
             {

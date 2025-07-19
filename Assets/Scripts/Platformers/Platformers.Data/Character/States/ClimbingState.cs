@@ -151,7 +151,7 @@ public struct ClimbingState : IPlatformerCharacterState
         ref PlatformerCharacterControl characterControl = ref aspect.CharacterControl.ValueRW;
         ref PlatformerCharacterStateMachine stateMachine = ref aspect.StateMachine.ValueRW;
         
-        if (!_foundValidClimbSurface || characterControl.JumpPressed || characterControl.DashPressed || characterControl.ClimbPressed)
+        if (!_foundValidClimbSurface || characterControl.IsJumpPressed() || characterControl.IsDashPressed() || characterControl.IsClimbPressed())
         {
             stateMachine.TransitionToState(CharacterState.AirMove, ref context, ref baseContext, in aspect);
             return true;
@@ -176,7 +176,7 @@ public struct ClimbingState : IPlatformerCharacterState
         ref PlatformerCharacterComponent character = ref aspect.Character.ValueRW;
         
         aspect.SetCapsuleGeometry(character.ClimbingGeometry.ToCapsuleGeometry());
-        bool canStart = ClimbingDetection(ref context, ref baseContext, in aspect, false, out float3 avgClimbingSurfaceNormal, out DistanceHit closestClimbableHit, out DistanceHit closestUnclimbableHit);
+        bool canStart = ClimbingDetection(ref context, ref baseContext, in aspect, false, out float3 _, out DistanceHit _, out DistanceHit _);
         aspect.SetCapsuleGeometry(character.StandingGeometry.ToCapsuleGeometry());
 
         return canStart;

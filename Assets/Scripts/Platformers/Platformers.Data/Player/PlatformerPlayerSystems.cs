@@ -21,7 +21,7 @@ public partial class PlatformerPlayerInputsSystem : SystemBase
         inputActions.Enable();
         inputActions.Player.Enable();
         _defaultActionsMap = inputActions.Player;
-        
+
         inputActions.Camera.Enable();
         _camActionsMap = inputActions.Camera;
 
@@ -38,10 +38,12 @@ public partial class PlatformerPlayerInputsSystem : SystemBase
         {
             playerInputs.ValueRW.Move = Vector2.ClampMagnitude(_defaultActionsMap.Move.ReadValue<Vector2>(), 1f);
             playerInputs.ValueRW.Look = _camActionsMap.Look.ReadValue<Vector2>();
-            if (math.lengthsq(_defaultActionsMap.Look.ReadValue<Vector2>()) > math.lengthsq(_camActionsMap.Look.ReadValue<Vector2>()))
+            if (math.lengthsq(_defaultActionsMap.Look.ReadValue<Vector2>()) >
+                math.lengthsq(_camActionsMap.Look.ReadValue<Vector2>()))
             {
                 playerInputs.ValueRW.Look = _defaultActionsMap.Look.ReadValue<Vector2>() * SystemAPI.Time.DeltaTime;
             }
+
             playerInputs.ValueRW.CameraZoom = _camActionsMap.Zoom.ReadValue<float>();
             playerInputs.ValueRW.SprintHeld = _defaultActionsMap.Sprint.IsPressed();
             playerInputs.ValueRW.RollHeld = _defaultActionsMap.Roll.IsPressed();
@@ -51,22 +53,27 @@ public partial class PlatformerPlayerInputsSystem : SystemBase
             {
                 playerInputs.ValueRW.JumpPressed.Set(fixedTick);
             }
+
             if (_defaultActionsMap.Dash.WasPressedThisFrame())
             {
                 playerInputs.ValueRW.DashPressed.Set(fixedTick);
             }
+
             if (_defaultActionsMap.Crouch.WasPressedThisFrame())
             {
                 playerInputs.ValueRW.CrouchPressed.Set(fixedTick);
             }
+
             if (_defaultActionsMap.Rope.WasPressedThisFrame())
             {
                 playerInputs.ValueRW.RopePressed.Set(fixedTick);
             }
+
             if (_defaultActionsMap.Climb.WasPressedThisFrame())
             {
                 playerInputs.ValueRW.ClimbPressed.Set(fixedTick);
             }
+
             if (_defaultActionsMap.FlyNoCollisions.WasPressedThisFrame())
             {
                 playerInputs.ValueRW.FlyNoCollisionsPressed.Set(fixedTick);
@@ -91,12 +98,14 @@ public partial struct PlatformerPlayerVariableStepControlSystem : ISystem
 
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (playerInputs, player) in SystemAPI.Query<PlatformerPlayerInputs, PlatformerPlayer>().WithAll<Simulate>())
+        foreach (var (playerInputs, player) in SystemAPI.Query<PlatformerPlayerInputs, PlatformerPlayer>()
+                     .WithAll<Simulate>())
         {
             if (SystemAPI.HasComponent<OrbitCameraControl>(player.ControlledCamera))
             {
@@ -129,7 +138,8 @@ public partial struct PlatformerPlayerFixedStepControlSystem : ISystem
 
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
@@ -139,10 +149,13 @@ public partial struct PlatformerPlayerFixedStepControlSystem : ISystem
         foreach (var (playerInputs, player) in SystemAPI.Query<RefRW<PlatformerPlayerInputs>, PlatformerPlayer>()
                      .WithAll<Simulate>())
         {
-            if (SystemAPI.HasComponent<PlatformerCharacterControl>(player.ControlledCharacter) && SystemAPI.HasComponent<PlatformerCharacterStateMachine>(player.ControlledCharacter))
+            if (SystemAPI.HasComponent<PlatformerCharacterControl>(player.ControlledCharacter) &&
+                SystemAPI.HasComponent<PlatformerCharacterStateMachine>(player.ControlledCharacter))
             {
-                PlatformerCharacterControl characterControl = SystemAPI.GetComponent<PlatformerCharacterControl>(player.ControlledCharacter);
-                PlatformerCharacterStateMachine stateMachine = SystemAPI.GetComponent<PlatformerCharacterStateMachine>(player.ControlledCharacter);
+                PlatformerCharacterControl characterControl =
+                    SystemAPI.GetComponent<PlatformerCharacterControl>(player.ControlledCharacter);
+                PlatformerCharacterStateMachine stateMachine =
+                    SystemAPI.GetComponent<PlatformerCharacterStateMachine>(player.ControlledCharacter);
 
                 // Get camera rotation data, since our movement is relative to it
                 quaternion cameraRotation = quaternion.identity;
@@ -151,18 +164,21 @@ public partial struct PlatformerPlayerFixedStepControlSystem : ISystem
                     cameraRotation = SystemAPI.GetComponent<LocalTransform>(player.ControlledCamera).Rotation;
                 }
 
-                stateMachine.GetMoveVectorFromPlayerInput(stateMachine.CurrentState, in playerInputs.ValueRO, cameraRotation, out characterControl.MoveVector);
+                stateMachine.GetMoveVectorFromPlayerInput(stateMachine.CurrentState, in playerInputs.ValueRO,
+                    cameraRotation, out characterControl.MoveVector);
 
-                characterControl.JumpHeld = playerInputs.ValueRW.JumpHeld;
-                characterControl.RollHeld = playerInputs.ValueRW.RollHeld;
-                characterControl.SprintHeld = playerInputs.ValueRW.SprintHeld;
+                characterControl.SetJumpHeld(playerInputs.ValueRW.JumpHeld);
+                characterControl.SetRollHeld(playerInputs.ValueRW.RollHeld);
+                characterControl.SetSprintHeld(playerInputs.ValueRW.SprintHeld);
 
-                characterControl.JumpPressed = playerInputs.ValueRW.JumpPressed.IsSet(fixedTick);
-                characterControl.DashPressed = playerInputs.ValueRW.DashPressed.IsSet(fixedTick);
-                characterControl.CrouchPressed = playerInputs.ValueRW.CrouchPressed.IsSet(fixedTick);
-                characterControl.RopePressed = playerInputs.ValueRW.RopePressed.IsSet(fixedTick);
-                characterControl.ClimbPressed = playerInputs.ValueRW.ClimbPressed.IsSet(fixedTick);
-                characterControl.FlyNoCollisionsPressed = playerInputs.ValueRW.FlyNoCollisionsPressed.IsSet(fixedTick);
+                characterControl.SetJumpPressed(playerInputs.ValueRW.JumpPressed.IsSet(fixedTick));
+                characterControl.SetDashPressed(playerInputs.ValueRW.DashPressed.IsSet(fixedTick));
+                characterControl.SetCrouchPressed(playerInputs.ValueRW.CrouchPressed.IsSet(fixedTick));
+                characterControl.SetRopePressed(playerInputs.ValueRW.RopePressed.IsSet(fixedTick));
+                characterControl.SetClimbPressed(playerInputs.ValueRW.ClimbPressed.IsSet(fixedTick));
+                characterControl.SetFlyNoCollisionsPressed(
+                    playerInputs.ValueRW.FlyNoCollisionsPressed.IsSet(fixedTick)
+                );
 
                 SystemAPI.SetComponent(player.ControlledCharacter, characterControl);
             }

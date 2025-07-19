@@ -68,7 +68,7 @@ public readonly partial struct PlatformerCharacterAspect : IAspect, IKinematicCh
                 stateMachine.TransitionToState(CharacterState.AirMove, ref context, ref baseContext, in this);
             }
 
-            if (characterControl.JumpHeld)
+            if (characterControl.IsJumpHeld())
             {
                 character.HeldJumpTimeCounter += baseContext.Time.DeltaTime;
             }
@@ -77,7 +77,7 @@ public readonly partial struct PlatformerCharacterAspect : IAspect, IKinematicCh
                 character.HeldJumpTimeCounter = 0f;
                 character.AllowHeldJumpInAir = false;
             }
-            if (characterControl.JumpPressed)
+            if (characterControl.IsJumpPressed())
             {
                 character.LastTimeJumpPressed = (float)baseContext.Time.ElapsedTime;
             }
@@ -132,7 +132,7 @@ public readonly partial struct PlatformerCharacterAspect : IAspect, IKinematicCh
             }
         }
 
-        if (characterControl.FlyNoCollisionsPressed)
+        if (characterControl.IsFlyNoCollisionsPressed())
         {
             if (stateMachine.CurrentState == CharacterState.FlyingNoCollisions)
             {

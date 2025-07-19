@@ -74,7 +74,7 @@ public struct RollingState : IPlatformerCharacterState
         ref PlatformerCharacterControl characterControl = ref aspect.CharacterControl.ValueRW;
         ref PlatformerCharacterStateMachine stateMachine = ref aspect.StateMachine.ValueRW;
         
-        if (!characterControl.RollHeld && aspect.CanStandUp(ref context, ref baseContext))
+        if (!characterControl.IsRollHeld() && aspect.CanStandUp(ref context, ref baseContext))
         {
             stateMachine.TransitionToState(CharacterState.AirMove, ref context, ref baseContext, in aspect);
             return true;

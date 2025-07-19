@@ -39,7 +39,7 @@ public struct GroundMoveState : IPlatformerCharacterState
 
         if (characterBody.IsGrounded)
         {
-            character.IsSprinting = characterControl.SprintHeld;
+            character.IsSprinting = characterControl.IsSprintHeld();
 
             // Move on ground
             {
@@ -57,7 +57,7 @@ public struct GroundMoveState : IPlatformerCharacterState
             }
             
             // Jumping
-            if (characterControl.JumpPressed || 
+            if (characterControl.IsJumpPressed() || 
                 (character.JumpPressedBeforeBecameGrounded && elapsedTime < character.LastTimeJumpPressed + character.JumpBeforeGroundedGraceTime)) // this is for allowing jumps that were triggered shortly before becoming grounded
             {
                 CharacterControlUtilities.StandardJump(ref characterBody, characterBody.GroundingUp * character.GroundJumpSpeed, true, characterBody.GroundingUp);
@@ -112,19 +112,19 @@ public struct GroundMoveState : IPlatformerCharacterState
         ref PlatformerCharacterControl characterControl = ref aspect.CharacterControl.ValueRW;
         ref PlatformerCharacterStateMachine stateMachine = ref aspect.StateMachine.ValueRW;
         
-        if (characterControl.CrouchPressed)
+        if (characterControl.IsCrouchPressed())
         {
             stateMachine.TransitionToState(CharacterState.Crouched, ref context, ref baseContext, in aspect);
             return true;
         }
 
-        if (characterControl.RollHeld)
+        if (characterControl.IsRollHeld())
         {
             stateMachine.TransitionToState(CharacterState.Rolling, ref context, ref baseContext, in aspect);
             return true;
         }
 
-        if (characterControl.DashPressed)
+        if (characterControl.IsDashPressed())
         {
             stateMachine.TransitionToState(CharacterState.Dashing, ref context, ref baseContext, in aspect);
             return true;
@@ -136,7 +136,7 @@ public struct GroundMoveState : IPlatformerCharacterState
             return true;
         }
 
-        if (characterControl.ClimbPressed)
+        if (characterControl.IsClimbPressed())
         {
             if (ClimbingState.CanStartClimbing(ref context, ref baseContext, in aspect))
             {

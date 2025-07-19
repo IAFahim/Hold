@@ -45,7 +45,7 @@ public struct AirMoveState : IPlatformerCharacterState
         
         // Jumping
         {
-            if (characterControl.JumpPressed)
+            if (characterControl.IsJumpPressed())
             {
                 // Allow jumping shortly after getting degrounded
                 if (character.AllowJumpAfterBecameUngrounded && elapsedTime < character.LastTimeWasGrounded + character.JumpAfterUngroundedGraceTime)
@@ -69,7 +69,7 @@ public struct AirMoveState : IPlatformerCharacterState
             }
             
             // Additional jump power when holding jump
-            if (character.AllowHeldJumpInAir && characterControl.JumpHeld && character.HeldJumpTimeCounter < character.MaxHeldJumpTime)
+            if (character.AllowHeldJumpInAir && characterControl.IsJumpHeld() && character.HeldJumpTimeCounter < character.MaxHeldJumpTime)
             {
                 characterBody.RelativeVelocity += characterBody.GroundingUp * character.JumpHeldAcceleration * deltaTime;
             }
@@ -119,20 +119,20 @@ public struct AirMoveState : IPlatformerCharacterState
         ref PlatformerCharacterControl characterControl = ref aspect.CharacterControl.ValueRW;
         ref PlatformerCharacterStateMachine stateMachine = ref aspect.StateMachine.ValueRW;
         
-        if (characterControl.RopePressed && RopeSwingState.DetectRopePoints(in baseContext.PhysicsWorld, in aspect, out float3 detectedRopeAnchorPoint))
+        if (characterControl.IsRopePressed() && RopeSwingState.DetectRopePoints(in baseContext.PhysicsWorld, in aspect, out float3 detectedRopeAnchorPoint))
         {
             stateMachine.RopeSwingState.AnchorPoint = detectedRopeAnchorPoint;
             stateMachine.TransitionToState(CharacterState.RopeSwing, ref context, ref baseContext, in aspect);
             return true;
         }
 
-        if (characterControl.RollHeld)
+        if (characterControl.IsRollHeld())
         {
             stateMachine.TransitionToState(CharacterState.Rolling, ref context, ref baseContext, in aspect);
             return true;
         }
 
-        if (characterControl.DashPressed)
+        if (characterControl.IsDashPressed())
         {
             stateMachine.TransitionToState(CharacterState.Dashing, ref context, ref baseContext, in aspect);
             return true;
@@ -144,7 +144,7 @@ public struct AirMoveState : IPlatformerCharacterState
             return true;
         }
 
-        if (characterControl.SprintHeld && character.HasDetectedMoveAgainstWall)
+        if (characterControl.IsSprintHeld() && character.HasDetectedMoveAgainstWall)
         {
             stateMachine.TransitionToState(CharacterState.WallRun, ref context, ref baseContext, in aspect);
             return true;
@@ -157,7 +157,7 @@ public struct AirMoveState : IPlatformerCharacterState
             return true;
         }
 
-        if (characterControl.ClimbPressed)
+        if (characterControl.IsClimbPressed())
         {
             if (ClimbingState.CanStartClimbing(ref context, ref baseContext, in aspect))
             {

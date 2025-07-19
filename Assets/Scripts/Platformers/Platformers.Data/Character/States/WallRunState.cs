@@ -45,12 +45,12 @@ public struct WallRunState : IPlatformerCharacterState
             CharacterControlUtilities.StandardAirMove(ref characterBody.RelativeVelocity, acceleration, character.WallRunMaxSpeed, characterBody.GroundingUp, deltaTime, false);
 
             // Jumping
-            if (character.HasDetectedMoveAgainstWall && characterControl.JumpPressed)
+            if (character.HasDetectedMoveAgainstWall && characterControl.IsJumpPressed())
             {
                 float3 jumpDirection = math.normalizesafe(math.lerp(characterBody.GroundingUp, character.LastKnownWallNormal, character.WallRunJumpRatioFromCharacterUp));
                 CharacterControlUtilities.StandardJump(ref characterBody, jumpDirection * character.WallRunJumpSpeed, true, jumpDirection);
             }
-            if (characterControl.JumpHeld && character.HeldJumpTimeCounter < character.MaxHeldJumpTime)
+            if (characterControl.IsJumpHeld() && character.HeldJumpTimeCounter < character.MaxHeldJumpTime)
             {
                 characterBody.RelativeVelocity += characterBody.GroundingUp * character.JumpHeldAcceleration * deltaTime;
             }
@@ -106,13 +106,13 @@ public struct WallRunState : IPlatformerCharacterState
         ref PlatformerCharacterControl characterControl = ref aspect.CharacterControl.ValueRW;
         ref PlatformerCharacterStateMachine stateMachine = ref aspect.StateMachine.ValueRW;
         
-        if (characterControl.RollHeld)
+        if (characterControl.IsRollHeld())
         {
             stateMachine.TransitionToState(CharacterState.Rolling, ref context, ref baseContext, in aspect);
             return true;
         }
 
-        if (characterControl.DashPressed)
+        if (characterControl.IsDashPressed())
         {
             stateMachine.TransitionToState(CharacterState.Dashing, ref context, ref baseContext, in aspect);
             return true;

@@ -126,7 +126,7 @@ public struct LedgeGrabState : IPlatformerCharacterState
         }
 
         // Detect letting go of ledge
-        if (characterControl.CrouchPressed || characterControl.DashPressed)
+        if (characterControl.IsCrouchPressed() || characterControl.IsDashPressed())
         {
             character.LedgeGrabBlockCounter = 0.3f;
         }
@@ -173,7 +173,7 @@ public struct LedgeGrabState : IPlatformerCharacterState
             return true;
         }
 
-        if (characterControl.JumpPressed)
+        if (characterControl.IsJumpPressed())
         {
             LedgeDetection(
                 ref context,

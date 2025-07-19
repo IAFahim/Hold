@@ -94,7 +94,7 @@ public struct RopeSwingState : IPlatformerCharacterState
         ref PlatformerCharacterControl characterControl = ref aspect.CharacterControl.ValueRW;
         ref PlatformerCharacterStateMachine stateMachine = ref aspect.StateMachine.ValueRW;
         
-        if (characterControl.JumpPressed || characterControl.DashPressed)
+        if (characterControl.IsJumpPressed() || characterControl.IsDashPressed())
         {
             stateMachine.TransitionToState(CharacterState.AirMove, ref context, ref baseContext, in aspect);
             return true;
