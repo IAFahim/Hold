@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.CompilerServices;
-using Inputs.Inputs.Data;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;

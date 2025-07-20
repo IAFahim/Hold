@@ -29,10 +29,7 @@ public partial struct SceneInitializationSystem : ISystem
         if (SystemAPI.HasSingleton<SceneInitialization>())
         {
             ref SceneInitialization sceneInitializer = ref SystemAPI.GetSingletonRW<SceneInitialization>().ValueRW;
-
-            // Spawn player
-            Entity playerEntity = state.EntityManager.Instantiate(sceneInitializer.PlayerPrefabEntity);
-
+            
             // Spawn character at spawn point
             Entity characterEntity = state.EntityManager.Instantiate(sceneInitializer.CharacterPrefabEntity);
             LocalTransform spawnTransform = SystemAPI.GetComponent<LocalTransform>(sceneInitializer.CharacterSpawnPointEntity);
@@ -41,6 +38,10 @@ public partial struct SceneInitializationSystem : ISystem
             // Spawn camera
             Entity cameraEntity = state.EntityManager.Instantiate(sceneInitializer.CameraPrefabEntity);
             state.EntityManager.AddComponentData(cameraEntity, new MainEntityCamera());
+
+            
+            // Spawn player
+            Entity playerEntity = state.EntityManager.Instantiate(sceneInitializer.PlayerPrefabEntity);
 
             // Assign camera & character to player
             PlatformerPlayer player = SystemAPI.GetComponent<PlatformerPlayer>(playerEntity);
