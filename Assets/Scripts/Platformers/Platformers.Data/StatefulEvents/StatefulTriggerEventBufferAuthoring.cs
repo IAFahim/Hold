@@ -7,17 +7,19 @@ namespace Unity.Physics.Stateful
     // of that entity by the StatefulTriggerEventBufferSystem. This component is by default added to
     // CharacterController entity, so that CharacterControllerSystem can add trigger events to
     // CharacterController on its own, without StatefulTriggerEventBufferSystem interference.
-    public struct StatefulTriggerEventExclude : IComponentData {}
+    public struct StatefulTriggerEventExclude : IComponentData
+    {
+    }
 
     public class StatefulTriggerEventBufferAuthoring : MonoBehaviour
     {
     }
 
-    class StatefulTriggerEventBufferAuthoringBaker : Baker<StatefulTriggerEventBufferAuthoring>
+    internal class StatefulTriggerEventBufferAuthoringBaker : Baker<StatefulTriggerEventBufferAuthoring>
     {
         public override void Bake(StatefulTriggerEventBufferAuthoring authoring)
         {
-            Entity entity = GetEntity(TransformUsageFlags.Dynamic);
+            var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddBuffer<StatefulTriggerEvent>(entity);
         }
     }

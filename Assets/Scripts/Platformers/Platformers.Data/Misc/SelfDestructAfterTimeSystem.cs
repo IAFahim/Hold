@@ -21,10 +21,11 @@ public partial struct SelfDestructAfterTimeSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        SelfDestructAfterTimeJob job = new SelfDestructAfterTimeJob
+        var job = new SelfDestructAfterTimeJob
         {
             DeltaTime = SystemAPI.Time.DeltaTime,
-            ECB = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW.CreateCommandBuffer(state.WorldUnmanaged),
+            ECB = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW
+                .CreateCommandBuffer(state.WorldUnmanaged)
         };
         job.Schedule();
     }
@@ -35,13 +36,10 @@ public partial struct SelfDestructAfterTimeSystem : ISystem
         public float DeltaTime;
         public EntityCommandBuffer ECB;
 
-        void Execute(Entity entity, ref SelfDestructAfterTime selfDestructAfterTime)
+        private void Execute(Entity entity, ref SelfDestructAfterTime selfDestructAfterTime)
         {
             selfDestructAfterTime.TimeSinceAlive += DeltaTime;
-            if (selfDestructAfterTime.TimeSinceAlive > selfDestructAfterTime.LifeTime)
-            {
-                ECB.DestroyEntity(entity);
-            }
+            if (selfDestructAfterTime.TimeSinceAlive > selfDestructAfterTime.LifeTime) ECB.DestroyEntity(entity);
         }
     }
 }

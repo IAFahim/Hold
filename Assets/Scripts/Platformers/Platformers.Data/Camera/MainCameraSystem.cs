@@ -12,9 +12,10 @@ public partial class MainCameraSystem : SystemBase
     {
         if (MainGameObjectCamera.Instance != null && SystemAPI.HasSingleton<MainEntityCamera>())
         {
-            Entity mainEntityCameraEntity = SystemAPI.GetSingletonEntity<MainEntityCamera>();
-            LocalToWorld targetLocalToWorld = SystemAPI.GetComponent<LocalToWorld>(mainEntityCameraEntity);
-            MainGameObjectCamera.Instance.transform.SetPositionAndRotation(targetLocalToWorld.Position, targetLocalToWorld.Rotation);
+            var mainEntityCameraEntity = SystemAPI.GetSingletonEntity<MainEntityCamera>();
+            var targetLocalToWorld = SystemAPI.GetComponent<LocalToWorld>(mainEntityCameraEntity);
+            MainGameObjectCamera.Instance.transform.SetPositionAndRotation(targetLocalToWorld.Position,
+                targetLocalToWorld.Rotation);
         }
     }
 }

@@ -11,13 +11,14 @@ public struct ClimbingState : IPlatformerCharacterState
 
     private bool _foundValidClimbSurface;
 
-    public void OnStateEnter(CharacterState previousState, ref PlatformerCharacterUpdateContext context, ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
+    public void OnStateEnter(CharacterState previousState, ref PlatformerCharacterUpdateContext context,
+        ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
     {
-        ref PlatformerCharacterComponent character = ref aspect.Character.ValueRW;
-        ref KinematicCharacterBody characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
-        ref KinematicCharacterProperties characterProperties = ref aspect.CharacterAspect.CharacterProperties.ValueRW;
-        ref quaternion characterRotation = ref aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
-        
+        ref var character = ref aspect.Character.ValueRW;
+        ref var characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
+        ref var characterProperties = ref aspect.CharacterAspect.CharacterProperties.ValueRW;
+        ref var characterRotation = ref aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
+
         aspect.SetCapsuleGeometry(character.ClimbingGeometry.ToCapsuleGeometry());
 
         characterProperties.EvaluateGrounding = false;
@@ -28,53 +29,59 @@ public struct ClimbingState : IPlatformerCharacterState
         LastKnownClimbNormal = -MathUtilities.GetForwardFromRotation(characterRotation);
     }
 
-    public void OnStateExit(CharacterState nextState, ref PlatformerCharacterUpdateContext context, ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
+    public void OnStateExit(CharacterState nextState, ref PlatformerCharacterUpdateContext context,
+        ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
     {
-        ref KinematicCharacterBody characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
-        ref KinematicCharacterProperties characterProperties = ref aspect.CharacterAspect.CharacterProperties.ValueRW;
-        
-        aspect.CharacterAspect.SetOrUpdateParentBody(ref baseContext, ref characterBody, default, default); 
+        ref var characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
+        ref var characterProperties = ref aspect.CharacterAspect.CharacterProperties.ValueRW;
+
+        aspect.CharacterAspect.SetOrUpdateParentBody(ref baseContext, ref characterBody, default, default);
         characterProperties.EvaluateGrounding = true;
         characterProperties.DetectMovementCollisions = true;
         characterProperties.DecollideFromOverlaps = true;
     }
 
-    public void OnStatePhysicsUpdate(ref PlatformerCharacterUpdateContext context, ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
+    public void OnStatePhysicsUpdate(ref PlatformerCharacterUpdateContext context,
+        ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
     {
-        float deltaTime = baseContext.Time.DeltaTime;
-        ref KinematicCharacterBody characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
-        ref PlatformerCharacterComponent character = ref aspect.Character.ValueRW;
-        ref PlatformerCharacterControl characterControl = ref aspect.CharacterControl.ValueRW;
-        ref float3 characterPosition = ref aspect.CharacterAspect.LocalTransform.ValueRW.Position;
-        
+        var deltaTime = baseContext.Time.DeltaTime;
+        ref var characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
+        ref var character = ref aspect.Character.ValueRW;
+        ref var characterControl = ref aspect.CharacterControl.ValueRW;
+        ref var characterPosition = ref aspect.CharacterAspect.LocalTransform.ValueRW.Position;
+
         aspect.HandlePhysicsUpdatePhase1(ref context, ref baseContext, true, false);
 
         // Quad climbing surface detection raycasts
         _foundValidClimbSurface = false;
-        if (ClimbingDetection(ref context, ref baseContext, in aspect, true, out LastKnownClimbNormal, out DistanceHit closestClimbableHit, out DistanceHit closestUnclimbableHit))
+        if (ClimbingDetection(ref context, ref baseContext, in aspect, true, out LastKnownClimbNormal,
+                out var closestClimbableHit, out var closestUnclimbableHit))
         {
             _foundValidClimbSurface = true;
 
             // Adjust distance of character to surface
             characterPosition += -closestClimbableHit.Distance * closestClimbableHit.SurfaceNormal;
-            characterPosition += (character.ClimbingGeometry.Radius - character.ClimbingDistanceFromSurface) * -closestClimbableHit.SurfaceNormal;
+            characterPosition += (character.ClimbingGeometry.Radius - character.ClimbingDistanceFromSurface) *
+                                 -closestClimbableHit.SurfaceNormal;
 
             // decollide from most penetrating non-climbable hit
             if (closestUnclimbableHit.Entity != Entity.Null)
-            {
                 characterPosition += -closestUnclimbableHit.Distance * closestUnclimbableHit.SurfaceNormal;
-            }
 
             // Move
-            float3 climbMoveVector = math.normalizesafe(MathUtilities.ProjectOnPlane(characterControl.MoveVector, LastKnownClimbNormal)) * math.length(characterControl.MoveVector);
-            float3 targetVelocity = climbMoveVector * character.ClimbingSpeed;
-            CharacterControlUtilities.InterpolateVelocityTowardsTarget(ref characterBody.RelativeVelocity, targetVelocity, deltaTime, character.ClimbingMovementSharpness);
-            characterBody.RelativeVelocity = MathUtilities.ProjectOnPlane(characterBody.RelativeVelocity, LastKnownClimbNormal);
+            var climbMoveVector =
+                math.normalizesafe(MathUtilities.ProjectOnPlane(characterControl.MoveVector, LastKnownClimbNormal)) *
+                math.length(characterControl.MoveVector);
+            var targetVelocity = climbMoveVector * character.ClimbingSpeed;
+            CharacterControlUtilities.InterpolateVelocityTowardsTarget(ref characterBody.RelativeVelocity,
+                targetVelocity, deltaTime, character.ClimbingMovementSharpness);
+            characterBody.RelativeVelocity =
+                MathUtilities.ProjectOnPlane(characterBody.RelativeVelocity, LastKnownClimbNormal);
 
             // Project velocity on non-climbable obstacles
             if (aspect.CharacterAspect.VelocityProjectionHits.Length > 0)
             {
-                bool tmpCharacterGrounded = false;
+                var tmpCharacterGrounded = false;
                 BasicHit tmpCharacterGroundHit = default;
                 aspect.ProjectVelocityOnHits(
                     ref context,
@@ -85,73 +92,76 @@ public struct ClimbingState : IPlatformerCharacterState
                     in aspect.CharacterAspect.VelocityProjectionHits,
                     math.normalizesafe(characterBody.RelativeVelocity));
             }
-            
+
             // Apply velocity to position
             characterPosition += characterBody.RelativeVelocity * baseContext.Time.DeltaTime;
-            
-            aspect.CharacterAspect.SetOrUpdateParentBody(ref baseContext, ref characterBody, closestClimbableHit.Entity, closestClimbableHit.Position); 
+
+            aspect.CharacterAspect.SetOrUpdateParentBody(ref baseContext, ref characterBody, closestClimbableHit.Entity,
+                closestClimbableHit.Position);
         }
         else
         {
-            aspect.CharacterAspect.SetOrUpdateParentBody(ref baseContext, ref characterBody, default, default); 
+            aspect.CharacterAspect.SetOrUpdateParentBody(ref baseContext, ref characterBody, default, default);
         }
-        
+
         aspect.HandlePhysicsUpdatePhase2(ref context, ref baseContext, false, false, false, false, true);
-        
+
         DetectTransitions(ref context, ref baseContext, in aspect);
     }
 
-    public void OnStateVariableUpdate(ref PlatformerCharacterUpdateContext context, ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
+    public void OnStateVariableUpdate(ref PlatformerCharacterUpdateContext context,
+        ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
     {
-        float deltaTime = baseContext.Time.DeltaTime;
-        ref KinematicCharacterBody characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
-        ref PlatformerCharacterComponent character = ref aspect.Character.ValueRW;
-        ref PlatformerCharacterControl characterControl = ref aspect.CharacterControl.ValueRW;
-        ref float3 characterPosition = ref aspect.CharacterAspect.LocalTransform.ValueRW.Position;
-        ref quaternion characterRotation = ref aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
+        var deltaTime = baseContext.Time.DeltaTime;
+        ref var characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
+        ref var character = ref aspect.Character.ValueRW;
+        ref var characterControl = ref aspect.CharacterControl.ValueRW;
+        ref var characterPosition = ref aspect.CharacterAspect.LocalTransform.ValueRW.Position;
+        ref var characterRotation = ref aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
 
-        float3 geometryCenter = GetGeometryCenter(in aspect);
-        
+        var geometryCenter = GetGeometryCenter(in aspect);
+
         // Rotate
-        float3 targetCharacterUp = characterBody.GroundingUp;
+        var targetCharacterUp = characterBody.GroundingUp;
         if (math.lengthsq(characterControl.MoveVector) > 0f)
-        {
-            targetCharacterUp = math.normalizesafe(MathUtilities.ProjectOnPlane(characterControl.MoveVector, LastKnownClimbNormal));
-        }
-        quaternion targetRotation = quaternion.LookRotationSafe(-LastKnownClimbNormal, targetCharacterUp);
-        quaternion smoothedRotation = math.slerp(characterRotation, targetRotation, MathUtilities.GetSharpnessInterpolant(character.ClimbingRotationSharpness, deltaTime));
-        MathUtilities.SetRotationAroundPoint(ref characterRotation, ref characterPosition, geometryCenter, smoothedRotation);
+            targetCharacterUp =
+                math.normalizesafe(MathUtilities.ProjectOnPlane(characterControl.MoveVector, LastKnownClimbNormal));
+        var targetRotation = quaternion.LookRotationSafe(-LastKnownClimbNormal, targetCharacterUp);
+        var smoothedRotation = math.slerp(characterRotation, targetRotation,
+            MathUtilities.GetSharpnessInterpolant(character.ClimbingRotationSharpness, deltaTime));
+        MathUtilities.SetRotationAroundPoint(ref characterRotation, ref characterPosition, geometryCenter,
+            smoothedRotation);
     }
 
-    public void GetCameraParameters(in PlatformerCharacterComponent character, out Entity cameraTarget, out bool calculateUpFromGravity)
+    public void GetCameraParameters(in PlatformerCharacterComponent character, out Entity cameraTarget,
+        out bool calculateUpFromGravity)
     {
         cameraTarget = character.ClimbingCameraTargetEntity;
         calculateUpFromGravity = true;
     }
 
-    public void GetMoveVectorFromPlayerInput(in PlatformerPlayerInputs inputs, quaternion cameraRotation, out float3 moveVector)
+    public void GetMoveVectorFromPlayerInput(in PlatformerPlayerInputs inputs, quaternion cameraRotation,
+        out float3 moveVector)
     {
-        float3 cameraFwd = math.mul(cameraRotation, math.forward());
-        float3 cameraRight = math.mul(cameraRotation, math.right());
-        float3 cameraUp = math.mul(cameraRotation, math.up());
-        
+        var cameraFwd = math.mul(cameraRotation, math.forward());
+        var cameraRight = math.mul(cameraRotation, math.right());
+        var cameraUp = math.mul(cameraRotation, math.up());
+
         // Only use input if the camera is pointing towards the normal
         if (math.dot(LastKnownClimbNormal, cameraFwd) < -0.05f)
-        {
-            moveVector = (cameraRight * inputs.Move.x) + (cameraUp * inputs.Move.y);
-        }
+            moveVector = cameraRight * inputs.Move.x + cameraUp * inputs.Move.y;
         else
-        {
-            moveVector = (cameraRight * inputs.Move.x) + (cameraFwd * inputs.Move.y);
-        }
+            moveVector = cameraRight * inputs.Move.x + cameraFwd * inputs.Move.y;
     }
 
-    public bool DetectTransitions(ref PlatformerCharacterUpdateContext context, ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
+    public bool DetectTransitions(ref PlatformerCharacterUpdateContext context,
+        ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
     {
-        ref PlatformerCharacterControl characterControl = ref aspect.CharacterControl.ValueRW;
-        ref PlatformerCharacterStateMachine stateMachine = ref aspect.StateMachine.ValueRW;
-        
-        if (!_foundValidClimbSurface || characterControl.IsJumpPressed() || characterControl.IsDashPressed() || characterControl.IsClimbPressed())
+        ref var characterControl = ref aspect.CharacterControl.ValueRW;
+        ref var stateMachine = ref aspect.StateMachine.ValueRW;
+
+        if (!_foundValidClimbSurface || characterControl.IsJumpPressed() || characterControl.IsDashPressed() ||
+            characterControl.IsClimbPressed())
         {
             stateMachine.TransitionToState(CharacterState.AirMove, ref context, ref baseContext, in aspect);
             return true;
@@ -162,21 +172,23 @@ public struct ClimbingState : IPlatformerCharacterState
 
     public static float3 GetGeometryCenter(in PlatformerCharacterAspect aspect)
     {
-        float3 characterPosition = aspect.CharacterAspect.LocalTransform.ValueRW.Position;
-        quaternion characterRotation = aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
-        PlatformerCharacterComponent character = aspect.Character.ValueRW;
-        
-        RigidTransform characterTransform = new RigidTransform(characterRotation, characterPosition);
-        float3 geometryCenter = math.transform(characterTransform, math.up() * character.ClimbingGeometry.Height * 0.5f);
+        var characterPosition = aspect.CharacterAspect.LocalTransform.ValueRW.Position;
+        var characterRotation = aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
+        var character = aspect.Character.ValueRW;
+
+        var characterTransform = new RigidTransform(characterRotation, characterPosition);
+        var geometryCenter = math.transform(characterTransform, math.up() * character.ClimbingGeometry.Height * 0.5f);
         return geometryCenter;
     }
 
-    public static bool CanStartClimbing(ref PlatformerCharacterUpdateContext context, ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
+    public static bool CanStartClimbing(ref PlatformerCharacterUpdateContext context,
+        ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
     {
-        ref PlatformerCharacterComponent character = ref aspect.Character.ValueRW;
-        
+        ref var character = ref aspect.Character.ValueRW;
+
         aspect.SetCapsuleGeometry(character.ClimbingGeometry.ToCapsuleGeometry());
-        bool canStart = ClimbingDetection(ref context, ref baseContext, in aspect, false, out float3 _, out DistanceHit _, out DistanceHit _);
+        var canStart = ClimbingDetection(ref context, ref baseContext, in aspect, false, out var _, out var _,
+            out var _);
         aspect.SetCapsuleGeometry(character.StandingGeometry.ToCapsuleGeometry());
 
         return canStart;
@@ -191,16 +203,16 @@ public struct ClimbingState : IPlatformerCharacterState
         out DistanceHit closestClimbableHit,
         out DistanceHit closestUnclimbableHit)
     {
-        int climbableNormalsCounter = 0;
+        var climbableNormalsCounter = 0;
         avgClimbingSurfaceNormal = default;
         closestClimbableHit = default;
         closestUnclimbableHit = default;
 
-        ref KinematicCharacterProperties characterProperties = ref aspect.CharacterAspect.CharacterProperties.ValueRW;
-        ref PlatformerCharacterComponent character = ref aspect.Character.ValueRW;
-        ref float3 characterPosition = ref aspect.CharacterAspect.LocalTransform.ValueRW.Position;
-        ref quaternion characterRotation = ref aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
-        float characterScale = aspect.CharacterAspect.LocalTransform.ValueRO.Scale;
+        ref var characterProperties = ref aspect.CharacterAspect.CharacterProperties.ValueRW;
+        ref var character = ref aspect.Character.ValueRW;
+        ref var characterPosition = ref aspect.CharacterAspect.LocalTransform.ValueRW.Position;
+        ref var characterRotation = ref aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
+        var characterScale = aspect.CharacterAspect.LocalTransform.ValueRO.Scale;
 
         aspect.CharacterAspect.CalculateDistanceAllCollisions(
             in aspect,
@@ -218,51 +230,41 @@ public struct ClimbingState : IPlatformerCharacterState
             closestClimbableHit.Fraction = float.MaxValue;
             closestUnclimbableHit.Fraction = float.MaxValue;
 
-            for (int i = 0; i < baseContext.TmpDistanceHits.Length; i++)
+            for (var i = 0; i < baseContext.TmpDistanceHits.Length; i++)
             {
-                DistanceHit tmpHit = baseContext.TmpDistanceHits[i];
+                var tmpHit = baseContext.TmpDistanceHits[i];
 
-                float3 faceNormal = tmpHit.SurfaceNormal;
+                var faceNormal = tmpHit.SurfaceNormal;
 
                 // This is necessary for cases where the detected hit is the edge of a triangle/plane
-                if (PhysicsUtilities.GetHitFaceNormal(baseContext.PhysicsWorld.Bodies[tmpHit.RigidBodyIndex], tmpHit.ColliderKey, out float3 tmpFaceNormal))
-                {
-                    faceNormal = tmpFaceNormal;
-                }
+                if (PhysicsUtilities.GetHitFaceNormal(baseContext.PhysicsWorld.Bodies[tmpHit.RigidBodyIndex],
+                        tmpHit.ColliderKey, out var tmpFaceNormal)) faceNormal = tmpFaceNormal;
 
                 // Ignore back faces
-                if (math.dot(faceNormal, tmpHit.SurfaceNormal) > KinematicCharacterAspect.Constants.DotProductSimilarityEpsilon)
+                if (math.dot(faceNormal, tmpHit.SurfaceNormal) >
+                    KinematicCharacterAspect.Constants.DotProductSimilarityEpsilon)
                 {
-                    bool isClimbable = false;
+                    var isClimbable = false;
                     if (character.ClimbableTag.Value > CustomPhysicsBodyTags.Nothing.Value)
-                    {
-                        if ((baseContext.PhysicsWorld.Bodies[tmpHit.RigidBodyIndex].CustomTags & character.ClimbableTag.Value) > 0)
-                        {
+                        if ((baseContext.PhysicsWorld.Bodies[tmpHit.RigidBodyIndex].CustomTags &
+                             character.ClimbableTag.Value) > 0)
                             isClimbable = true;
-                        }
-                    }
 
                     // Add virtual velocityProjection hit in direction of unclimbable hit
                     if (isClimbable)
                     {
-                        if (tmpHit.Fraction < closestClimbableHit.Fraction)
-                        {
-                            closestClimbableHit = tmpHit;
-                        }
+                        if (tmpHit.Fraction < closestClimbableHit.Fraction) closestClimbableHit = tmpHit;
 
                         avgClimbingSurfaceNormal += faceNormal;
                         climbableNormalsCounter++;
                     }
                     else
                     {
-                        if (tmpHit.Fraction < closestUnclimbableHit.Fraction)
-                        {
-                            closestUnclimbableHit = tmpHit;
-                        }
+                        if (tmpHit.Fraction < closestUnclimbableHit.Fraction) closestUnclimbableHit = tmpHit;
 
                         if (addUnclimbableHitsAsVelocityProjectionHits)
                         {
-                            KinematicVelocityProjectionHit velProjHit = new KinematicVelocityProjectionHit(new BasicHit(tmpHit), false);
+                            var velProjHit = new KinematicVelocityProjectionHit(new BasicHit(tmpHit), false);
                             aspect.CharacterAspect.VelocityProjectionHits.Add(velProjHit);
                         }
                     }

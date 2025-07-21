@@ -25,7 +25,7 @@ namespace Unity.Physics.Stateful
         private ComponentHandles m_ComponentHandles;
         private EntityQuery m_TriggerEventQuery;
 
-        struct ComponentHandles
+        private struct ComponentHandles
         {
             public ComponentLookup<StatefulTriggerEventExclude> EventExcludes;
             public BufferLookup<StatefulTriggerEvent> EventBuffers;
@@ -46,7 +46,7 @@ namespace Unity.Physics.Stateful
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            EntityQueryBuilder builder = new EntityQueryBuilder(Allocator.Temp)
+            var builder = new EntityQueryBuilder(Allocator.Temp)
                 .WithAllRW<StatefulTriggerEvent>()
                 .WithNone<StatefulTriggerEventExclude>();
 
@@ -68,7 +68,10 @@ namespace Unity.Physics.Stateful
         [BurstCompile]
         public partial struct ClearTriggerEventDynamicBufferJob : IJobEntity
         {
-            public void Execute(ref DynamicBuffer<StatefulTriggerEvent> eventBuffer) => eventBuffer.Clear();
+            public void Execute(ref DynamicBuffer<StatefulTriggerEvent> eventBuffer)
+            {
+                eventBuffer.Clear();
+            }
         }
 
         [BurstCompile]
@@ -91,14 +94,14 @@ namespace Unity.Physics.Stateful
 
             state.Dependency = new StatefulEventCollectionJobs
                 .ConvertEventStreamToDynamicBufferJob<StatefulTriggerEvent, StatefulTriggerEventExclude>
-            {
-                CurrentEvents = currentEvents,
-                PreviousEvents = previousEvents,
-                EventBuffers = m_ComponentHandles.EventBuffers,
+                {
+                    CurrentEvents = currentEvents,
+                    PreviousEvents = previousEvents,
+                    EventBuffers = m_ComponentHandles.EventBuffers,
 
-                UseExcludeComponent = true,
-                EventExcludeLookup = m_ComponentHandles.EventExcludes
-            }.Schedule(state.Dependency);
+                    UseExcludeComponent = true,
+                    EventExcludeLookup = m_ComponentHandles.EventExcludes
+                }.Schedule(state.Dependency);
         }
     }
 }

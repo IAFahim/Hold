@@ -9,9 +9,9 @@ public class PlatformerCharacterAnimationAuthoring : MonoBehaviour
     {
         public override void Bake(PlatformerCharacterAnimationAuthoring authoring)
         {
-            Entity entity = GetEntity(TransformUsageFlags.Dynamic);
-            
-            PlatformerCharacterAnimation characterAnimation = new PlatformerCharacterAnimation();
+            var entity = GetEntity(TransformUsageFlags.Dynamic);
+
+            var characterAnimation = new PlatformerCharacterAnimation();
 
             // Set clip indexes
             characterAnimation.IdleClip = 0;

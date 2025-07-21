@@ -45,12 +45,13 @@ namespace Unity.Physics.Stateful
 
             // Estimated impulse applied
             public float EstimatedImpulse;
+
             // Average contact point position
             public float3 AverageContactPointPosition;
 
             public Details(int numContactPoints, float estimatedImpulse, float3 averageContactPosition)
             {
-                IsValid = (0 < numContactPoints); // Should we add a max check?
+                IsValid = 0 < numContactPoints; // Should we add a max check?
                 NumberOfContactPoints = numContactPoints;
                 EstimatedImpulse = estimatedImpulse;
                 AverageContactPointPosition = averageContactPosition;
@@ -60,14 +61,14 @@ namespace Unity.Physics.Stateful
         // Returns the other entity in EntityPair, if provided with other one
         public Entity GetOtherEntity(Entity entity)
         {
-            Assert.IsTrue((entity == EntityA) || (entity == EntityB));
+            Assert.IsTrue(entity == EntityA || entity == EntityB);
             return entity == EntityA ? EntityB : EntityA;
         }
 
         // Returns the normal pointing from passed entity to the other one in pair
         public float3 GetNormalFrom(Entity entity)
         {
-            Assert.IsTrue((entity == EntityA) || (entity == EntityB));
+            Assert.IsTrue(entity == EntityA || entity == EntityB);
             return math.select(-Normal, Normal, entity == EntityB);
         }
 
@@ -77,6 +78,9 @@ namespace Unity.Physics.Stateful
             return CollisionDetails.IsValid;
         }
 
-        public int CompareTo(StatefulCollisionEvent other) => ISimulationEventUtilities.CompareEvents(this, other);
+        public int CompareTo(StatefulCollisionEvent other)
+        {
+            return ISimulationEventUtilities.CompareEvents(this, other);
+        }
     }
 }

@@ -14,53 +14,56 @@ public partial class PlatformerCharacterHybridSystem : SystemBase
 
     public int fps = 8;
     private float _time;
-    
+
     protected override void OnUpdate()
     {
         _time += SystemAPI.Time.DeltaTime;
         var updateTime = 1f / fps;
         float stopMotionFactor = 0;
-        
+
         if (_time > updateTime)
         {
             _time -= updateTime;
             stopMotionFactor = updateTime / Time.deltaTime;
         }
-        
-        EntityCommandBuffer ecb = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW.CreateCommandBuffer(World.Unmanaged);
-        
+
+        var ecb = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW
+            .CreateCommandBuffer(World.Unmanaged);
+
         // Create
-        foreach (var (characterAnimation, hybridData, entity) in SystemAPI.Query<RefRW<PlatformerCharacterAnimation>, PlatformerCharacterHybridData>()
+        foreach (var (characterAnimation, hybridData, entity) in SystemAPI
+                     .Query<RefRW<PlatformerCharacterAnimation>, PlatformerCharacterHybridData>()
                      .WithNone<PlatformerCharacterHybridLink>()
                      .WithEntityAccess())
         {
-            GameObject tmpObject = GameObject.Instantiate(hybridData.MeshPrefab);
-            Animator animator = tmpObject.GetComponent<Animator>();
+            var tmpObject = GameObject.Instantiate(hybridData.MeshPrefab);
+            var animator = tmpObject.GetComponent<Animator>();
 
             ecb.AddComponent(entity, new PlatformerCharacterHybridLink
             {
                 Object = tmpObject,
-                Animator = animator,
+                Animator = animator
             });
         }
-        
+
         // Update
-        foreach (var (characterAnimation, characterBody, characterTransform, characterComponent, characterStateMachine, characterControl, hybridLink, entity) in SystemAPI.Query<
-            RefRW<PlatformerCharacterAnimation>, 
-            KinematicCharacterBody,
-            LocalTransform,
-            PlatformerCharacterComponent,
-            PlatformerCharacterStateMachine,
-            PlatformerCharacterControl,
-            PlatformerCharacterHybridLink>()
-            .WithEntityAccess())
-        {
+        foreach (var (characterAnimation, characterBody, characterTransform, characterComponent, characterStateMachine,
+                     characterControl, hybridLink, entity) in SystemAPI.Query<
+                         RefRW<PlatformerCharacterAnimation>,
+                         KinematicCharacterBody,
+                         LocalTransform,
+                         PlatformerCharacterComponent,
+                         PlatformerCharacterStateMachine,
+                         PlatformerCharacterControl,
+                         PlatformerCharacterHybridLink>()
+                     .WithEntityAccess())
             if (hybridLink.Object)
             {
                 // Transform
-                LocalToWorld meshRootLTW = SystemAPI.GetComponent<LocalToWorld>(characterComponent.MeshRootEntity);
+                var meshRootLTW = SystemAPI.GetComponent<LocalToWorld>(characterComponent.MeshRootEntity);
                 hybridLink.Object.transform.SetLocalPositionAndRotation(meshRootLTW.Position, meshRootLTW.Rotation);
 
+                
                 // Animation
                 PlatformerCharacterAnimationHandler.UpdateAnimation(
                     hybridLink.Animator,
@@ -76,21 +79,14 @@ public partial class PlatformerCharacterHybridSystem : SystemBase
                 // Mesh enabling
                 if (characterStateMachine.CurrentState == CharacterState.Rolling)
                 {
-                    if (hybridLink.Object.activeSelf)
-                    {
-                        hybridLink.Object.SetActive(false);
-                    }
+                    if (hybridLink.Object.activeSelf) hybridLink.Object.SetActive(false);
                 }
                 else
                 {
-                    if (!hybridLink.Object.activeSelf)
-                    {
-                        hybridLink.Object.SetActive(true);
-                    }
+                    if (!hybridLink.Object.activeSelf) hybridLink.Object.SetActive(true);
                 }
             }
-        }
-        
+
         // Destroy
         foreach (var (hybridLink, entity) in SystemAPI.Query<PlatformerCharacterHybridLink>()
                      .WithNone<PlatformerCharacterHybridData>()

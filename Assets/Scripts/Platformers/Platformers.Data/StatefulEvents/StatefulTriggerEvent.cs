@@ -28,10 +28,13 @@ namespace Unity.Physics.Stateful
         // Returns other entity in EntityPair, if provided with one
         public Entity GetOtherEntity(Entity entity)
         {
-            Assert.IsTrue((entity == EntityA) || (entity == EntityB));
-            return (entity == EntityA) ? EntityB : EntityA;
+            Assert.IsTrue(entity == EntityA || entity == EntityB);
+            return entity == EntityA ? EntityB : EntityA;
         }
 
-        public int CompareTo(StatefulTriggerEvent other) => ISimulationEventUtilities.CompareEvents(this, other);
+        public int CompareTo(StatefulTriggerEvent other)
+        {
+            return ISimulationEventUtilities.CompareEvents(this, other);
+        }
     }
 }

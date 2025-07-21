@@ -16,11 +16,13 @@ public partial struct SceneInitializationSystem : ISystem
 {
     [BurstCompile]
     public void OnCreate(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
@@ -28,23 +30,24 @@ public partial struct SceneInitializationSystem : ISystem
         // Game init
         if (SystemAPI.HasSingleton<SceneInitialization>())
         {
-            ref SceneInitialization sceneInitializer = ref SystemAPI.GetSingletonRW<SceneInitialization>().ValueRW;
-            
+            ref var sceneInitializer = ref SystemAPI.GetSingletonRW<SceneInitialization>().ValueRW;
+
             // Spawn character at spawn point
-            Entity characterEntity = state.EntityManager.Instantiate(sceneInitializer.CharacterPrefabEntity);
-            LocalTransform spawnTransform = SystemAPI.GetComponent<LocalTransform>(sceneInitializer.CharacterSpawnPointEntity);
-            SystemAPI.SetComponent(characterEntity, LocalTransform.FromPositionRotation(spawnTransform.Position, spawnTransform.Rotation));
+            var characterEntity = state.EntityManager.Instantiate(sceneInitializer.CharacterPrefabEntity);
+            var spawnTransform = SystemAPI.GetComponent<LocalTransform>(sceneInitializer.CharacterSpawnPointEntity);
+            SystemAPI.SetComponent(characterEntity,
+                LocalTransform.FromPositionRotation(spawnTransform.Position, spawnTransform.Rotation));
 
             // Spawn camera
-            Entity cameraEntity = state.EntityManager.Instantiate(sceneInitializer.CameraPrefabEntity);
+            var cameraEntity = state.EntityManager.Instantiate(sceneInitializer.CameraPrefabEntity);
             state.EntityManager.AddComponentData(cameraEntity, new MainEntityCamera());
 
-            
+
             // Spawn player
-            Entity playerEntity = state.EntityManager.Instantiate(sceneInitializer.PlayerPrefabEntity);
+            var playerEntity = state.EntityManager.Instantiate(sceneInitializer.PlayerPrefabEntity);
 
             // Assign camera & character to player
-            PlatformerPlayer player = SystemAPI.GetComponent<PlatformerPlayer>(playerEntity);
+            var player = SystemAPI.GetComponent<PlatformerPlayer>(playerEntity);
             player.ControlledCharacter = characterEntity;
             player.ControlledCamera = cameraEntity;
             SystemAPI.SetComponent(playerEntity, player);

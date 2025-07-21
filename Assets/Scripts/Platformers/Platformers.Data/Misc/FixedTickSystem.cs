@@ -15,21 +15,23 @@ public partial struct FixedTickSystem : ISystem
     }
 
     public void OnCreate(ref SystemState state)
-    { }
+    {
+    }
 
     public void OnDestroy(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         if (!SystemAPI.HasSingleton<Singleton>())
-        { 
-            Entity singletonEntity = state.EntityManager.CreateEntity();
+        {
+            var singletonEntity = state.EntityManager.CreateEntity();
             state.EntityManager.AddComponentData(singletonEntity, new Singleton());
         }
 
-        ref Singleton singleton = ref SystemAPI.GetSingletonRW<Singleton>().ValueRW;
+        ref var singleton = ref SystemAPI.GetSingletonRW<Singleton>().ValueRW;
         singleton.Tick++;
-    } 
+    }
 }

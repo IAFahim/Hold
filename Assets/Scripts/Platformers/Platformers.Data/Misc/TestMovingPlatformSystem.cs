@@ -26,14 +26,14 @@ public partial struct TestMovingPlatformSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        float deltaTime = SystemAPI.Time.DeltaTime;
+        var deltaTime = SystemAPI.Time.DeltaTime;
         if (deltaTime <= 0f)
             return;
 
-        TestMovingPlatformJob job = new TestMovingPlatformJob
+        var job = new TestMovingPlatformJob
         {
             Time = (float)SystemAPI.Time.ElapsedTime,
-            InvDeltaTime = 1f / deltaTime,
+            InvDeltaTime = 1f / deltaTime
         };
         job.Schedule();
     }
@@ -44,18 +44,24 @@ public partial struct TestMovingPlatformSystem : ISystem
         public float Time;
         public float InvDeltaTime;
 
-        void Execute(Entity entity, ref PhysicsVelocity physicsVelocity, in PhysicsMass physicsMass, in LocalTransform localTransform, in TestMovingPlatform movingPlatform)
+        private void Execute(Entity entity, ref PhysicsVelocity physicsVelocity, in PhysicsMass physicsMass,
+            in LocalTransform localTransform, in TestMovingPlatform movingPlatform)
         {
-            float3 targetPos = movingPlatform.OriginalPosition + (math.normalizesafe(movingPlatform.Data.TranslationAxis) * math.sin(Time * movingPlatform.Data.TranslationSpeed) * movingPlatform.Data.TranslationAmplitude);
+            var targetPos = movingPlatform.OriginalPosition + math.normalizesafe(movingPlatform.Data.TranslationAxis) *
+                math.sin(Time * movingPlatform.Data.TranslationSpeed) * movingPlatform.Data.TranslationAmplitude;
 
-            quaternion rotationFromRotation = quaternion.Euler(math.normalizesafe(movingPlatform.Data.RotationAxis) * movingPlatform.Data.RotationSpeed * Time);
-            quaternion rotationFromOscillation = quaternion.Euler(math.normalizesafe(movingPlatform.Data.OscillationAxis) * (math.sin(Time * movingPlatform.Data.OscillationSpeed) * movingPlatform.Data.OscillationAmplitude));
-            quaternion totalRotation = math.mul(rotationFromRotation, rotationFromOscillation);
-            quaternion targetRot = math.mul(totalRotation, movingPlatform.OriginalRotation);
+            var rotationFromRotation = quaternion.Euler(math.normalizesafe(movingPlatform.Data.RotationAxis) *
+                                                        movingPlatform.Data.RotationSpeed * Time);
+            var rotationFromOscillation = quaternion.Euler(math.normalizesafe(movingPlatform.Data.OscillationAxis) *
+                                                           (math.sin(Time * movingPlatform.Data.OscillationSpeed) *
+                                                            movingPlatform.Data.OscillationAmplitude));
+            var totalRotation = math.mul(rotationFromRotation, rotationFromOscillation);
+            var targetRot = math.mul(totalRotation, movingPlatform.OriginalRotation);
 
-            RigidTransform targetTransform = new RigidTransform(targetRot, targetPos);
+            var targetTransform = new RigidTransform(targetRot, targetPos);
 
-            physicsVelocity = PhysicsVelocity.CalculateVelocityToTarget(in physicsMass, localTransform.Position, localTransform.Rotation, in targetTransform, InvDeltaTime);
+            physicsVelocity = PhysicsVelocity.CalculateVelocityToTarget(in physicsMass, localTransform.Position,
+                localTransform.Rotation, in targetTransform, InvDeltaTime);
         }
     }
 }

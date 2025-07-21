@@ -13,11 +13,11 @@ namespace Unity.Physics.Stateful
         [Tooltip("If selected, the details will be calculated in collision event dynamic buffer of this entity")]
         public bool CalculateDetails = false;
 
-        class StatefulCollisionEventBufferBaker : Baker<StatefulCollisionEventBufferAuthoring>
+        private class StatefulCollisionEventBufferBaker : Baker<StatefulCollisionEventBufferAuthoring>
         {
             public override void Bake(StatefulCollisionEventBufferAuthoring authoring)
             {
-                Entity entity = GetEntity(TransformUsageFlags.Dynamic);
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
                 if (authoring.CalculateDetails)
                 {
                     var dynamicBufferTag = new StatefulCollisionEventDetails
@@ -27,6 +27,7 @@ namespace Unity.Physics.Stateful
 
                     AddComponent(entity, dynamicBufferTag);
                 }
+
                 AddBuffer<StatefulCollisionEvent>(entity);
             }
         }

@@ -8,11 +8,11 @@ public class GlobalGravityZoneAuthoring : MonoBehaviour
 {
     public float3 Gravity;
 
-    class Baker : Baker<GlobalGravityZoneAuthoring>
+    private class Baker : Baker<GlobalGravityZoneAuthoring>
     {
         public override void Bake(GlobalGravityZoneAuthoring authoring)
         {
-            Entity entity = GetEntity(TransformUsageFlags.Dynamic);
+            var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new GlobalGravityZone { Gravity = authoring.Gravity });
         }
     }

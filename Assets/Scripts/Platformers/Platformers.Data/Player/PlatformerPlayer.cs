@@ -16,11 +16,11 @@ public struct PlatformerPlayerInputs : IComponentData
     public float2 Move;
     public float2 Look;
     public float CameraZoom;
-    
+
     public bool SprintHeld;
     public bool RollHeld;
     public bool JumpHeld;
-    
+
     public FixedInputEvent JumpPressed;
     public FixedInputEvent DashPressed;
     public FixedInputEvent CrouchPressed;

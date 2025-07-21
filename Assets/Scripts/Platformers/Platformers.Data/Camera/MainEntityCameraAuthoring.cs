@@ -10,7 +10,7 @@ public class MainEntityCameraAuthoring : MonoBehaviour
     {
         public override void Bake(MainEntityCameraAuthoring authoring)
         {
-            Entity entity = GetEntity(TransformUsageFlags.Dynamic);
+            var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent<MainEntityCamera>(entity);
         }
     }

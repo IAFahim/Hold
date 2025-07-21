@@ -24,9 +24,11 @@ namespace Unity.Physics.Stateful
         private ComponentHandles m_Handles;
 
         // Component that does nothing. Made in order to use a generic job. See OnUpdate() method for details.
-        internal struct DummyExcludeComponent : IComponentData {};
+        internal struct DummyExcludeComponent : IComponentData
+        {
+        };
 
-        struct ComponentHandles
+        private struct ComponentHandles
         {
             public ComponentLookup<DummyExcludeComponent> EventExcludes;
             public ComponentLookup<StatefulCollisionEventDetails> EventDetails;
@@ -66,7 +68,10 @@ namespace Unity.Physics.Stateful
         [BurstCompile]
         public partial struct ClearCollisionEventDynamicBufferJob : IJobEntity
         {
-            public void Execute(ref DynamicBuffer<StatefulCollisionEvent> eventBuffer) => eventBuffer.Clear();
+            public void Execute(ref DynamicBuffer<StatefulCollisionEvent> eventBuffer)
+            {
+                eventBuffer.Clear();
+            }
         }
 
         [BurstCompile]
@@ -84,23 +89,23 @@ namespace Unity.Physics.Stateful
 
             state.Dependency = new StatefulEventCollectionJobs.
                 CollectCollisionEventsWithDetails
-            {
-                CollisionEvents = currentEvents,
-                PhysicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().PhysicsWorld,
-                EventDetails = m_Handles.EventDetails
-            }.Schedule(SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);
+                {
+                    CollisionEvents = currentEvents,
+                    PhysicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().PhysicsWorld,
+                    EventDetails = m_Handles.EventDetails
+                }.Schedule(SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);
 
 
             state.Dependency = new StatefulEventCollectionJobs.
                 ConvertEventStreamToDynamicBufferJob<StatefulCollisionEvent, DummyExcludeComponent>
-            {
-                CurrentEvents = currentEvents,
-                PreviousEvents = previousEvents,
-                EventBuffers = m_Handles.EventBuffers,
+                {
+                    CurrentEvents = currentEvents,
+                    PreviousEvents = previousEvents,
+                    EventBuffers = m_Handles.EventBuffers,
 
-                UseExcludeComponent = false,
-                EventExcludeLookup = m_Handles.EventExcludes
-            }.Schedule(state.Dependency);
+                    UseExcludeComponent = false,
+                    EventExcludeLookup = m_Handles.EventExcludes
+                }.Schedule(state.Dependency);
         }
     }
 }

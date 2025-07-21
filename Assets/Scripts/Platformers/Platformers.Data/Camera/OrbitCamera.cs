@@ -22,15 +22,15 @@ public struct OrbitCamera : IComponentData
     public float ObstructionInnerSmoothingSharpness;
     public float ObstructionOuterSmoothingSharpness;
     public bool PreventFixedUpdateJitter;
-    
+
     public float CameraTargetTransitionTime;
-    
+
     public float TargetDistance;
     public float SmoothedTargetDistance;
     public float ObstructedDistance;
     public float PitchAngle;
     public float3 PlanarForward;
-    
+
     public Entity ActiveCameraTarget;
     public Entity PreviousCameraTarget;
     public float CameraTargetTransitionStartTime;

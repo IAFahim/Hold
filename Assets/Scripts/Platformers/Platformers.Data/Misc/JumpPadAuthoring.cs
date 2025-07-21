@@ -7,11 +7,11 @@ public class JumpPadAuthoring : MonoBehaviour
 {
     public JumpPad JumpPad;
 
-    class Baker : Baker<JumpPadAuthoring>
+    private class Baker : Baker<JumpPadAuthoring>
     {
         public override void Bake(JumpPadAuthoring authoring)
         {
-            Entity entity = GetEntity(TransformUsageFlags.Dynamic);
+            var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, authoring.JumpPad);
         }
     }

@@ -15,20 +15,22 @@ public partial struct TeleporterSystem : ISystem
 {
     [BurstCompile]
     public void OnCreate(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        TeleporterJob job = new TeleporterJob
+        var job = new TeleporterJob
         {
             LocalTransformLookup = SystemAPI.GetComponentLookup<LocalTransform>(false),
             CharacterBodyLookup = SystemAPI.GetComponentLookup<KinematicCharacterBody>(true),
-            CharacterInterpolationLookup = SystemAPI.GetComponentLookup<CharacterInterpolation>(false),
+            CharacterInterpolationLookup = SystemAPI.GetComponentLookup<CharacterInterpolation>(false)
         };
         job.Schedule();
     }
@@ -40,20 +42,20 @@ public partial struct TeleporterSystem : ISystem
         [ReadOnly] public ComponentLookup<KinematicCharacterBody> CharacterBodyLookup;
         public ComponentLookup<CharacterInterpolation> CharacterInterpolationLookup;
 
-        void Execute(Entity entity, in Teleporter teleporter, in DynamicBuffer<StatefulTriggerEvent> triggerEventsBuffer)
+        private void Execute(Entity entity, in Teleporter teleporter,
+            in DynamicBuffer<StatefulTriggerEvent> triggerEventsBuffer)
         {
             // Only teleport if there is a destination
             if (teleporter.DestinationEntity != Entity.Null)
-            {
-                for (int i = 0; i < triggerEventsBuffer.Length; i++)
+                for (var i = 0; i < triggerEventsBuffer.Length; i++)
                 {
-                    StatefulTriggerEvent triggerEvent = triggerEventsBuffer[i];
-                    Entity otherEntity = triggerEvent.GetOtherEntity(entity);
+                    var triggerEvent = triggerEventsBuffer[i];
+                    var otherEntity = triggerEvent.GetOtherEntity(entity);
 
                     // If a character has entered the trigger, move its translation to the destination
                     if (triggerEvent.State == StatefulEventState.Enter && CharacterBodyLookup.HasComponent(otherEntity))
                     {
-                        LocalTransform t = LocalTransformLookup[otherEntity];
+                        var t = LocalTransformLookup[otherEntity];
                         t.Position = LocalTransformLookup[teleporter.DestinationEntity].Position;
                         t.Rotation = LocalTransformLookup[teleporter.DestinationEntity].Rotation;
                         LocalTransformLookup[otherEntity] = t;
@@ -61,13 +63,12 @@ public partial struct TeleporterSystem : ISystem
                         // Bypass interpolation
                         if (CharacterInterpolationLookup.HasComponent(otherEntity))
                         {
-                            CharacterInterpolation interpolation = CharacterInterpolationLookup[otherEntity];
+                            var interpolation = CharacterInterpolationLookup[otherEntity];
                             interpolation.SkipNextInterpolation();
                             CharacterInterpolationLookup[otherEntity] = interpolation;
                         }
                     }
                 }
-            }
         }
     }
 }

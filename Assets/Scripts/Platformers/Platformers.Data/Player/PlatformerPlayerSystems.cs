@@ -32,7 +32,7 @@ public partial class PlatformerPlayerInputsSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        uint fixedTick = SystemAPI.GetSingleton<FixedTickSystem.Singleton>().Tick;
+        var fixedTick = SystemAPI.GetSingleton<FixedTickSystem.Singleton>().Tick;
 
         foreach (var (playerInputs, player) in SystemAPI.Query<RefRW<PlatformerPlayerInputs>, PlatformerPlayer>())
         {
@@ -40,44 +40,25 @@ public partial class PlatformerPlayerInputsSystem : SystemBase
             playerInputs.ValueRW.Look = _camActionsMap.Look.ReadValue<Vector2>();
             if (math.lengthsq(_defaultActionsMap.Look.ReadValue<Vector2>()) >
                 math.lengthsq(_camActionsMap.Look.ReadValue<Vector2>()))
-            {
                 playerInputs.ValueRW.Look = _defaultActionsMap.Look.ReadValue<Vector2>() * SystemAPI.Time.DeltaTime;
-            }
 
             playerInputs.ValueRW.CameraZoom = _camActionsMap.Zoom.ReadValue<float>();
             playerInputs.ValueRW.SprintHeld = _defaultActionsMap.Sprint.IsPressed();
             playerInputs.ValueRW.RollHeld = _defaultActionsMap.Roll.IsPressed();
             playerInputs.ValueRW.JumpHeld = _defaultActionsMap.Jump.IsPressed();
 
-            if (_defaultActionsMap.Jump.WasPressedThisFrame())
-            {
-                playerInputs.ValueRW.JumpPressed.Set(fixedTick);
-            }
+            if (_defaultActionsMap.Jump.WasPressedThisFrame()) playerInputs.ValueRW.JumpPressed.Set(fixedTick);
 
-            if (_defaultActionsMap.Dash.WasPressedThisFrame())
-            {
-                playerInputs.ValueRW.DashPressed.Set(fixedTick);
-            }
+            if (_defaultActionsMap.Dash.WasPressedThisFrame()) playerInputs.ValueRW.DashPressed.Set(fixedTick);
 
-            if (_defaultActionsMap.Crouch.WasPressedThisFrame())
-            {
-                playerInputs.ValueRW.CrouchPressed.Set(fixedTick);
-            }
+            if (_defaultActionsMap.Crouch.WasPressedThisFrame()) playerInputs.ValueRW.CrouchPressed.Set(fixedTick);
 
-            if (_defaultActionsMap.Rope.WasPressedThisFrame())
-            {
-                playerInputs.ValueRW.RopePressed.Set(fixedTick);
-            }
+            if (_defaultActionsMap.Rope.WasPressedThisFrame()) playerInputs.ValueRW.RopePressed.Set(fixedTick);
 
-            if (_defaultActionsMap.Climb.WasPressedThisFrame())
-            {
-                playerInputs.ValueRW.ClimbPressed.Set(fixedTick);
-            }
+            if (_defaultActionsMap.Climb.WasPressedThisFrame()) playerInputs.ValueRW.ClimbPressed.Set(fixedTick);
 
             if (_defaultActionsMap.FlyNoCollisions.WasPressedThisFrame())
-            {
                 playerInputs.ValueRW.FlyNoCollisionsPressed.Set(fixedTick);
-            }
         }
     }
 }
@@ -106,10 +87,9 @@ public partial struct PlatformerPlayerVariableStepControlSystem : ISystem
     {
         foreach (var (playerInputs, player) in SystemAPI.Query<PlatformerPlayerInputs, PlatformerPlayer>()
                      .WithAll<Simulate>())
-        {
             if (SystemAPI.HasComponent<OrbitCameraControl>(player.ControlledCamera))
             {
-                OrbitCameraControl cameraControl = SystemAPI.GetComponent<OrbitCameraControl>(player.ControlledCamera);
+                var cameraControl = SystemAPI.GetComponent<OrbitCameraControl>(player.ControlledCamera);
 
                 cameraControl.FollowedCharacterEntity = player.ControlledCharacter;
                 cameraControl.LookDegreesDelta = playerInputs.Look;
@@ -117,7 +97,6 @@ public partial struct PlatformerPlayerVariableStepControlSystem : ISystem
 
                 SystemAPI.SetComponent(player.ControlledCamera, cameraControl);
             }
-        }
     }
 }
 
@@ -144,25 +123,22 @@ public partial struct PlatformerPlayerFixedStepControlSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        uint fixedTick = SystemAPI.GetSingleton<FixedTickSystem.Singleton>().Tick;
+        var fixedTick = SystemAPI.GetSingleton<FixedTickSystem.Singleton>().Tick;
 
         foreach (var (playerInputs, player) in SystemAPI.Query<RefRW<PlatformerPlayerInputs>, PlatformerPlayer>()
                      .WithAll<Simulate>())
-        {
             if (SystemAPI.HasComponent<PlatformerCharacterControl>(player.ControlledCharacter) &&
                 SystemAPI.HasComponent<PlatformerCharacterStateMachine>(player.ControlledCharacter))
             {
-                PlatformerCharacterControl characterControl =
+                var characterControl =
                     SystemAPI.GetComponent<PlatformerCharacterControl>(player.ControlledCharacter);
-                PlatformerCharacterStateMachine stateMachine =
+                var stateMachine =
                     SystemAPI.GetComponent<PlatformerCharacterStateMachine>(player.ControlledCharacter);
 
                 // Get camera rotation data, since our movement is relative to it
-                quaternion cameraRotation = quaternion.identity;
+                var cameraRotation = quaternion.identity;
                 if (SystemAPI.HasComponent<LocalTransform>(player.ControlledCamera))
-                {
                     cameraRotation = SystemAPI.GetComponent<LocalTransform>(player.ControlledCamera).Rotation;
-                }
 
                 stateMachine.GetMoveVectorFromPlayerInput(stateMachine.CurrentState, in playerInputs.ValueRO,
                     cameraRotation, out characterControl.MoveVector);
@@ -182,6 +158,5 @@ public partial struct PlatformerPlayerFixedStepControlSystem : ISystem
 
                 SystemAPI.SetComponent(player.ControlledCharacter, characterControl);
             }
-        }
     }
 }

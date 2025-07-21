@@ -44,7 +44,7 @@ public static class PlatformerCharacterAnimationHandler
         in PlatformerCharacterControl characterControl,
         in LocalTransform localTransform)
     {
-        float velocityMagnitude = math.length(characterBody.RelativeVelocity);
+        var velocityMagnitude = math.length(characterBody.RelativeVelocity);
         float speed = 1;
         switch (characterStateMachine.CurrentState)
         {
@@ -59,13 +59,13 @@ public static class PlatformerCharacterAnimationHandler
                 {
                     if (characterComponent.IsSprinting)
                     {
-                        float velocityRatio = velocityMagnitude / characterComponent.GroundSprintMaxSpeed;
+                        var velocityRatio = velocityMagnitude / characterComponent.GroundSprintMaxSpeed;
                         speed = velocityRatio;
                         animator.SetInteger(clipIndexParameterHash, characterAnimation.SprintClip);
                     }
                     else
                     {
-                        float velocityRatio = velocityMagnitude / characterComponent.GroundRunMaxSpeed;
+                        var velocityRatio = velocityMagnitude / characterComponent.GroundRunMaxSpeed;
                         speed = velocityRatio;
                         animator.SetInteger(clipIndexParameterHash, characterAnimation.RunClip);
                     }
@@ -81,7 +81,7 @@ public static class PlatformerCharacterAnimationHandler
                 }
                 else
                 {
-                    float velocityRatio = velocityMagnitude / characterComponent.CrouchedMaxSpeed;
+                    var velocityRatio = velocityMagnitude / characterComponent.CrouchedMaxSpeed;
                     speed = velocityRatio;
                     animator.SetInteger(clipIndexParameterHash, characterAnimation.CrouchMoveClip);
                 }
@@ -101,7 +101,7 @@ public static class PlatformerCharacterAnimationHandler
                 break;
             case CharacterState.WallRun:
             {
-                bool wallIsOnTheLeft = math.dot(MathUtilities.GetRightFromRotation(localTransform.Rotation),
+                var wallIsOnTheLeft = math.dot(MathUtilities.GetRightFromRotation(localTransform.Rotation),
                     characterComponent.LastKnownWallNormal) > 0f;
                 speed = 1f;
                 animator.SetInteger(clipIndexParameterHash,
@@ -116,14 +116,14 @@ public static class PlatformerCharacterAnimationHandler
                 break;
             case CharacterState.Climbing:
             {
-                float velocityRatio = velocityMagnitude / characterComponent.ClimbingSpeed;
+                var velocityRatio = velocityMagnitude / characterComponent.ClimbingSpeed;
                 speed = velocityRatio;
                 animator.SetInteger(clipIndexParameterHash, characterAnimation.ClimbingMoveClip);
             }
                 break;
             case CharacterState.LedgeGrab:
             {
-                float velocityRatio = velocityMagnitude / characterComponent.LedgeMoveSpeed;
+                var velocityRatio = velocityMagnitude / characterComponent.LedgeMoveSpeed;
                 speed = velocityRatio;
                 animator.SetInteger(clipIndexParameterHash, characterAnimation.LedgeGrabMoveClip);
             }
@@ -136,7 +136,7 @@ public static class PlatformerCharacterAnimationHandler
                 break;
             case CharacterState.Swimming:
             {
-                float velocityRatio = velocityMagnitude / characterComponent.SwimmingMaxSpeed;
+                var velocityRatio = velocityMagnitude / characterComponent.SwimmingMaxSpeed;
                 if (velocityRatio < 0.1f)
                 {
                     speed = 1f;

@@ -36,7 +36,10 @@ namespace Unity.Physics.Stateful
         /// </summary>
         /// <param name="statefulEvents"></param>
         /// <param name="sortCurrent">Specifies whether the Current events list needs to be sorted first.</param>
-        public void GetStatefulEvents(NativeList<T> statefulEvents, bool sortCurrent = true) => GetStatefulEvents(Previous, Current, statefulEvents, sortCurrent);
+        public void GetStatefulEvents(NativeList<T> statefulEvents, bool sortCurrent = true)
+        {
+            GetStatefulEvents(Previous, Current, statefulEvents, sortCurrent);
+        }
 
         /// <summary>
         /// Given two sorted event buffers, this function returns a single combined list with
@@ -46,17 +49,18 @@ namespace Unity.Physics.Stateful
         /// <param name="currentEvents">The events buffer from the current frame. This list should be sorted before calling this function.</param>
         /// <param name="statefulEvents">A single combined list of stateful events based on the previous and current frames.</param>
         /// <param name="sortCurrent">Specifies whether the currentEvents list needs to be sorted first.</param>
-        public static void GetStatefulEvents(NativeList<T> previousEvents, NativeList<T> currentEvents, NativeList<T> statefulEvents, bool sortCurrent = true)
+        public static void GetStatefulEvents(NativeList<T> previousEvents, NativeList<T> currentEvents,
+            NativeList<T> statefulEvents, bool sortCurrent = true)
         {
             if (sortCurrent) currentEvents.Sort();
 
             statefulEvents.Clear();
 
-            int c = 0;
-            int p = 0;
+            var c = 0;
+            var p = 0;
             while (c < currentEvents.Length && p < previousEvents.Length)
             {
-                int r = previousEvents[p].CompareTo(currentEvents[c]);
+                var r = previousEvents[p].CompareTo(currentEvents[c]);
                 if (r == 0)
                 {
                     var currentEvent = currentEvents[c];
@@ -80,8 +84,8 @@ namespace Unity.Physics.Stateful
                     c++;
                 }
             }
+
             if (c == currentEvents.Length)
-            {
                 while (p < previousEvents.Length)
                 {
                     var previousEvent = previousEvents[p];
@@ -89,9 +93,7 @@ namespace Unity.Physics.Stateful
                     statefulEvents.Add(previousEvent);
                     p++;
                 }
-            }
             else if (p == previousEvents.Length)
-            {
                 while (c < currentEvents.Length)
                 {
                     var currentEvent = currentEvents[c];
@@ -99,7 +101,6 @@ namespace Unity.Physics.Stateful
                     statefulEvents.Add(currentEvent);
                     c++;
                 }
-            }
         }
     }
 
@@ -109,14 +110,22 @@ namespace Unity.Physics.Stateful
         public struct CollectTriggerEvents : ITriggerEventsJob
         {
             public NativeList<StatefulTriggerEvent> TriggerEvents;
-            public void Execute(TriggerEvent triggerEvent) => TriggerEvents.Add(new StatefulTriggerEvent(triggerEvent));
+
+            public void Execute(TriggerEvent triggerEvent)
+            {
+                TriggerEvents.Add(new StatefulTriggerEvent(triggerEvent));
+            }
         }
 
         [BurstCompile]
         public struct CollectCollisionEvents : ICollisionEventsJob
         {
             public NativeList<StatefulCollisionEvent> CollisionEvents;
-            public void Execute(CollisionEvent collisionEvent) => CollisionEvents.Add(new StatefulCollisionEvent(collisionEvent));
+
+            public void Execute(CollisionEvent collisionEvent)
+            {
+                CollisionEvents.Add(new StatefulCollisionEvent(collisionEvent));
+            }
         }
 
         [BurstCompile]
@@ -132,15 +141,11 @@ namespace Unity.Physics.Stateful
                 var statefulCollisionEvent = new StatefulCollisionEvent(collisionEvent);
 
                 // Check if we should calculate the collision details
-                bool calculateDetails = ForceCalculateDetails;
+                var calculateDetails = ForceCalculateDetails;
                 if (!calculateDetails && EventDetails.HasComponent(collisionEvent.EntityA))
-                {
                     calculateDetails = EventDetails[collisionEvent.EntityA].CalculateDetails;
-                }
                 if (!calculateDetails && EventDetails.HasComponent(collisionEvent.EntityB))
-                {
                     calculateDetails = EventDetails[collisionEvent.EntityB].CalculateDetails;
-                }
                 if (calculateDetails)
                 {
                     var details = collisionEvent.CalculateDetails(ref PhysicsWorld);
@@ -172,21 +177,17 @@ namespace Unity.Physics.Stateful
 
                 StatefulSimulationEventBuffers<T>.GetStatefulEvents(PreviousEvents, CurrentEvents, statefulEvents);
 
-                for (int i = 0; i < statefulEvents.Length; i++)
+                for (var i = 0; i < statefulEvents.Length; i++)
                 {
                     var statefulEvent = statefulEvents[i];
 
-                    var addToEntityA = EventBuffers.HasBuffer(statefulEvent.EntityA) && (!UseExcludeComponent || !EventExcludeLookup.HasComponent(statefulEvent.EntityA));
-                    var addToEntityB = EventBuffers.HasBuffer(statefulEvent.EntityB) && (!UseExcludeComponent || !EventExcludeLookup.HasComponent(statefulEvent.EntityA));
+                    var addToEntityA = EventBuffers.HasBuffer(statefulEvent.EntityA) && (!UseExcludeComponent ||
+                        !EventExcludeLookup.HasComponent(statefulEvent.EntityA));
+                    var addToEntityB = EventBuffers.HasBuffer(statefulEvent.EntityB) && (!UseExcludeComponent ||
+                        !EventExcludeLookup.HasComponent(statefulEvent.EntityA));
 
-                    if (addToEntityA)
-                    {
-                        EventBuffers[statefulEvent.EntityA].Add(statefulEvent);
-                    }
-                    if (addToEntityB)
-                    {
-                        EventBuffers[statefulEvent.EntityB].Add(statefulEvent);
-                    }
+                    if (addToEntityA) EventBuffers[statefulEvent.EntityA].Add(statefulEvent);
+                    if (addToEntityB) EventBuffers[statefulEvent.EntityB].Add(statefulEvent);
                 }
             }
         }

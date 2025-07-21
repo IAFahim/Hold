@@ -11,11 +11,11 @@ public class PlatformerPlayerAuthoring : MonoBehaviour
     {
         public override void Bake(PlatformerPlayerAuthoring authoring)
         {
-            Entity entity = GetEntity(TransformUsageFlags.None);
+            var entity = GetEntity(TransformUsageFlags.None);
             AddComponent(entity, new PlatformerPlayer
             {
                 ControlledCharacter = GetEntity(authoring.ControlledCharacter, TransformUsageFlags.Dynamic),
-                ControlledCamera = GetEntity(authoring.ControlledCamera, TransformUsageFlags.Dynamic),
+                ControlledCamera = GetEntity(authoring.ControlledCamera, TransformUsageFlags.Dynamic)
             });
             AddComponent(entity, new PlatformerPlayerInputs());
         }

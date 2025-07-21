@@ -8,11 +8,11 @@ public class WindZoneAuthoring : MonoBehaviour
 {
     public float3 WindForce;
 
-    class Baker : Baker<WindZoneAuthoring>
+    private class Baker : Baker<WindZoneAuthoring>
     {
         public override void Bake(WindZoneAuthoring authoring)
         {
-            Entity entity = GetEntity(TransformUsageFlags.Dynamic);
+            var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new WindZone { WindForce = authoring.WindForce });
         }
     }

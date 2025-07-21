@@ -16,22 +16,24 @@ public partial struct WindZoneSystem : ISystem
 {
     [BurstCompile]
     public void OnCreate(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        WindZoneJob job = new WindZoneJob
+        var job = new WindZoneJob
         {
             DeltaTime = SystemAPI.Time.DeltaTime,
             CharacterBodyLookup = SystemAPI.GetComponentLookup<KinematicCharacterBody>(false),
             CharacterStateMachineLookup = SystemAPI.GetComponentLookup<PlatformerCharacterStateMachine>(true),
             PhysicsVelocityLookup = SystemAPI.GetComponentLookup<PhysicsVelocity>(false),
-            PhysicsMassLookup = SystemAPI.GetComponentLookup<PhysicsMass>(true),
+            PhysicsMassLookup = SystemAPI.GetComponentLookup<PhysicsMass>(true)
         };
         job.Schedule();
     }
@@ -41,41 +43,37 @@ public partial struct WindZoneSystem : ISystem
     {
         public float DeltaTime;
         public ComponentLookup<KinematicCharacterBody> CharacterBodyLookup;
-        [ReadOnly]
-        public ComponentLookup<PlatformerCharacterStateMachine> CharacterStateMachineLookup;
+        [ReadOnly] public ComponentLookup<PlatformerCharacterStateMachine> CharacterStateMachineLookup;
         public ComponentLookup<PhysicsVelocity> PhysicsVelocityLookup;
-        [ReadOnly]
-        public ComponentLookup<PhysicsMass> PhysicsMassLookup;
-        
-        void Execute(Entity entity, in WindZone windZone, in DynamicBuffer<StatefulTriggerEvent> triggerEventsBuffer)
+        [ReadOnly] public ComponentLookup<PhysicsMass> PhysicsMassLookup;
+
+        private void Execute(Entity entity, in WindZone windZone,
+            in DynamicBuffer<StatefulTriggerEvent> triggerEventsBuffer)
         {
-            for (int i = 0; i < triggerEventsBuffer.Length; i++)
+            for (var i = 0; i < triggerEventsBuffer.Length; i++)
             {
-                StatefulTriggerEvent triggerEvent = triggerEventsBuffer[i];
-                Entity otherEntity = triggerEvent.GetOtherEntity(entity);
-    
+                var triggerEvent = triggerEventsBuffer[i];
+                var otherEntity = triggerEvent.GetOtherEntity(entity);
+
                 if (triggerEvent.State == StatefulEventState.Stay)
                 {
                     // Characters
-                    if (CharacterBodyLookup.TryGetComponent(otherEntity, out KinematicCharacterBody characterBody) && 
-                        CharacterStateMachineLookup.TryGetComponent(otherEntity, out PlatformerCharacterStateMachine characterStateMachine))
-                    {
+                    if (CharacterBodyLookup.TryGetComponent(otherEntity, out var characterBody) &&
+                        CharacterStateMachineLookup.TryGetComponent(otherEntity, out var characterStateMachine))
                         if (PlatformerCharacterAspect.CanBeAffectedByWindZone(characterStateMachine.CurrentState))
                         {
                             characterBody.RelativeVelocity += windZone.WindForce * DeltaTime;
                             CharacterBodyLookup[otherEntity] = characterBody;
                         }
-                    }
+
                     // Dynamic physics bodies
-                    if (PhysicsVelocityLookup.TryGetComponent(otherEntity, out PhysicsVelocity physicsVelocity) && 
-                        PhysicsMassLookup.TryGetComponent(otherEntity, out PhysicsMass physicsMass))
-                    {
+                    if (PhysicsVelocityLookup.TryGetComponent(otherEntity, out var physicsVelocity) &&
+                        PhysicsMassLookup.TryGetComponent(otherEntity, out var physicsMass))
                         if (physicsMass.InverseMass > 0f)
                         {
                             physicsVelocity.Linear += windZone.WindForce * DeltaTime;
                             PhysicsVelocityLookup[otherEntity] = physicsVelocity;
                         }
-                    }
                 }
             }
         }

@@ -19,17 +19,11 @@ public struct FramerateCalculator
         _minDeltaTimeForAvg = Mathf.Infinity;
         _maxDeltaTimeForAvg = Mathf.NegativeInfinity;
         _framerateStrings = new string[1001];
-        for (int i = 0; i < _framerateStrings.Length; i++)
-        {
+        for (var i = 0; i < _framerateStrings.Length; i++)
             if (i >= _framerateStrings.Length - 1)
-            {
                 _framerateStrings[i] = i.ToString() + "+" + " (<" + (1000f / (float)i).ToString("F") + "ms)";
-            }
             else
-            {
                 _framerateStrings[i] = i.ToString() + " (" + (1000f / (float)i).ToString("F") + "ms)";
-            }
-        }
     }
 
     public void Update()
@@ -39,27 +33,17 @@ public struct FramerateCalculator
         _framesDeltaSum += Time.deltaTime;
 
         // Max and min
-        if (Time.deltaTime < _minDeltaTimeForAvg)
-        {
-            _minDeltaTimeForAvg = Time.deltaTime;
-        }
+        if (Time.deltaTime < _minDeltaTimeForAvg) _minDeltaTimeForAvg = Time.deltaTime;
 
-        if (Time.deltaTime > _maxDeltaTimeForAvg)
-        {
-            _maxDeltaTimeForAvg = Time.deltaTime;
-        }
+        if (Time.deltaTime > _maxDeltaTimeForAvg) _maxDeltaTimeForAvg = Time.deltaTime;
     }
 
     private string GetNumberString(int fps)
     {
         if (fps < _framerateStrings.Length - 1 && fps >= 0)
-        {
             return _framerateStrings[fps];
-        }
         else
-        {
             return _framerateStrings[_framerateStrings.Length - 1];
-        }
     }
 
     public void PollFramerate(out string avg, out string worst, out string best)
@@ -88,19 +72,17 @@ public class FramerateMenuManager : MonoBehaviour
     private float _lastTimePolledFPS = float.MinValue;
     private bool _hasVSync = false;
 
-    void Start()
+    private void Start()
     {
         _framerateCalculator.Initialize();
         UpdateRenderSettings();
     }
 
-    void Update()
+    private void Update()
     {
         // show hide
         if (Keyboard.current.f1Key.wasPressedThisFrame)
-        {
             MainCanvas.gameObject.SetActive(!MainCanvas.gameObject.activeSelf);
-        }
 
         if (Keyboard.current.f3Key.wasPressedThisFrame)
         {
@@ -112,7 +94,7 @@ public class FramerateMenuManager : MonoBehaviour
         _framerateCalculator.Update();
         if (Time.time >= _lastTimePolledFPS + FPSPollRate)
         {
-            _framerateCalculator.PollFramerate(out string avg, out string worst, out string best);
+            _framerateCalculator.PollFramerate(out var avg, out var worst, out var best);
             AvgFPS.text = avg;
             WorstFPS.text = worst;
             BestFPS.text = best;

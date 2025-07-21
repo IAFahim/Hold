@@ -16,27 +16,31 @@ using Unity.CharacterController;
 public partial struct PlatformerCharacterInitializationSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
-    { }
+    {
+    }
 
     public void OnDestroy(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        EntityCommandBuffer ecb = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW.CreateCommandBuffer(state.WorldUnmanaged);
-        BufferLookup<LinkedEntityGroup> linkedEntitiesLookup = SystemAPI.GetBufferLookup<LinkedEntityGroup>(true);
+        var ecb = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW
+            .CreateCommandBuffer(state.WorldUnmanaged);
+        var linkedEntitiesLookup = SystemAPI.GetBufferLookup<LinkedEntityGroup>(true);
 
-        foreach (var (character, stateMachine, entity) in SystemAPI.Query<RefRW<PlatformerCharacterComponent>, RefRW<PlatformerCharacterStateMachine>>().WithNone<PlatformerCharacterInitialized>().WithEntityAccess())
-        {
+        foreach (var (character, stateMachine, entity) in SystemAPI
+                     .Query<RefRW<PlatformerCharacterComponent>, RefRW<PlatformerCharacterStateMachine>>()
+                     .WithNone<PlatformerCharacterInitialized>().WithEntityAccess())
             // Make sure the transform system has done a pass on it first
             if (linkedEntitiesLookup.HasBuffer(entity))
             {
                 // Disable alternative meshes
-                PlatformerUtilities.SetEntityHierarchyEnabled(false, character.ValueRO.RollballMeshEntity, ecb, linkedEntitiesLookup);
+                PlatformerUtilities.SetEntityHierarchyEnabled(false, character.ValueRO.RollballMeshEntity, ecb,
+                    linkedEntitiesLookup);
                 ecb.AddComponent<PlatformerCharacterInitialized>(entity);
             }
-        }
     }
 }
 
@@ -69,18 +73,21 @@ public partial struct PlatformerCharacterPhysicsUpdateSystem : ISystem
 
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        _context.OnSystemUpdate(ref state, SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW.CreateCommandBuffer(state.WorldUnmanaged));
+        _context.OnSystemUpdate(ref state,
+            SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW
+                .CreateCommandBuffer(state.WorldUnmanaged));
         _baseContext.OnSystemUpdate(ref state, SystemAPI.Time, SystemAPI.GetSingleton<PhysicsWorldSingleton>());
 
-        PlatformerCharacterPhysicsUpdateJob job = new PlatformerCharacterPhysicsUpdateJob
+        var job = new PlatformerCharacterPhysicsUpdateJob
         {
             Context = _context,
-            BaseContext = _baseContext,
+            BaseContext = _baseContext
         };
         job.ScheduleParallel();
     }
@@ -92,20 +99,23 @@ public partial struct PlatformerCharacterPhysicsUpdateSystem : ISystem
         public PlatformerCharacterUpdateContext Context;
         public KinematicCharacterUpdateContext BaseContext;
 
-        void Execute([ChunkIndexInQuery] int chunkIndex, PlatformerCharacterAspect characterAspect)
+        private void Execute([ChunkIndexInQuery] int chunkIndex, PlatformerCharacterAspect characterAspect)
         {
             Context.SetChunkIndex(chunkIndex);
             characterAspect.PhysicsUpdate(ref Context, ref BaseContext);
         }
 
-        public bool OnChunkBegin(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask, in v128 chunkEnabledMask)
+        public bool OnChunkBegin(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask,
+            in v128 chunkEnabledMask)
         {
             BaseContext.EnsureCreationOfTmpCollections();
             return true;
         }
 
-        public void OnChunkEnd(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask, in v128 chunkEnabledMask, bool chunkWasExecuted)
-        { }
+        public void OnChunkEnd(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask,
+            in v128 chunkEnabledMask, bool chunkWasExecuted)
+        {
+        }
     }
 }
 
@@ -138,18 +148,21 @@ public partial struct PlatformerCharacterVariableUpdateSystem : ISystem
 
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
-    { }
+    {
+    }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        _context.OnSystemUpdate(ref state, SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW.CreateCommandBuffer(state.WorldUnmanaged));
+        _context.OnSystemUpdate(ref state,
+            SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW
+                .CreateCommandBuffer(state.WorldUnmanaged));
         _baseContext.OnSystemUpdate(ref state, SystemAPI.Time, SystemAPI.GetSingleton<PhysicsWorldSingleton>());
 
-        PlatformerCharacterVariableUpdateJob job = new PlatformerCharacterVariableUpdateJob
+        var job = new PlatformerCharacterVariableUpdateJob
         {
             Context = _context,
-            BaseContext = _baseContext,
+            BaseContext = _baseContext
         };
         job.ScheduleParallel();
     }
@@ -161,19 +174,22 @@ public partial struct PlatformerCharacterVariableUpdateSystem : ISystem
         public PlatformerCharacterUpdateContext Context;
         public KinematicCharacterUpdateContext BaseContext;
 
-        void Execute([ChunkIndexInQuery] int chunkIndex, PlatformerCharacterAspect characterAspect)
+        private void Execute([ChunkIndexInQuery] int chunkIndex, PlatformerCharacterAspect characterAspect)
         {
             Context.SetChunkIndex(chunkIndex);
             characterAspect.VariableUpdate(ref Context, ref BaseContext);
         }
 
-        public bool OnChunkBegin(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask, in v128 chunkEnabledMask)
+        public bool OnChunkBegin(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask,
+            in v128 chunkEnabledMask)
         {
             BaseContext.EnsureCreationOfTmpCollections();
             return true;
         }
 
-        public void OnChunkEnd(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask, in v128 chunkEnabledMask, bool chunkWasExecuted)
-        { }
+        public void OnChunkEnd(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask,
+            in v128 chunkEnabledMask, bool chunkWasExecuted)
+        {
+        }
     }
 }
