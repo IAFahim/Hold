@@ -158,7 +158,9 @@ public static class PlatformerCharacterAnimationHandler
                 break;
         }
 
-        animator.speed = speed * stopMotionFactor;
+        var stateUnChanged = characterStateMachine.CurrentState == characterAnimation.LastAnimationCharacterState;
+        if (stateUnChanged) animator.speed = speed * stopMotionFactor;
+        else animator.speed = speed;
         characterAnimation.LastAnimationCharacterState = characterStateMachine.CurrentState;
     }
 }

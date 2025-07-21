@@ -12,13 +12,13 @@ public partial class PlatformerCharacterHybridSystem : SystemBase
 {
     public static readonly int ClipIndex = Animator.StringToHash("ClipIndex");
 
-    public int fps = 8;
+    public readonly float InBetweens = 1 / 12f;
     private float _time;
 
     protected override void OnUpdate()
     {
         _time += SystemAPI.Time.DeltaTime;
-        var updateTime = 1f / fps;
+        var updateTime = InBetweens;
         float stopMotionFactor = 0;
 
         if (_time > updateTime)
@@ -63,7 +63,7 @@ public partial class PlatformerCharacterHybridSystem : SystemBase
                 var meshRootLTW = SystemAPI.GetComponent<LocalToWorld>(characterComponent.MeshRootEntity);
                 hybridLink.Object.transform.SetLocalPositionAndRotation(meshRootLTW.Position, meshRootLTW.Rotation);
 
-                
+
                 // Animation
                 PlatformerCharacterAnimationHandler.UpdateAnimation(
                     hybridLink.Animator,
