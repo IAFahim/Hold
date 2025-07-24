@@ -3,8 +3,6 @@ using Unity.Mathematics;
 using Unity.Physics.Authoring;
 using UnityEngine;
 using Unity.CharacterController;
-using Unity.Physics;
-using UnityEngine.Serialization;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(PhysicsShapeAuthoring))]
