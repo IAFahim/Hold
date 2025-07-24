@@ -23,6 +23,7 @@ public struct PlatformerCharacterStateMachine : IComponentData
     public LedgeStandingUpState LedgeStandingUpState;
     public FlyingNoCollisionsState FlyingNoCollisionsState;
     public RopeSwingState RopeSwingState;
+    public SlidingState SlidingState;
 
     public void TransitionToState(CharacterState newState, ref PlatformerCharacterUpdateContext context,
         ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
@@ -76,6 +77,9 @@ public struct PlatformerCharacterStateMachine : IComponentData
             case CharacterState.RopeSwing:
                 RopeSwingState.OnStateEnter(previousState, ref context, ref baseContext, in aspect);
                 break;
+            case CharacterState.Sliding:
+                SlidingState.OnStateEnter(previousState, ref context, ref baseContext, in aspect);
+                break;
         }
     }
 
@@ -119,6 +123,9 @@ public struct PlatformerCharacterStateMachine : IComponentData
                 break;
             case CharacterState.RopeSwing:
                 RopeSwingState.OnStateExit(newState, ref context, ref baseContext, in aspect);
+                break;
+            case CharacterState.Sliding:
+                SlidingState.OnStateExit(newState, ref context, ref baseContext, in aspect);
                 break;
         }
     }
@@ -164,6 +171,9 @@ public struct PlatformerCharacterStateMachine : IComponentData
             case CharacterState.RopeSwing:
                 RopeSwingState.OnStatePhysicsUpdate(ref context, ref baseContext, in aspect);
                 break;
+            case CharacterState.Sliding:
+                SlidingState.OnStatePhysicsUpdate(ref context, ref baseContext, in aspect);
+                break;
         }
     }
 
@@ -207,6 +217,9 @@ public struct PlatformerCharacterStateMachine : IComponentData
                 break;
             case CharacterState.RopeSwing:
                 RopeSwingState.OnStateVariableUpdate(ref context, ref baseContext, in aspect);
+                break;
+            case CharacterState.Sliding:
+                SlidingState.OnStateVariableUpdate(ref context, ref baseContext, in aspect);
                 break;
         }
     }
@@ -255,6 +268,9 @@ public struct PlatformerCharacterStateMachine : IComponentData
             case CharacterState.RopeSwing:
                 RopeSwingState.GetCameraParameters(in character, out cameraTarget, out calculateUpFromGravity);
                 break;
+            case CharacterState.Sliding:
+                SlidingState.GetCameraParameters(in character, out cameraTarget, out calculateUpFromGravity);
+                break;
         }
     }
 
@@ -300,6 +316,9 @@ public struct PlatformerCharacterStateMachine : IComponentData
                 break;
             case CharacterState.RopeSwing:
                 RopeSwingState.GetMoveVectorFromPlayerInput(in inputs, cameraRotation, out moveVector);
+                break;
+            case CharacterState.Sliding:
+                SlidingState.GetMoveVectorFromPlayerInput(in inputs, cameraRotation, out moveVector);
                 break;
         }
     }

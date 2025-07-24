@@ -171,6 +171,8 @@ MonoBehaviour:
     cancellable: 0
   Conditions:
     conditions: []
+    conditionLogic:
+      expression: 
     chanceToTrigger: 1
     doNotReset: 0
 --- !u!114 &161891921
@@ -827,26 +829,6 @@ PrefabInstance:
     - target: {fileID: 1692896102597148395, guid: 5fbcc801dea8fd640a004697d22ed448, type: 3}
       propertyPath: m_Name
       value: PlatformerCharacter
-      objectReference: {fileID: 0}
-    - target: {fileID: 1692896102597148395, guid: 5fbcc801dea8fd640a004697d22ed448, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6689285571920954877, guid: 5fbcc801dea8fd640a004697d22ed448, type: 3}
-      propertyPath: DebugClimbingGeometry
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6689285571920954877, guid: 5fbcc801dea8fd640a004697d22ed448, type: 3}
-      propertyPath: DebugStandingGeometry
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6689285571920954877, guid: 5fbcc801dea8fd640a004697d22ed448, type: 3}
-      propertyPath: DebugSwimmingGeometry
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6689285571920954877, guid: 5fbcc801dea8fd640a004697d22ed448, type: 3}
-      propertyPath: DebugCrouchingGeometry
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

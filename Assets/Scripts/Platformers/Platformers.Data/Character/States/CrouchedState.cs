@@ -1,8 +1,6 @@
 using Unity.Entities;
 using Unity.CharacterController;
 using Unity.Mathematics;
-using Unity.Physics;
-using Unity.Transforms;
 
 public struct CrouchedState : IPlatformerCharacterState
 {
@@ -120,6 +118,12 @@ public struct CrouchedState : IPlatformerCharacterState
 
         if (characterControl.IsRollHeld())
         {
+            if (characterControl.IsSprintHeld())
+            {
+                stateMachine.TransitionToState(CharacterState.Sliding, ref context, ref baseContext, in aspect);
+                return true;
+            }
+
             stateMachine.TransitionToState(CharacterState.Rolling, ref context, ref baseContext, in aspect);
             return true;
         }

@@ -135,6 +135,12 @@ public struct GroundMoveState : IPlatformerCharacterState
 
         if (characterControl.IsRollHeld())
         {
+            if (characterControl.IsSprintHeld())
+            {
+                stateMachine.TransitionToState(CharacterState.Sliding, ref context, ref baseContext, in aspect);
+                return true;
+            }
+            
             stateMachine.TransitionToState(CharacterState.Rolling, ref context, ref baseContext, in aspect);
             return true;
         }
