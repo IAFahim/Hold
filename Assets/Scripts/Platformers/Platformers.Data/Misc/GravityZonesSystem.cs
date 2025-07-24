@@ -49,7 +49,7 @@ public partial class GravityZonesSystem : SystemBase
     [BurstCompile]
     public partial struct ResetGravitiesJob : IJobEntity
     {
-        private void Execute(Entity entity, ref CustomGravity customGravity)
+        private void Execute(ref CustomGravity customGravity)
         {
             customGravity.LastZoneEntity = customGravity.CurrentZoneEntity;
             customGravity.TouchedByNonGlobalGravity = false;
@@ -103,7 +103,7 @@ public partial class GravityZonesSystem : SystemBase
     {
         public GlobalGravityZone GlobalGravityZone;
 
-        private void Execute(Entity entity, ref CustomGravity customGravity)
+        private void Execute( ref CustomGravity customGravity)
         {
             if (!customGravity.TouchedByNonGlobalGravity)
             {
@@ -118,7 +118,7 @@ public partial class GravityZonesSystem : SystemBase
     {
         public float DeltaTime;
 
-        private void Execute(Entity entity, ref PhysicsVelocity physicsVelocity, in PhysicsMass physicsMass,
+        private void Execute(ref PhysicsVelocity physicsVelocity, in PhysicsMass physicsMass,
             in CustomGravity customGravity)
         {
             if (physicsMass.InverseMass > 0f)

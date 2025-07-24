@@ -76,19 +76,29 @@ public struct PlatformerCharacterComponent : IComponentData
     public float RopeSwingDrag;
     public float RopeLength;
     public float3 LocalRopeAnchorPoint;
+    
+    [Header("Sliding")]
+    public float SlideStartMinSpeed;
+    public float SlideFriction;
+    public float SlideSteeringSharpness;
+    public float SlideSpeedToExit;
 
     [Header("Climbing")] public float ClimbingDistanceFromSurface;
     public float ClimbingSpeed;
     public float ClimbingMovementSharpness;
     public float ClimbingRotationSharpness;
+    
 
     [Header("Step & Slope")] public BasicStepAndSlopeHandlingParameters StepAndSlopeHandling;
 
-    [Header("Misc")] public CustomPhysicsBodyTags StickySurfaceTag;
+    [Header("Misc")] 
+    public CustomPhysicsBodyTags StickySurfaceTag;
     public CustomPhysicsBodyTags ClimbableTag;
     public PhysicsCategoryTags WaterPhysicsCategory;
     public PhysicsCategoryTags RopeAnchorCategory;
     public float UpOrientationAdaptationSharpness;
+    
+    [Header("Geometry")]
     public CapsuleGeometryDefinition StandingGeometry;
     public CapsuleGeometryDefinition CrouchingGeometry;
     public CapsuleGeometryDefinition RollingGeometry;
@@ -111,6 +121,7 @@ public struct PlatformerCharacterComponent : IComponentData
     [HideInInspector] public float3 DirectionToWaterSurface;
     [HideInInspector] public bool IsSprinting;
     [HideInInspector] public bool IsOnStickySurface;
+    
 }
 
 public struct PlatformerCharacterInitialized : IComponentData
