@@ -148,6 +148,12 @@ public static class PlatformerCharacterAnimationHandler
                 }
             }
                 break;
+            case CharacterState.Sliding:
+            {
+                speed = 1f;
+                clipId = characterAnimation.SlidingClip;
+            }
+                break;
             case CharacterState.Rolling:
             case CharacterState.FlyingNoCollisions:
             {
