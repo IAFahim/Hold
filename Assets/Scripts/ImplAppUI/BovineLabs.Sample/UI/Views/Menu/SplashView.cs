@@ -24,22 +24,15 @@ namespace BovineLabs.Sample.UI.Views.Menu
         public const string PressAnyButtonTransitionClassName = PressAnyButtonClassName + "-flash";
 
         private readonly Text anyText;
-
         private IDisposable onAnyPress;
 
         /// <summary> Initializes a new instance of the <see cref="SplashView"/> class. </summary>
         /// <param name="viewModel"> The view model. </param>
-        public SplashView(SplashViewModel viewModel, IUxmlService uxmlService)
+        public SplashView(SplashViewModel viewModel)
             : base(viewModel)
         {
             this.Navigate(Actions.go_to_game);
-            BovineLabsBootstrap.Instance.CreateGameWorld();
-            var visualTreeAsset = uxmlService.GetAsset("joystick");
-            this.Add(visualTreeAsset.Instantiate());
-            this.AddToClassList("Joystick");
-            return;
             this.AddToClassList(UssClassName);
-
             var preloader = new Preloader();
             preloader.StretchToParentSize();
             this.Add(preloader);

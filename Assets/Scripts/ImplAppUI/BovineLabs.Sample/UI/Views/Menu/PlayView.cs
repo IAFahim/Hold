@@ -2,6 +2,7 @@
 //     Copyright (c) BovineLabs. All rights reserved.
 // </copyright>
 
+using _src.Scripts.UiServices.UXMLs.Service;
 using BovineLabs.Core;
 
 namespace BovineLabs.Sample.UI.Views.Menu

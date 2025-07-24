@@ -1,8 +1,6 @@
 using System;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
@@ -46,6 +44,7 @@ public static class PlatformerCharacterAnimationHandler
     {
         var velocityMagnitude = math.length(characterBody.RelativeVelocity);
         float speed = 1;
+        var clipId = 0;
         switch (characterStateMachine.CurrentState)
         {
             case CharacterState.GroundMove:
@@ -53,7 +52,7 @@ public static class PlatformerCharacterAnimationHandler
                 if (math.length(characterControl.MoveVector) < 0.01f)
                 {
                     speed = 1f;
-                    animator.SetInteger(clipIndexParameterHash, characterAnimation.IdleClip);
+                    clipId = characterAnimation.IdleClip;
                 }
                 else
                 {
@@ -61,13 +60,13 @@ public static class PlatformerCharacterAnimationHandler
                     {
                         var velocityRatio = velocityMagnitude / characterComponent.GroundSprintMaxSpeed;
                         speed = velocityRatio;
-                        animator.SetInteger(clipIndexParameterHash, characterAnimation.SprintClip);
+                        clipId = characterAnimation.SprintClip;
                     }
                     else
                     {
                         var velocityRatio = velocityMagnitude / characterComponent.GroundRunMaxSpeed;
                         speed = velocityRatio;
-                        animator.SetInteger(clipIndexParameterHash, characterAnimation.RunClip);
+                        clipId = characterAnimation.RunClip;
                     }
                 }
             }
@@ -77,26 +76,26 @@ public static class PlatformerCharacterAnimationHandler
                 if (math.length(characterControl.MoveVector) < 0.01f)
                 {
                     speed = 1f;
-                    animator.SetInteger(clipIndexParameterHash, characterAnimation.CrouchIdleClip);
+                    clipId = characterAnimation.CrouchIdleClip;
                 }
                 else
                 {
                     var velocityRatio = velocityMagnitude / characterComponent.CrouchedMaxSpeed;
                     speed = velocityRatio;
-                    animator.SetInteger(clipIndexParameterHash, characterAnimation.CrouchMoveClip);
+                    clipId = characterAnimation.CrouchMoveClip;
                 }
             }
                 break;
             case CharacterState.AirMove:
             {
                 speed = 1f;
-                animator.SetInteger(clipIndexParameterHash, characterAnimation.InAirClip);
+                clipId = characterAnimation.InAirClip;
             }
                 break;
             case CharacterState.Dashing:
             {
                 speed = 1f;
-                animator.SetInteger(clipIndexParameterHash, characterAnimation.DashClip);
+                clipId = characterAnimation.DashClip;
             }
                 break;
             case CharacterState.WallRun:
@@ -104,34 +103,34 @@ public static class PlatformerCharacterAnimationHandler
                 var wallIsOnTheLeft = math.dot(MathUtilities.GetRightFromRotation(localTransform.Rotation),
                     characterComponent.LastKnownWallNormal) > 0f;
                 speed = 1f;
-                animator.SetInteger(clipIndexParameterHash,
-                    wallIsOnTheLeft ? characterAnimation.WallRunLeftClip : characterAnimation.WallRunRightClip);
+                clipId =
+                    wallIsOnTheLeft ? characterAnimation.WallRunLeftClip : characterAnimation.WallRunRightClip;
             }
                 break;
             case CharacterState.RopeSwing:
             {
                 speed = 1f;
-                animator.SetInteger(clipIndexParameterHash, characterAnimation.RopeHangClip);
+                clipId = characterAnimation.RopeHangClip;
             }
                 break;
             case CharacterState.Climbing:
             {
                 var velocityRatio = velocityMagnitude / characterComponent.ClimbingSpeed;
                 speed = velocityRatio;
-                animator.SetInteger(clipIndexParameterHash, characterAnimation.ClimbingMoveClip);
+                clipId = characterAnimation.ClimbingMoveClip;
             }
                 break;
             case CharacterState.LedgeGrab:
             {
                 var velocityRatio = velocityMagnitude / characterComponent.LedgeMoveSpeed;
                 speed = velocityRatio;
-                animator.SetInteger(clipIndexParameterHash, characterAnimation.LedgeGrabMoveClip);
+                clipId = characterAnimation.LedgeGrabMoveClip;
             }
                 break;
             case CharacterState.LedgeStandingUp:
             {
                 speed = 1f;
-                //animator.SetInteger(ClipIndexParameterHash, characterAnimation.LedgeStandUpClip);
+                // clipId = characterAnimation.LedgeStandUpClip;
             }
                 break;
             case CharacterState.Swimming:
@@ -140,12 +139,12 @@ public static class PlatformerCharacterAnimationHandler
                 if (velocityRatio < 0.1f)
                 {
                     speed = 1f;
-                    animator.SetInteger(clipIndexParameterHash, characterAnimation.SwimmingIdleClip);
+                    clipId = characterAnimation.SwimmingIdleClip;
                 }
                 else
                 {
                     speed = velocityRatio;
-                    animator.SetInteger(clipIndexParameterHash, characterAnimation.SwimmingMoveClip);
+                    clipId = characterAnimation.SwimmingMoveClip;
                 }
             }
                 break;
@@ -153,14 +152,19 @@ public static class PlatformerCharacterAnimationHandler
             case CharacterState.FlyingNoCollisions:
             {
                 speed = 1f;
-                animator.SetInteger(clipIndexParameterHash, characterAnimation.IdleClip);
+                clipId = characterAnimation.IdleClip;
             }
                 break;
         }
 
+        animator.SetInteger(clipIndexParameterHash, clipId);
         var stateUnChanged = characterStateMachine.CurrentState == characterAnimation.LastAnimationCharacterState;
-        if (stateUnChanged) animator.speed = speed * stopMotionFactor;
-        else animator.speed = speed;
+        if (stateUnChanged)
+        {
+            animator.speed = speed * stopMotionFactor;
+            return;
+        }
+        animator.speed = speed;
         characterAnimation.LastAnimationCharacterState = characterStateMachine.CurrentState;
     }
 }

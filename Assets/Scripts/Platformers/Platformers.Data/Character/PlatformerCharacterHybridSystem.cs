@@ -10,21 +10,19 @@ using UnityEngine;
 [UpdateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
 public partial class PlatformerCharacterHybridSystem : SystemBase
 {
-    public static readonly int ClipIndex = Animator.StringToHash("ClipIndex");
-
-    public readonly float InBetweens = 1 / 12f;
+    private static readonly int ClipIndex = Animator.StringToHash("ClipIndex");
+    private readonly float _updateAfter = 1 / 12f;
     private float _time;
 
     protected override void OnUpdate()
     {
         _time += SystemAPI.Time.DeltaTime;
-        var updateTime = InBetweens;
         float stopMotionFactor = 0;
 
-        if (_time > updateTime)
+        if (_time > _updateAfter)
         {
-            _time -= updateTime;
-            stopMotionFactor = updateTime / Time.deltaTime;
+            _time -= _updateAfter;
+            stopMotionFactor = _updateAfter / Time.deltaTime;
         }
 
         var ecb = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW
@@ -46,6 +44,7 @@ public partial class PlatformerCharacterHybridSystem : SystemBase
             });
         }
 
+        
         // Update
         foreach (var (characterAnimation, characterBody, characterTransform, characterComponent, characterStateMachine,
                      characterControl, hybridLink, entity) in SystemAPI.Query<

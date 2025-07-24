@@ -4,6 +4,7 @@
     "com.bovinelabs.core": "https://gitlab.com/tertle/com.bovinelabs.core.git#1.4.5",
     "com.bovinelabs.essence": "https://gitlab.com/tertle/com.bovinelabs.essence.git",
     "com.bovinelabs.reaction": "https://gitlab.com/tertle/com.bovinelabs.reaction.git",
+    "com.bovinelabs.timeline": "https://gitlab.com/tertle/com.bovinelabs.timeline.git",
     "com.unity.charactercontroller": "1.3.11",
     "com.unity.entities": "https://github.com/tertle/com.unity.entities.git",
     "com.unity.entities.graphics": "https://github.com/tertle/com.unity.entities.graphics.git",
