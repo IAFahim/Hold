@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.andrewraphaellukasik.segments": {
+      "version": "https://github.com/andrew-raphael-lukasik/segments.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.entities.graphics": "1.4.12"
+      },
+      "hash": "160e81bbb174050f9a1f14d083792976de5dcdaf"
+    },
     "com.arongranberg.aline": {
       "version": "file:com.arongranberg.aline",
       "depth": 0,

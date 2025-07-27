@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.andrewraphaellukasik.segments": "https://github.com/andrew-raphael-lukasik/segments.git#upm",
     "com.bovinelabs.anchor": "https://gitlab.com/tertle/com.bovinelabs.anchor.git",
     "com.bovinelabs.core": "https://gitlab.com/tertle/com.bovinelabs.core.git#1.4.5",
     "com.bovinelabs.essence": "https://gitlab.com/tertle/com.bovinelabs.essence.git",
