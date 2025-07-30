@@ -17,8 +17,9 @@
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
         "Unity.Transforms",
-        "BovineLabs.Stats.Authoring",
-        "BovineLabs.Reaction.Authoring"
+        "BovineLabs.Reaction.Authoring",
+        "BovineLabs.Essence.Data",
+        "BovineLabs.Essence.Authoring"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -2,6 +2,8 @@
 //     Copyright (c) BovineLabs. All rights reserved.
 // </copyright>
 
+using _src.Scripts.UiServices.UXMLs.Service;
+
 namespace BovineLabs.Sample.UI
 {
     using BovineLabs.Anchor;
@@ -16,6 +18,8 @@ namespace BovineLabs.Sample.UI
         {
             base.OnConfiguringApp(builder);
 
+            
+            builder.services.AddSingleton<IUxmlService,UxmlService>();
             builder.services.AddSingleton<IControlService, ControlService>();
         }
 

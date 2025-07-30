@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 2702368002050863145}
   - component: {fileID: 5523294873506209897}
   - component: {fileID: -157613356057576432}
+  - component: {fileID: 6320378397898833652}
+  - component: {fileID: 5603434518511128282}
   m_Layer: 0
   m_Name: GameSettings
   m_TagString: Untagged
@@ -59,3 +61,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c16549610bfe4458aa9389201d072bb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6320378397898833652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230174546286035906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210bfb0b2ee044b09a07b53db2a6001a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5603434518511128282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1230174546286035906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc355e2200c74152b7fb829f9150215e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BovineLabs.Core.Extensions.Authoring::BovineLabs.Core.Authoring.Camera.CameraAuthoring
+  isMainCamera: 1

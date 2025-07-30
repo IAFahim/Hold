@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 32
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: stress tests lines A
+  m_Shader: {fileID: 4800000, guid: f08c904251499354b8cf48315e30760e, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _TEXTURE_ON
+  m_InvalidKeywords:
+  - UVCORRECTION_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - SHADOWCASTER
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.85
+    - _AlphaPow: 5.1
+    - _DitherStrength: 1
+    - _FarColorDistance: 20
+    - _FarCutoffDistaneEnd: 30
+    - _FarCutoffDistaneStart: 25
+    - _FarWidth: 0.35
+    - _FarWidthDistance: 30
+    - _NearColorDistance: 3
+    - _NearCutoffDistane: 2
+    - _NearWidth: 0.4
+    - _NearWidthDistance: 3
+    - _Roundness: 1
+    - _Smoothness: 1
+    - _Texture: 1
+    m_Colors:
+    - _Color: {r: 0.008251819, g: 0, b: 0.026554096, a: 1}
+    - _ColorFar: {r: 4, g: 0.37260616, b: 0, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
+--- !u!114 &1532484212802381824
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 2

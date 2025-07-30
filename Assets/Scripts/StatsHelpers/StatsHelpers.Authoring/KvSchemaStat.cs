@@ -1,5 +1,5 @@
 ﻿using System;
-using BovineLabs.Stats.Authoring;
+using BovineLabs.Essence.Authoring;
 using Unity.Mathematics;
 
 namespace StatsHelpers.StatsHelpers.Authoring

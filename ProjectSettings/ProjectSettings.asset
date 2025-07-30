@@ -132,7 +132,6 @@ PlayerSettings:
   switchNVNMaxPublicSamplerIDCount: 0
   switchMaxWorkerMultiple: 8
   switchNVNGraphicsFirmwareMemory: 32
-  switchGraphicsJobsSyncAfterKick: 1
   vulkanNumSwapchainBuffers: 3
   vulkanEnableSetSRGBWrite: 0
   vulkanEnablePreTransform: 1
@@ -822,7 +821,7 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    Android: BL_CORE_EXTENSIONS;BL_ENTITIES_CUSTOM;BL_DISABLE_PHYSICS_STATES;UNITY_BURST_EXPERIMENTAL_ATOMIC_INTRINSICS
+    Android: BL_CORE_EXTENSIONS;BL_ENTITIES_CUSTOM;BL_DISABLE_PHYSICS_STATES;UNITY_BURST_EXPERIMENTAL_ATOMIC_INTRINSICS;UNITY_PHYSICS_CUSTOM
     Standalone: BL_DISABLE_TOOLBAR;BL_DISABLE_ENTROPY;BL_CORE_EXTENSIONS;BL_DISABLE_PHYSICS_STATES;BL_DISABLE_STRIP;BL_DISABLE_ANALYZERS;BL_ENTITIES_CUSTOM
   additionalCompilerArguments: {}
   platformArchitecture: {}

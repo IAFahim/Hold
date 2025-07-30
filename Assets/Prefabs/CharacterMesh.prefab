@@ -792,6 +792,8 @@ SkinnedMeshRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
@@ -816,6 +818,7 @@ SkinnedMeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -1142,6 +1145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3482759376885619007}
   - component: {fileID: 7400843449472140101}
+  - component: {fileID: 5237031703156972318}
   m_Layer: 0
   m_Name: CharacterMesh
   m_TagString: Untagged
@@ -1157,7 +1161,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4260105767809303429}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.830176, y: 4.3268247, z: 27.354652}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1177,7 +1181,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 50ce2b7f52817404babd1add65c9ee0e, type: 3}
   m_Controller: {fileID: 9100000, guid: 2ea1ed0fc9a014540bd7af9a37da1f55, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
@@ -1188,6 +1192,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5237031703156972318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4260105767809303429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fbdb3174a73a07408595a85d3e7fb6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Platformers.Data::PlatformerPlayerAuthoring
+  ControlledCharacter: {fileID: 0}
+  ControlledCamera: {fileID: 0}
 --- !u!1 &4260715355395123013
 GameObject:
   m_ObjectHideFlags: 0

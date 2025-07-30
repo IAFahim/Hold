@@ -2,6 +2,7 @@
 //     Copyright (c) BovineLabs. All rights reserved.
 // </copyright>
 
+using _src.Scripts.UiServices.UXMLs.Service;
 using BovineLabs.Core;
 using Unity.AppUI.Navigation;
 
@@ -23,7 +24,6 @@ namespace BovineLabs.Sample.UI.Views.Menu
         public const string PressAnyButtonTransitionClassName = PressAnyButtonClassName + "-flash";
 
         private readonly Text anyText;
-
         private IDisposable onAnyPress;
 
         /// <summary> Initializes a new instance of the <see cref="SplashView"/> class. </summary>
@@ -32,10 +32,7 @@ namespace BovineLabs.Sample.UI.Views.Menu
             : base(viewModel)
         {
             this.Navigate(Actions.go_to_game);
-            BovineLabsBootstrap.Instance.CreateGameWorld();
-            return;
             this.AddToClassList(UssClassName);
-
             var preloader = new Preloader();
             preloader.StretchToParentSize();
             this.Add(preloader);

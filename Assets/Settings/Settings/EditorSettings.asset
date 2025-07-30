@@ -53,7 +53,7 @@ MonoBehaviour:
   - {fileID: 102900000, guid: 7826639a4f45ea84b82e431cedbba575, type: 3}
   - {fileID: 102900000, guid: 73e85a973cc88cf4baa62974e69b4115, type: 3}
   - {fileID: 102900000, guid: 9257b7fb43ff3064c95a771aca82b20d, type: 3}
-  startupScene: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
+  startupScene: {fileID: 0}
   defaultSettingsAuthoring: {fileID: 5523294873506209897, guid: 6d34cbd235bfdab48b2915f6f527d66e, type: 3}
   settingAuthoring:
   - World: service
