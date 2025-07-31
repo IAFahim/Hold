@@ -41,7 +41,7 @@
       "dependencies": {
         "com.unity.entities": "1.4.0-pre.3"
       },
-      "hash": "c3d10c04d61830cf7075738589f2a6fbf58621de"
+      "hash": "4630dca94fcaffe279e0ddf0e2f9d8097e9f2f68"
     },
     "com.bovinelabs.essence": {
       "version": "https://gitlab.com/tertle/com.bovinelabs.essence.git",
@@ -351,6 +351,17 @@
         "com.unity.render-pipelines.core": "17.2.0",
         "com.unity.searcher": "4.9.3"
       }
+    },
+    "com.unity.splines": {
+      "version": "2.8.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.1",
+        "com.unity.modules.imgui": "1.0.0",
+        "com.unity.settings-manager": "1.0.3"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.sysroot": {
       "version": "2.0.10",

@@ -160,7 +160,8 @@ public struct AirMoveState : IPlatformerCharacterState
             return true;
         }
 
-        if (characterControl.IsSprintHeld() && character.HasDetectedMoveAgainstWall)
+        // if (characterControl.IsSprintHeld() && character.HasDetectedMoveAgainstWall)
+        if (character.HasDetectedMoveAgainstWall)
         {
             stateMachine.TransitionToState(CharacterState.WallRun, ref context, ref baseContext, in aspect);
             return true;
