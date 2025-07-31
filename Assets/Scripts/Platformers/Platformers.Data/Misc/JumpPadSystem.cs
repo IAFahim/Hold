@@ -1,15 +1,16 @@
+using BovineLabs.Core.PhysicsStates;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Physics;
-using Unity.Physics.Stateful;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using Unity.CharacterController;
+using StatefulEventState = BovineLabs.Core.PhysicsStates.StatefulEventState;
+using StatefulTriggerEvent = BovineLabs.Core.PhysicsStates.StatefulTriggerEvent;
 
-[UpdateInGroup(typeof(AfterPhysicsSystemGroup))]
+// [UpdateInGroup(typeof(AfterPhysicsSystemGroup))]
+
+[UpdateInGroup(typeof(PhysicsSystemGroup))]
 [UpdateBefore(typeof(KinematicCharacterPhysicsUpdateGroup))]
 [BurstCompile]
 public partial struct JumpPadSystem : ISystem
@@ -45,7 +46,7 @@ public partial struct JumpPadSystem : ISystem
             for (var i = 0; i < triggerEventsBuffer.Length; i++)
             {
                 var triggerEvent = triggerEventsBuffer[i];
-                var otherEntity = triggerEvent.GetOtherEntity(entity);
+                var otherEntity = triggerEvent.EntityB;
 
                 // If a character has entered the trigger, add jumppad power to it
                 if (triggerEvent.State == StatefulEventState.Enter &&

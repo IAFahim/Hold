@@ -4,12 +4,13 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
-using Unity.Physics.Stateful;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using Unity.CharacterController;
+using StatefulEventState = BovineLabs.Core.PhysicsStates.StatefulEventState;
+using StatefulTriggerEvent = BovineLabs.Core.PhysicsStates.StatefulTriggerEvent;
 
-[UpdateInGroup(typeof(AfterPhysicsSystemGroup))]
+[UpdateInGroup(typeof(PhysicsSystemGroup))]
 [UpdateAfter(typeof(KinematicCharacterPhysicsUpdateGroup))]
 [BurstCompile]
 public partial struct WindZoneSystem : ISystem
@@ -53,7 +54,7 @@ public partial struct WindZoneSystem : ISystem
             for (var i = 0; i < triggerEventsBuffer.Length; i++)
             {
                 var triggerEvent = triggerEventsBuffer[i];
-                var otherEntity = triggerEvent.GetOtherEntity(entity);
+                var otherEntity = triggerEvent.EntityB;
 
                 if (triggerEvent.State == StatefulEventState.Stay)
                 {

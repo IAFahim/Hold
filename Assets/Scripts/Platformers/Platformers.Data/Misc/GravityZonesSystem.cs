@@ -4,13 +4,18 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
-using Unity.Physics.Stateful;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using Unity.CharacterController;
 
-[UpdateInGroup(
-    typeof(SimulationSystemGroup))] // update in variable update because the camera can use gravity to adjust its up direction
+
+using StatefulEventState = BovineLabs.Core.PhysicsStates.StatefulEventState;
+using StatefulTriggerEvent = BovineLabs.Core.PhysicsStates.StatefulTriggerEvent;
+
+//
+// [UpdateInGroup(
+//     typeof(SimulationSystemGroup))] // update in variable update because the camera can use gravity to adjust its up direction
+[UpdateInGroup(typeof(PhysicsSystemGroup))]
 [UpdateBefore(typeof(PlatformerCharacterVariableUpdateSystem))]
 public partial class GravityZonesSystem : SystemBase
 {
@@ -75,7 +80,7 @@ public partial class GravityZonesSystem : SystemBase
                     var triggerEvent = triggerEventsBuffer[i];
                     if (triggerEvent.State == StatefulEventState.Stay)
                     {
-                        var otherEntity = triggerEvent.GetOtherEntity(entity);
+                        var otherEntity = triggerEvent.EntityB;
 
                         var fromOtherToSelfVector = LocalToWorldFromEntity[entity].Position -
                                                     LocalToWorldFromEntity[otherEntity].Position;

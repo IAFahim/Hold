@@ -74,11 +74,11 @@ GameObject:
   - component: {fileID: 1692896102597148393}
   - component: {fileID: 6689285571920954877}
   - component: {fileID: 4070104326975267335}
-  - component: {fileID: -1191803628544701202}
   - component: {fileID: -8306520697180238540}
   - component: {fileID: -8944153960414828713}
   - component: {fileID: 7878928124258816284}
   - component: {fileID: 7595669063680691565}
+  - component: {fileID: 4054680451272068333}
   m_Layer: 0
   m_Name: PlatformerCharacter
   m_TagString: Untagged
@@ -534,18 +534,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f410dd0089c6aa945948ddb7779c15d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-1191803628544701202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1692896102597148395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec1d002f95a780948b1ce03964ee964d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-8306520697180238540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -597,6 +585,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Follows.Authoring::Follows.Follows.Data.FollowEnableAuthoring
   enable: 0
+  stoppingDistance: 1
+--- !u!114 &4054680451272068333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692896102597148395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 374892803943bc04cb79933b2eeba006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BovineLabs.Core.Extensions.Authoring::BovineLabs.Core.Authoring.PhysicsStates.StatefulTriggerEventAuthoring
 --- !u!1 &3057386589211996020
 GameObject:
   m_ObjectHideFlags: 0
