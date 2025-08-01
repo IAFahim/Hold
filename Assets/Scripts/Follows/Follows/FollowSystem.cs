@@ -43,8 +43,8 @@ namespace Follows.Follows
         [BurstCompile]
         private void Execute(
             Entity entity,
-            EnabledRefRO<FollowEnableComponent> follow,
-            in FollowEnableComponent followEnableComponent,
+            EnabledRefRW<FollowEnableComponent> follow,
+            ref FollowEnableComponent followEnableComponent,
             in LocalTransform localTransform,
             ref PlatformerCharacterControl characterControl
         )
@@ -54,15 +54,9 @@ namespace Follows.Follows
             var diff = PositionMainEntity - localTransform.Position;
             var normalize = math.normalize(diff);
             var lengthSq = math.lengthsq(diff);
-            if (lengthSq > followEnableComponent.StoppingDistanceSq)
-            {
-                characterControl.MoveVector = normalize;
-            }
-            else
-            {
-                characterControl.MoveVector = float3.zero;
-            }
-                
+            var far = lengthSq > followEnableComponent.StoppingDistanceSq;
+            followEnableComponent.Reached = !far;
+            characterControl.MoveVector = far ? normalize : float3.zero;
         }
     }
 }

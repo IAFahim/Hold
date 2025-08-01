@@ -21,7 +21,7 @@ public enum CharacterState
     Climbing,
     FlyingNoCollisions,
     RopeSwing,
-    Sliding,
+    Sliding
 }
 
 public interface IPlatformerCharacterState

@@ -29,7 +29,8 @@ public class PlatformerCharacterAnimationAuthoring : MonoBehaviour
                 SwimmingMoveClip = 12,
                 DashClip = 13,
                 RopeHangClip = 14,
-                SlidingClip = 15
+                SlidingClip = 15,
+                HitClip = 14
             };
 
             AddComponent(entity, characterAnimation);

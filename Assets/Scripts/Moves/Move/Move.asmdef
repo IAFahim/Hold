@@ -20,7 +20,8 @@
         "Unity.Physics",
         "Unity.Transforms",
         "Ease.Data",
-        "Time.Data"
+        "Time.Data",
+        "Unity.Splines"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,4 +1,5 @@
 using System;
+using Follows.Follows.Data;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -25,26 +26,37 @@ public struct PlatformerCharacterAnimation : IComponentData
     [HideInInspector] public int DashClip;
     [HideInInspector] public int RopeHangClip;
     [HideInInspector] public int SlidingClip;
+    [HideInInspector] public int HitClip;
 
     [HideInInspector] public CharacterState LastAnimationCharacterState;
 }
 
 public static class PlatformerCharacterAnimationHandler
 {
+    private static readonly int ClipIndex = Animator.StringToHash("ClipIndex");
+
     public static void UpdateAnimation(
         Animator animator,
-        int clipIndexParameterHash,
-        float stopMotionFactor,
         ref PlatformerCharacterAnimation characterAnimation,
         in KinematicCharacterBody characterBody,
         in PlatformerCharacterComponent characterComponent,
         in PlatformerCharacterStateMachine characterStateMachine,
         in PlatformerCharacterControl characterControl,
-        in LocalTransform localTransform)
+        in LocalTransform localTransform,
+        in FollowEnableComponent followEnableComponent
+    )
     {
-        var velocityMagnitude = math.length(characterBody.RelativeVelocity);
         float speed = 1;
         var clipId = 0;
+        if (followEnableComponent.Reached)
+        {
+            clipId = characterAnimation.HitClip;
+            speed = 1;
+            SetAnimationToGameobject(animator, clipId, speed, ref characterAnimation, characterStateMachine);
+            return;
+        }
+
+        var velocityMagnitude = math.length(characterBody.RelativeVelocity);
         switch (characterStateMachine.CurrentState)
         {
             case CharacterState.GroundMove:
@@ -163,7 +175,16 @@ public static class PlatformerCharacterAnimationHandler
                 break;
         }
 
-        animator.SetInteger(clipIndexParameterHash, clipId);
+        SetAnimationToGameobject(animator, clipId, speed, ref characterAnimation, characterStateMachine);
+    }
+
+    private static void SetAnimationToGameobject(
+        Animator animator, int clipId, float speed,
+        ref PlatformerCharacterAnimation characterAnimation,
+        PlatformerCharacterStateMachine characterStateMachine
+    )
+    {
+        animator.SetInteger(ClipIndex, clipId);
         // var stateUnChanged = characterStateMachine.CurrentState == characterAnimation.LastAnimationCharacterState;
         // if (stateUnChanged)
         // {

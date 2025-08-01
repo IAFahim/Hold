@@ -56,7 +56,7 @@ public class OrbitCameraAuthoring : MonoBehaviour
                 ObstructedDistance = authoring.StartDistance,
 
                 PitchAngle = 0f,
-                PlanarForward = -math.forward()
+                PlanarForward = math.forward()
             });
 
             AddComponent(entity, new OrbitCameraControl());
