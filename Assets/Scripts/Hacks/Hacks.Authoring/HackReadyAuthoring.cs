@@ -6,7 +6,7 @@ namespace Hacks.Hacks.Authoring
 {
     public class HackReadyAuthoring : MonoBehaviour
     {
-        public float activeDuration;
+        public float activeDuration = 1f;
         public bool enable;
 
         public class Baker : Baker<HackReadyAuthoring>

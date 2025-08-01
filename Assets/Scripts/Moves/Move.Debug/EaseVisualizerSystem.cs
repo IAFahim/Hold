@@ -14,7 +14,6 @@ namespace Moves.Move.Debug
     /// rotation arcs, and scale changes for entities with an EaseStateComponent.
     /// </summary>
     [WorldSystemFilter(WorldSystemFilterFlags.Editor | WorldSystemFilterFlags.Default)]
-    [UpdateInGroup(typeof(PresentationSystemGroup))]
     [UpdateAfter(typeof(MoveSystem))]
     public partial struct EaseVisualizerSystem : ISystem
     {

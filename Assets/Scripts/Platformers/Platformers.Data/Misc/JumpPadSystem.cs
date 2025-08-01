@@ -40,7 +40,7 @@ public partial struct JumpPadSystem : ISystem
     {
         public ComponentLookup<KinematicCharacterBody> KinematicCharacterBodyLookup;
 
-        private void Execute(Entity entity, in LocalTransform localTransform, in JumpPad jumpPad,
+        private void Execute(in LocalToWorld ltw, in JumpPad jumpPad,
             in DynamicBuffer<StatefulTriggerEvent> triggerEventsBuffer)
         {
             for (var i = 0; i < triggerEventsBuffer.Length; i++)
@@ -52,7 +52,7 @@ public partial struct JumpPadSystem : ISystem
                 if (triggerEvent.State == StatefulEventState.Enter &&
                     KinematicCharacterBodyLookup.TryGetComponent(otherEntity, out var characterBody))
                 {
-                    var jumpVelocity = MathUtilities.GetForwardFromRotation(localTransform.Rotation) *
+                    var jumpVelocity = ltw.Up *
                                        jumpPad.JumpPower;
                     characterBody.RelativeVelocity = jumpVelocity;
 

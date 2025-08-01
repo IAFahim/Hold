@@ -79,6 +79,7 @@ GameObject:
   - component: {fileID: 7878928124258816284}
   - component: {fileID: 7595669063680691565}
   - component: {fileID: 4054680451272068333}
+  - component: {fileID: 5745564584817229127}
   m_Layer: 0
   m_Name: PlatformerCharacter
   m_TagString: Untagged
@@ -598,6 +599,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 374892803943bc04cb79933b2eeba006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BovineLabs.Core.Extensions.Authoring::BovineLabs.Core.Authoring.PhysicsStates.StatefulTriggerEventAuthoring
+--- !u!114 &5745564584817229127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692896102597148395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b59bd671ee5346a2877733b2b7f4dc58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Hacks.Authoring::Hacks.Hacks.Data.HackActiveAuthoring
+  Enable: 0
 --- !u!1 &3057386589211996020
 GameObject:
   m_ObjectHideFlags: 0
