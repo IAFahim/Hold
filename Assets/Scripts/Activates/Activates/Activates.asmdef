@@ -1,11 +1,11 @@
 {
-    "name": "Hacks",
+    "name": "Activates",
     "rootNamespace": "",
     "references": [
+        "Activates.Data",
         "BovineLabs.Anchor",
         "BovineLabs.Core",
         "BovineLabs.Core.Extensions",
-        "Hacks.Data",
         "Unity.AppUI",
         "Unity.AppUI.MVVM",
         "Unity.AppUI.Navigation",
@@ -18,9 +18,7 @@
         "Unity.Mathematics",
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
-        "Unity.Transforms",
-        "Focuses.Data",
-        "Activates.Data"
+        "Unity.Transforms"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

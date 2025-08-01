@@ -1,14 +1,13 @@
 using Activates.Activates.Data;
 using BovineLabs.Core.PhysicsStates;
 using Focuses.Focuses.Data;
+using Hacks.Hacks.Data;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
-namespace Stations.Stations
+namespace Hacks.Hacks
 {
-    public partial struct StationReachedSystem : ISystem
+    public partial struct ActiveHackSystem : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)
@@ -19,9 +18,10 @@ namespace Stations.Stations
         public void OnUpdate(ref SystemState state)
         {
             var mainEntity = SystemAPI.GetSingleton<FocusSingletonComponent>().Entity;
-            new StationReachedSystemJob
+            new ActiveHackJob
             {
-                MainEntity = mainEntity
+                MainEntity = mainEntity,
+                Active = true
             }.ScheduleParallel();
         }
 
@@ -32,11 +32,17 @@ namespace Stations.Stations
     }
 
     [BurstCompile]
-    public partial struct StationReachedSystemJob : IJobEntity
+    [WithPresent(typeof(HackReady))]
+    public partial struct ActiveHackJob : IJobEntity
     {
         public Entity MainEntity;
+        public bool Active;
 
-        private void Execute(in DynamicBuffer<StatefulTriggerEvent> triggerEvents)
+        public void Execute(
+            EnabledRefRW<HackReady> hackReady,
+            in DynamicBuffer<StatefulTriggerEvent> triggerEvents,
+            in DynamicBuffer<LinkedEntityGroup> linkedEntity
+        )
         {
             foreach (var statefulTriggerEvent in triggerEvents)
             {
@@ -44,7 +50,7 @@ namespace Stations.Stations
                 {
                     if (statefulTriggerEvent.State == StatefulEventState.Enter)
                     {
-                        Debug.Log("Reached");
+                        hackReady.ValueRW = true;
                     }
                 }
             }

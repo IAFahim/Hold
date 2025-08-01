@@ -1,14 +1,12 @@
 {
-    "name": "Hacks",
+    "name": "Activates.Authoring",
     "rootNamespace": "",
     "references": [
-        "BovineLabs.Anchor",
+        "Activates.Data",
         "BovineLabs.Core",
+        "BovineLabs.Core.Authoring",
         "BovineLabs.Core.Extensions",
-        "Hacks.Data",
-        "Unity.AppUI",
-        "Unity.AppUI.MVVM",
-        "Unity.AppUI.Navigation",
+        "BovineLabs.Core.Extensions.Authoring",
         "Unity.Burst",
         "Unity.Collections",
         "Unity.Entities",
@@ -18,9 +16,7 @@
         "Unity.Mathematics",
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
-        "Unity.Transforms",
-        "Focuses.Data",
-        "Activates.Data"
+        "Unity.Transforms"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
@@ -29,7 +25,9 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": false,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_EDITOR"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }

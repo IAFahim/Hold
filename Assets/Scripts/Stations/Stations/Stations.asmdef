@@ -19,7 +19,8 @@
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
         "Unity.Transforms",
-        "Focuses.Data"
+        "Focuses.Data",
+        "Activates.Data"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
