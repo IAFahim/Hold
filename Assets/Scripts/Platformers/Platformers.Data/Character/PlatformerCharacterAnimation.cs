@@ -184,7 +184,7 @@ public static class PlatformerCharacterAnimationHandler
         PlatformerCharacterStateMachine characterStateMachine
     )
     {
-        animator.SetInteger(ClipIndex, clipId);
+        
         // var stateUnChanged = characterStateMachine.CurrentState == characterAnimation.LastAnimationCharacterState;
         // if (stateUnChanged)
         // {
@@ -192,6 +192,7 @@ public static class PlatformerCharacterAnimationHandler
         //     return;
         // }
         animator.speed = speed;
+        animator.SetInteger(ClipIndex, clipId);
         characterAnimation.LastAnimationCharacterState = characterStateMachine.CurrentState;
     }
 }

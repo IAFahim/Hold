@@ -249,7 +249,7 @@ public struct LedgeGrabState : IPlatformerCharacterState
             out var upOffsetToPlaceLedgeDetectionPointAtLedgeLevel);
 
         // Prevent detecting valid grab if going up
-        if (math.dot(characterBody.RelativeVelocity, ledgeSurfaceHit.SurfaceNormal) > 0f) ledgeIsValid = false;
+        // if (math.dot(characterBody.RelativeVelocity, ledgeSurfaceHit.SurfaceNormal) > 0f) ledgeIsValid = false;
 
         if (ledgeIsValid) ledgeEntity = ledgeSurfaceHit.Entity;
 
