@@ -59,3 +59,8 @@ MonoBehaviour:
   PreventFixedUpdateJitter: 1
   CameraTargetTransitionTime: 0.4
   IgnoredEntities: []
+  pitchAngle: 32
+  planarForward:
+    x: 0
+    y: 0
+    z: 1
