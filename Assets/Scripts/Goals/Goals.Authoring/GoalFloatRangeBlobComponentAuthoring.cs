@@ -1,8 +1,8 @@
 using System;
 using BovineLabs.Reaction.Authoring.Conditions;
-using Goals.Goals.Data.Component;
 using Goals.Goals.Data.Enum;
 using Goals.Goals.Data.Goals;
+using Goals.Goals.Data.GoalBlob;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -11,14 +11,14 @@ namespace Goals.Goals.Authoring
 {
     public class GoalFloatRangeBlobComponentAuthoring : MonoBehaviour
     {
-        public GoalFloatRangeData[] goalTables;
+        public GoalFloatRangeData[] datas;
 
-        private class GoalTableFloatComponentBaker : Baker<GoalFloatRangeBlobComponentAuthoring>
+        private class Baker : Baker<GoalFloatRangeBlobComponentAuthoring>
         {
             public override void Bake(GoalFloatRangeBlobComponentAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.None);
-                var blobAssetRef = GoalFloatRangeData.CreateBlobAssetRef(authoring.goalTables);
+                var blobAssetRef = GoalFloatRangeData.CreateBlobAssetRef(authoring.datas);
                 AddComponent(entity, new GoalFloatRangeBlobComponent
                 {
                     BlobAssetRef = blobAssetRef

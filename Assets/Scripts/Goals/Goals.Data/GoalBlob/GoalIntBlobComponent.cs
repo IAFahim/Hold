@@ -1,7 +1,7 @@
 using Goals.Goals.Data.Goals;
 using Unity.Entities;
 
-namespace Goals.Goals.Data
+namespace Goals.Data.GoalBlob
 {
     public struct GoalIntBlobComponent : IComponentData
     {

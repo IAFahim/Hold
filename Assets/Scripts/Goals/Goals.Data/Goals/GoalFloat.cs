@@ -21,11 +21,6 @@ namespace Goals.Goals.Data.Goals
         public float TargetValue;
 
         /// <summary>
-        /// Optional secondary value for range checks (Between/NotBetween)
-        /// </summary>
-        public float UpperLimit;
-
-        /// <summary>
         /// Tolerance for floating-point comparisons
         /// </summary>
         private const float Tolerance = math.EPSILON;
@@ -85,7 +80,7 @@ namespace Goals.Goals.Data.Goals
 
                 case ECheckType.LessOrEqual:
                     conditionMet = currentValue <= TargetValue + Tolerance;
-                    if (currentValue <= TargetValue + Tolerance)
+                    if (conditionMet)
                     {
                         progress = 1f;
                     }
@@ -99,7 +94,7 @@ namespace Goals.Goals.Data.Goals
 
                 case ECheckType.LessThan:
                     conditionMet = currentValue < TargetValue - Tolerance;
-                    if (currentValue < TargetValue - Tolerance)
+                    if (conditionMet)
                     {
                         progress = 1f;
                     }

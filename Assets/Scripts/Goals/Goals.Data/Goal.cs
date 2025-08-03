@@ -1,11 +1,16 @@
-using System;
+using Unity.Entities;
 
 namespace Goals.Goals.Data
 {
-    [Serializable]
     public struct Goal
     {
-        public ushort id;
-        public ushort goalTable;
+        public ushort ID;
+        public byte GoalType;
+        public byte GoalIndex;
+    }
+
+    public struct GoalTable
+    {
+        public BlobArray<Goal> Goals;
     }
 }

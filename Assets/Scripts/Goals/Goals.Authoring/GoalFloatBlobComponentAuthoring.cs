@@ -1,8 +1,8 @@
 using System;
 using BovineLabs.Reaction.Authoring.Conditions;
-using Goals.Goals.Data.Enum;
 using Goals.Goals.Data.Goals;
-using Goals.Goals.Data.GoalTableComponent;
+using Goals.Goals.Data.Enum;
+using Goals.Goals.Data.GoalBlob;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;

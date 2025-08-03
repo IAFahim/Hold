@@ -1,5 +1,4 @@
 using System;
-using Goals.Goals.Data;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -11,6 +10,6 @@ namespace Maps.Maps.Data
         public ushort id;
         public Segment segment;
         [Range(0, 1)] public half traveled;
-        public Goal goal;
+        public ushort goalId;
     }
 }

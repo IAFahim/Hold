@@ -77,7 +77,7 @@ namespace Goals.Goals.Data.Goals
 
                 case ECheckType.LessOrEqual:
                     conditionMet = currentValue <= TargetValue;
-                    if (currentValue <= TargetValue)
+                    if (conditionMet)
                     {
                         progress = 1f;
                     }
@@ -91,7 +91,7 @@ namespace Goals.Goals.Data.Goals
 
                 case ECheckType.LessThan:
                     conditionMet = currentValue < TargetValue;
-                    if (currentValue < TargetValue)
+                    if (conditionMet)
                     {
                         progress = 1f;
                     }

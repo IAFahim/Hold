@@ -1,8 +1,8 @@
 using System;
 using BovineLabs.Reaction.Authoring.Conditions;
-using Goals.Goals.Data;
 using Goals.Goals.Data.Enum;
 using Goals.Goals.Data.Goals;
+using Goals.Data.GoalBlob;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -38,12 +38,12 @@ namespace Goals.Goals.Authoring
                 var arrayBuilder = builder.Allocate(ref blobArray, datas.Length);
                 for (int i = 0; i < datas.Length; i++)
                 {
-                    var goalTableData = datas[i];
+                    var data = datas[i];
                     arrayBuilder[i] = new GoalInt
                     {
-                        Key = goalTableData.conditionSchemaObject.Key,
-                        CheckType = goalTableData.checkType,
-                        TargetValue = goalTableData.targetValue,
+                        Key = data.conditionSchemaObject.Key,
+                        CheckType = data.checkType,
+                        TargetValue = data.targetValue,
                     };
                 }
 

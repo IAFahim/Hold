@@ -1,14 +1,15 @@
 using System;
 using BovineLabs.Reaction.Authoring.Conditions;
-using Goals.Goals.Data;
 using Goals.Goals.Data.Enum;
 using Goals.Goals.Data.Goals;
+using Goals.Goals.Data.GoalBlob;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Goals.Goals.Authoring
 {
-    public class GoalIntRangeBlobComponentAuthoring : UnityEngine.MonoBehaviour
+    public class GoalIntRangeBlobComponentAuthoring : MonoBehaviour
     {
         public GoalIntRangeData[] datas;
 
@@ -40,13 +41,13 @@ namespace Goals.Goals.Authoring
                 var arrayBuilder = builder.Allocate(ref blobArray, datas.Length);
                 for (int i = 0; i < datas.Length; i++)
                 {
-                    var goalTableData = datas[i];
+                    var data = datas[i];
                     arrayBuilder[i] = new GoalRangeInt
                     {
-                        Key = goalTableData.conditionSchemaObject.Key,
-                        CheckType = goalTableData.rangeCheckType,
-                        LowerLimit = goalTableData.lowerLimit,
-                        UpperLimit = goalTableData.upperLimit
+                        Key = data.conditionSchemaObject.Key,
+                        CheckType = data.rangeCheckType,
+                        LowerLimit = data.lowerLimit,
+                        UpperLimit = data.upperLimit
                     };
                 }
 
