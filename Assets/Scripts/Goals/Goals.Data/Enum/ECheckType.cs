@@ -8,7 +8,5 @@ namespace Goals.Goals.Data.Enum
         LessThan = 4,
         Equals = 5,
         NotEqual = 6,
-        Between = 7,
-        NotBetween = 8
     }
 }
