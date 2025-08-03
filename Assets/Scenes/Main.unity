@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 1309643622}
   - component: {fileID: 1309643626}
   m_Layer: 0
-  m_Name: Input
+  m_Name: Input/ UXML Service
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -316,6 +316,8 @@ MonoBehaviour:
   values:
   - Key: joystick
     Asset: {fileID: 9197481963319205126, guid: 5c656a0298064754913ca6e4614ff9b9, type: 3}
+  - Key: game
+    Asset: {fileID: 9197481963319205126, guid: 3b868c074df2bca53a0c047ee54205a3, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

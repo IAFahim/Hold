@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -27,6 +28,11 @@ public class OrbitCameraAuthoring : MonoBehaviour
     public List<GameObject> IgnoredEntities = new();
     public float pitchAngle = 25f;
     public float3 planarForward = math.forward();
+
+    private void OnValidate()
+    {
+        planarForward = math.normalize(planarForward);
+    }
 
     public class Baker : Baker<OrbitCameraAuthoring>
     {
@@ -58,7 +64,7 @@ public class OrbitCameraAuthoring : MonoBehaviour
                 ObstructedDistance = authoring.StartDistance,
 
                 PitchAngle = authoring.pitchAngle,
-                PlanarForward = authoring.planarForward
+                PlanarForward = math.normalize(authoring.planarForward)
             });
 
             AddComponent(entity, new OrbitCameraControl());
