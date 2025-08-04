@@ -1,22 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using BovineLabs.Core.PhysicsStates;
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
-using Unity.Physics.Authoring;
-using Unity.Physics.Extensions;
-using Unity.Physics.Systems;
-using Unity.Transforms;
 using Unity.CharacterController;
-using UnityEngine;
-using UnityEngine.SocialPlatforms;
 using CapsuleCollider = Unity.Physics.CapsuleCollider;
-using Material = Unity.Physics.Material;
 
 public struct PlatformerCharacterUpdateContext
 {
