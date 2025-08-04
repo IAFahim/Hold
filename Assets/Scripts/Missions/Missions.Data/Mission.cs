@@ -18,17 +18,10 @@ namespace Maps.Maps.Data
 
         public Segment segment;
 
-        public GoalInt[] goalInts;
         public GoalRangeInt[] goalRangeInts;
-
-        public GoalFloat[] goalFloats;
         public GoalRangeFloat[] goalRangeFloats;
 
         public GoalRewardInt[] rewardInts;
         public GoalRewardFloat[] rewardFloats;
-
-        public GoalTime[] times;
-        public GoalRewardInt[] timeReward;
-
     }
 }
