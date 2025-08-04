@@ -15,7 +15,8 @@
         "Unity.Physics",
         "Unity.Transforms",
         "Maps.Data",
-        "Goals.Data"
+        "Goals.Data",
+        "Rewards.Data"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

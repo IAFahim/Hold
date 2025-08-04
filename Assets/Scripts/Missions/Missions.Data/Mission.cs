@@ -1,15 +1,33 @@
 using System;
-using Unity.Mathematics;
+using BovineLabs.Core.ObjectManagement;
+using Goals.Goals.Data.Goals;
+using Rewards.Rewards.Data;
 using UnityEngine;
 
 namespace Maps.Maps.Data
 {
     [Serializable]
-    public struct Mission
+    public class Mission : ScriptableObject, IUID
     {
         public ushort id;
+
+        public int ID
+        {
+            get => id;
+            set => id = (ushort)value;
+        }
+
         public Segment segment;
-        [Range(0, 1)] public half traveled;
-        public ushort goalId;
+
+        public GoalInt[] goalInts;
+        public GoalRangeInt[] goalRangeInts;
+
+        public GoalFloat[] goalFloats;
+        public GoalRangeFloat[] goalRangeFloats;
+
+        public RewardInt[] rewardInts;
+        public RewardFloat[] rewardFloats;
+
+        public GoalTime time;
     }
 }

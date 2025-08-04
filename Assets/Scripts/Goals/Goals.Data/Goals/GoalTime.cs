@@ -7,25 +7,26 @@ namespace Goals.Goals.Data.Goals
 {
     [BurstCompile]
     [Serializable]
-    public struct GoalRangeInt
+    public struct GoalTime
     {
-        public ushort id;
+        public int id;
 
-        public ushort ID
+        public int ID
         {
             readonly get => id;
             set => id = value;
         }
 
-        public ushort goalKey;
-
         /// <summary>
         /// The type of check to perform
         /// </summary>
-        public ERangeCheckType checkType;
+        public ECheckType checkType;
 
-        public int lowerLimit;
-        public int upperLimit;
+        /// <summary>
+        /// The target/expected value
+        /// </summary>
+        public float targetValue;
+
 
         /// <summary>
         /// Evaluates the goal condition and calculates progress
@@ -35,9 +36,9 @@ namespace Goals.Goals.Data.Goals
         /// <returns>True if the goal condition is met, false otherwise</returns>
         [BurstCompile]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool TryProgress(int currentValue, out float progress)
+        public bool TryProgress(float currentValue, out float progress)
         {
-            return checkType.TryProgress(currentValue, lowerLimit, upperLimit, out progress);
+            return checkType.TryProgress(currentValue, targetValue, out progress);
         }
     }
 }

@@ -4,9 +4,9 @@ namespace Goals.Goals.Data.Enum
     {
         GreaterOrEqual = 0,
         GreaterThan = 1,
-        LessOrEqual = 3,
-        LessThan = 4,
-        Equals = 5,
-        NotEqual = 6,
+        LessOrEqual = 2,
+        LessThan = 3,
+        Equals = 4,
+        NotEqual = 5,
     }
 }
