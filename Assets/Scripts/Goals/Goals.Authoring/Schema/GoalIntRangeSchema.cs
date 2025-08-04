@@ -13,7 +13,7 @@ namespace Goals.Goals.Authoring.Schema
         public int lowerLimit;
         public int upperLimit;
 
-        public override GoalRangeInt ToGoal()
+        public override GoalRangeInt ToData()
         {
             return new GoalRangeInt
             {

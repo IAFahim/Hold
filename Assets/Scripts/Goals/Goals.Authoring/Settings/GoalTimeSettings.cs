@@ -7,8 +7,8 @@ namespace Goals.Goals.Authoring.Settings
 {
     
     [SettingsGroup("Goal")]
-    public class GoalTimeSettings : ScriptableObject, ISettings
+    public class GoalSettings<T>: ScriptableObject, ISettings
     {
-        [SerializeField] public GoalTimeSchema[] schemas = Array.Empty<GoalTimeSchema>();
+        [SerializeField] public T[] schemas = Array.Empty<T>();
     }
 }

@@ -1,5 +1,7 @@
 using System;
 using BovineLabs.Core.ObjectManagement;
+using BovineLabs.Core.Settings;
+using Goals.Goals.Authoring.Schema;
 using Goals.Goals.Data.Goals;
 using Rewards.Rewards.Data;
 using UnityEngine;
@@ -7,7 +9,7 @@ using UnityEngine;
 namespace Maps.Maps.Data
 {
     [Serializable]
-    public class Mission : ScriptableObject, IUID
+    public struct Mission : IUID
     {
         public ushort id;
 
@@ -29,5 +31,18 @@ namespace Maps.Maps.Data
         public RewardFloat[] rewardFloats;
 
         public GoalTime time;
+    }
+
+    [CreateAssetMenu(menuName = "Hold/Mission/Create " + nameof(MissionSchema), fileName = nameof(MissionSchema))]
+    [AutoRef(nameof(MissionSettings), nameof(MissionSettings.schemas), nameof(MissionSchema),
+        "Goal/" + nameof(MissionSchema))]
+    public class MissionSchema : GoalSchema<GoalFloat>
+    {
+        
+    }
+
+    public class MissionSettings : ScriptableObject, ISettings
+    {
+        [SerializeField] public MissionSchema[] schemas = Array.Empty<MissionSchema>();
     }
 }

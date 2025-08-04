@@ -12,7 +12,7 @@ namespace Goals.Goals.Authoring.Schema
         public ECheckType checkType;
         public int targetValue;
 
-        public override GoalInt ToGoal()
+        public override GoalInt ToData()
         {
             return new GoalInt
             {

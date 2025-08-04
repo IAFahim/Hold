@@ -14,7 +14,7 @@ namespace Goals.Goals.Authoring.Schema
         public ECheckType checkType;
         public float targetValue;
 
-        public override GoalTime ToGoal()
+        public override GoalTime ToData()
         {
             return new GoalTime
             {
