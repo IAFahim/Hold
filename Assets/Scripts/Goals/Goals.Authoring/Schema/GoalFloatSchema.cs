@@ -7,11 +7,18 @@ using UnityEngine;
 
 namespace Goals.Goals.Authoring.Schema
 {
-    [CreateAssetMenu(menuName = "Hold/Goal/Create " + nameof(GoalFloatSchema), fileName = nameof(GoalFloatSchema))]
-    [AutoRef(nameof(GoalFloatSettings), nameof(GoalFloatSettings.schemas), nameof(GoalFloatSchema),
-        "Goal/" + nameof(GoalFloatSchema))]
+    [CreateAssetMenu(menuName = "Hold/" + TypeString + "/Create " + FieldName, fileName = FieldName)]
+    [
+        AutoRef(
+            nameof(GoalFloatSettings), nameof(GoalFloatSettings.schemas), 
+            FieldName, TypeString + "/" + FieldName, createNull: false
+        )
+    ]
     public class GoalFloatSchema : GoalSchema<GoalFloat>
     {
+        private const string FieldName = nameof(GoalFloatSchema);
+
+
         public StatSchemaObject schemaObject;
         public ECheckType checkType;
         public float targetValue;

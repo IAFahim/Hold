@@ -17,7 +17,8 @@
         "Maps.Data",
         "Goals.Data",
         "Rewards.Data",
-        "Goals.Authoring"
+        "Goals.Authoring",
+        "SchemaSettings.Authoring"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: GoalTimeSettings
   m_EditorClassIdentifier: Goals.Authoring::Goals.Goals.Authoring.Schema.GoalTimeSettings
   schemas:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 35760d8964705d7ee9c9ab72becde02c, type: 2}

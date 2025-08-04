@@ -18,7 +18,8 @@
         "Unity.Physics",
         "Unity.Transforms",
         "BovineLabs.Reaction.Authoring",
-        "BovineLabs.Essence.Authoring"
+        "BovineLabs.Essence.Authoring",
+        "SchemaSettings.Authoring"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c967a6f425c467ba88be7f63763a0aa, type: 3}
   m_Name: GoalFloatSettings
   m_EditorClassIdentifier: Goals.Authoring::Goals.Goals.Authoring.Settings.GoalFloatSettings
-  schemas:
-  - {fileID: 11400000, guid: 0d5387839ac781ee1bd3ecd40d6cfd8e, type: 2}
+  schemas: []

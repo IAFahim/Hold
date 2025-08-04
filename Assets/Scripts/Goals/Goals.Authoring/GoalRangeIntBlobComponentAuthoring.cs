@@ -7,7 +7,7 @@ namespace Goals.Goals.Authoring
 {
     public class GoalRangeIntBlobComponentAuthoring : MonoBehaviour
     {
-        public GoalIntRangeSchema[] datas;
+        public GoalRangeIntSchema[] datas;
 
         private class Baker : Baker<GoalRangeIntBlobComponentAuthoring>
         {
@@ -16,7 +16,7 @@ namespace Goals.Goals.Authoring
                 var entity = GetEntity(TransformUsageFlags.None);
                 AddComponent(entity, new GoalIntRangeBlobComponent
                 {
-                    BlobAssetRef = GoalIntRangeSchema.CreateBlobAssetRef(authoring.datas)
+                    BlobAssetRef = GoalRangeIntSchema.CreateBlobAssetRef(authoring.datas)
                 });
             }
         }

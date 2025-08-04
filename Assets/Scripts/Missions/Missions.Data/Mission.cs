@@ -1,10 +1,7 @@
 using System;
 using BovineLabs.Core.ObjectManagement;
-using BovineLabs.Core.Settings;
-using Goals.Goals.Authoring.Schema;
 using Goals.Goals.Data.Goals;
 using Rewards.Rewards.Data;
-using UnityEngine;
 
 namespace Maps.Maps.Data
 {
@@ -27,22 +24,11 @@ namespace Maps.Maps.Data
         public GoalFloat[] goalFloats;
         public GoalRangeFloat[] goalRangeFloats;
 
-        public RewardInt[] rewardInts;
-        public RewardFloat[] rewardFloats;
+        public GoalRewardInt[] rewardInts;
+        public GoalRewardFloat[] rewardFloats;
 
-        public GoalTime time;
-    }
+        public GoalTime[] times;
+        public GoalRewardInt[] timeReward;
 
-    [CreateAssetMenu(menuName = "Hold/Mission/Create " + nameof(MissionSchema), fileName = nameof(MissionSchema))]
-    [AutoRef(nameof(MissionSettings), nameof(MissionSettings.schemas), nameof(MissionSchema),
-        "Goal/" + nameof(MissionSchema))]
-    public class MissionSchema : GoalSchema<GoalFloat>
-    {
-        
-    }
-
-    public class MissionSettings : ScriptableObject, ISettings
-    {
-        [SerializeField] public MissionSchema[] schemas = Array.Empty<MissionSchema>();
     }
 }

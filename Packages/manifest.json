@@ -10,6 +10,7 @@
     "com.unity.charactercontroller": "1.3.11",
     "com.unity.entities": "https://github.com/tertle/com.unity.entities.git",
     "com.unity.entities.graphics": "https://github.com/tertle/com.unity.entities.graphics.git",
+    "com.unity.graphtoolkit": "0.2.0-exp.1",
     "com.unity.ide.rider": "3.0.36",
     "com.unity.inputsystem": "1.14.1",
     "com.unity.localization": "1.5.5",
