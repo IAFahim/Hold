@@ -19,7 +19,8 @@ public struct DashingState : IPlatformerCharacterState
         ref var characterRotation = ref aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
         ref var character = ref aspect.Character.ValueRW;
 
-        aspect.SetCapsuleGeometry(character.StandingGeometry.ToCapsuleGeometry());
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
+        aspect.SetCapsuleGeometry(capsuleGeometry.standing.ToCapsuleGeometry());
 
         _dashStartTime = elapsedTime;
         characterProperties.EvaluateGrounding = false;

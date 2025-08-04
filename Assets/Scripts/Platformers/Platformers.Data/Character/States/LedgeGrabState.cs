@@ -16,9 +16,9 @@ public struct LedgeGrabState : IPlatformerCharacterState
     {
         ref var characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
         ref var characterProperties = ref aspect.CharacterAspect.CharacterProperties.ValueRW;
-        ref var character = ref aspect.Character.ValueRW;
 
-        aspect.SetCapsuleGeometry(character.StandingGeometry.ToCapsuleGeometry());
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
+        aspect.SetCapsuleGeometry(capsuleGeometry.standing.ToCapsuleGeometry());
 
         characterProperties.EvaluateGrounding = false;
         characterProperties.DetectMovementCollisions = false;

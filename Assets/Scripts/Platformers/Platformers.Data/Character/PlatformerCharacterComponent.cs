@@ -96,12 +96,7 @@ public struct PlatformerCharacterComponent : IComponentData
     public PhysicsCategoryTags WaterPhysicsCategory;
     public PhysicsCategoryTags RopeAnchorCategory;
     public float UpOrientationAdaptationSharpness;
-
-    [Header("Geometry")] public CapsuleGeometryDefinition StandingGeometry;
-    public CapsuleGeometryDefinition CrouchingGeometry;
-    public CapsuleGeometryDefinition RollingGeometry;
-    public CapsuleGeometryDefinition ClimbingGeometry;
-    public CapsuleGeometryDefinition SwimmingGeometry;
+    
 
     [HideInInspector] public float3 LocalLedgeDetectionPoint;
     [HideInInspector] public float3 LocalSwimmingDetectionPoint;

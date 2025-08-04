@@ -74,31 +74,31 @@ public class PlatformerCharacterAuthoring : MonoBehaviour
         if (DebugStandingGeometry)
         {
             Gizmos.color = Color.cyan;
-            DrawCapsuleGizmo(Character.StandingGeometry);
+            DrawCapsuleGizmo(characterCapsuleGeometry.standing);
         }
 
         if (DebugCrouchingGeometry)
         {
             Gizmos.color = Color.cyan;
-            DrawCapsuleGizmo(Character.CrouchingGeometry);
+            DrawCapsuleGizmo(characterCapsuleGeometry.crouching);
         }
 
         if (DebugRollingGeometry)
         {
             Gizmos.color = Color.cyan;
-            DrawCapsuleGizmo(Character.RollingGeometry);
+            DrawCapsuleGizmo(characterCapsuleGeometry.rolling);
         }
 
         if (DebugClimbingGeometry)
         {
             Gizmos.color = Color.cyan;
-            DrawCapsuleGizmo(Character.ClimbingGeometry);
+            DrawCapsuleGizmo(characterCapsuleGeometry.climbing);
         }
 
         if (DebugSwimmingGeometry)
         {
             Gizmos.color = Color.cyan;
-            DrawCapsuleGizmo(Character.SwimmingGeometry);
+            DrawCapsuleGizmo(characterCapsuleGeometry.swimming);
         }
     }
 

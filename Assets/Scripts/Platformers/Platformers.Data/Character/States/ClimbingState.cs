@@ -14,12 +14,12 @@ public struct ClimbingState : IPlatformerCharacterState
     public void OnStateEnter(CharacterState previousState, ref PlatformerCharacterUpdateContext context,
         ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
     {
-        ref var character = ref aspect.Character.ValueRW;
         ref var characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
         ref var characterProperties = ref aspect.CharacterAspect.CharacterProperties.ValueRW;
         ref var characterRotation = ref aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
 
-        aspect.SetCapsuleGeometry(character.ClimbingGeometry.ToCapsuleGeometry());
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
+        aspect.SetCapsuleGeometry(capsuleGeometry.climbing.ToCapsuleGeometry());
 
         characterProperties.EvaluateGrounding = false;
         characterProperties.DetectMovementCollisions = false;
@@ -49,6 +49,7 @@ public struct ClimbingState : IPlatformerCharacterState
         ref var character = ref aspect.Character.ValueRW;
         ref var characterControl = ref aspect.CharacterControl.ValueRW;
         ref var characterPosition = ref aspect.CharacterAspect.LocalTransform.ValueRW.Position;
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
 
         aspect.HandlePhysicsUpdatePhase1(ref context, ref baseContext, true, false);
 
@@ -61,7 +62,7 @@ public struct ClimbingState : IPlatformerCharacterState
 
             // Adjust distance of character to surface
             characterPosition += -closestClimbableHit.Distance * closestClimbableHit.SurfaceNormal;
-            characterPosition += (character.ClimbingGeometry.Radius - character.ClimbingDistanceFromSurface) *
+            characterPosition += (capsuleGeometry.climbing.Radius - character.ClimbingDistanceFromSurface) *
                                  -closestClimbableHit.SurfaceNormal;
 
             // decollide from most penetrating non-climbable hit
@@ -174,22 +175,22 @@ public struct ClimbingState : IPlatformerCharacterState
     {
         var characterPosition = aspect.CharacterAspect.LocalTransform.ValueRW.Position;
         var characterRotation = aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
-        var character = aspect.Character.ValueRW;
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
 
         var characterTransform = new RigidTransform(characterRotation, characterPosition);
-        var geometryCenter = math.transform(characterTransform, math.up() * character.ClimbingGeometry.Height * 0.5f);
+        var geometryCenter = math.transform(characterTransform, math.up() * capsuleGeometry.climbing.Height * 0.5f);
         return geometryCenter;
     }
 
     public static bool CanStartClimbing(ref PlatformerCharacterUpdateContext context,
         ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
     {
-        ref var character = ref aspect.Character.ValueRW;
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
 
-        aspect.SetCapsuleGeometry(character.ClimbingGeometry.ToCapsuleGeometry());
+        aspect.SetCapsuleGeometry(capsuleGeometry.climbing.ToCapsuleGeometry());
         var canStart = ClimbingDetection(ref context, ref baseContext, in aspect, false, out var _, out var _,
             out var _);
-        aspect.SetCapsuleGeometry(character.StandingGeometry.ToCapsuleGeometry());
+        aspect.SetCapsuleGeometry(capsuleGeometry.standing.ToCapsuleGeometry());
 
         return canStart;
     }
