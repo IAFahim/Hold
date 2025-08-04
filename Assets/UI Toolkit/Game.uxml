@@ -1,0 +1,27 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; flex-shrink: 0;">
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row; align-items: flex-start; justify-content: space-between;">
+            <ui:VisualElement style="flex-grow: 1; flex-direction: column; align-items: flex-start;">
+                <ui:Button name="Pause" style="width: 64px; height: 64px;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1; flex-direction: column; align-items: auto; justify-content: flex-start; align-self: stretch;">
+                <ui:VisualElement style="flex-grow: 0; flex-direction: row; margin-bottom: 16px; align-self: flex-end; align-items: center; width: 128px; height: 64px; background-color: rgba(0, 0, 0, 0.32); padding-right: 8px; padding-left: 0; justify-content: flex-end;">
+                    <Unity.AppUI.UI.Text text="${0}" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" name="text_gold" style="-unity-font-style: bold; font-size: 28px; -unity-text-align: middle-right; color: rgb(234, 203, 25); margin-top: 4px; margin-right: 4px; margin-bottom: 2px; margin-left: 2px; padding-top: 4px; padding-right: 2px; padding-bottom: 4px; padding-left: 1px;" />
+                    <ui:VisualElement style="flex-grow: 0; width: 32px; height: 32px; background-color: rgb(255, 255, 255);" />
+                </ui:VisualElement>
+                <ui:Button name="Powerups" style="width: 64px; height: 64px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1;" />
+        <ui:VisualElement style="flex-grow: 0; flex-direction: row; align-self: stretch; justify-content: space-between; align-items: auto; margin-bottom: 8px;">
+            <ui:VisualElement style="flex-grow: 1;">
+                <ui:Button text="Hack" name="button_hack" style="width: 128px; height: 128px; -unity-text-align: lower-center;" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: flex-end; align-self: auto; align-items: auto;">
+                <ui:Button text="Sneak" name="button_sneak" style="width: 128px; height: 128px; -unity-text-align: lower-center;" />
+                <ui:Button text="Run" name="button_run" style="width: 128px; height: 128px; -unity-text-align: lower-center;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1; border-top-width: 8px; border-right-width: 8px; border-bottom-width: 8px; border-left-width: 8px; border-left-color: rgba(255, 255, 255, 0.45); border-right-color: rgba(255, 255, 255, 0.45); border-top-color: rgba(255, 255, 255, 0.33); border-bottom-color: rgba(255, 255, 255, 0.45); border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; border-top-left-radius: 16px; border-top-right-radius: 16px;" />
+    </ui:VisualElement>
+</ui:UXML>

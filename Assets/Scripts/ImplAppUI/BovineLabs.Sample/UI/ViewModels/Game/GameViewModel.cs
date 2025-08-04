@@ -2,11 +2,16 @@
 //     Copyright (c) BovineLabs. All rights reserved.
 // </copyright>
 
+using BovineLabs.Anchor;
+using Unity.Properties;
+
 namespace BovineLabs.Sample.UI.ViewModels.Game
 {
-    using Unity.AppUI.MVVM;
-
-    public class GameViewModel : ObservableObject
+    public class GameViewModel : SystemObservableObject<GameViewModel.Data>
     {
+        public partial struct Data
+        {
+            [CreateProperty(ReadOnly = true)] public float Gold;
+        }
     }
 }
