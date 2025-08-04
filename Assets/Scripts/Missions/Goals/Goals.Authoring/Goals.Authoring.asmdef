@@ -19,7 +19,8 @@
         "Unity.Transforms",
         "BovineLabs.Reaction.Authoring",
         "BovineLabs.Essence.Authoring",
-        "SchemaSettings.Authoring"
+        "SchemaSettings.Authoring",
+        "BovineLabs.Essence.Data"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -10,9 +10,9 @@ namespace Goals.Goals.Authoring.Schema
     [CreateAssetMenu(menuName = "Hold/" + TypeString + "/Create " + FieldName, fileName = FieldName)]
     [
         AutoRef(
-            nameof(GoalIntRangeSettings), nameof(GoalIntRangeSettings.schemas), 
-            FieldName, TypeString + "/" + FieldName, createNull: false
-            )
+            nameof(GoalIntRangeSettings), nameof(GoalIntRangeSettings.schemas),
+            FieldName, TypeString + "/" + FieldName, createNull: false, defaultFileName: "Goal Range Int"
+        )
     ]
     public class GoalRangeIntSchema : GoalSchema<GoalRangeInt>
     {

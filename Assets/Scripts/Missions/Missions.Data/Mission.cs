@@ -2,6 +2,7 @@ using System;
 using BovineLabs.Core.ObjectManagement;
 using Goals.Goals.Data.Goals;
 using Rewards.Rewards.Data;
+using Rewards.Rewards.Data.GoalReward;
 
 namespace Maps.Maps.Data
 {
@@ -21,7 +22,7 @@ namespace Maps.Maps.Data
         public GoalRangeInt[] goalRangeInts;
         public GoalRangeFloat[] goalRangeFloats;
 
-        public GoalRewardInt[] rewardInts;
-        public GoalRewardFloat[] rewardFloats;
+        public RewardGoalInt[] rewardInts;
+        public RewardGoalFloat[] rewardFloats;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using BovineLabs.Core.PhysicsStates;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -51,6 +52,7 @@ public readonly partial struct PlatformerCharacterAspect : IAspect,
     public readonly RefRW<PlatformerCharacterControl> CharacterControl;
     public readonly RefRW<PlatformerCharacterStateMachine> StateMachine;
     public readonly RefRW<CustomGravity> CustomGravity;
+    public readonly RefRO<CapsuleGeometryBlobComponent> CapsuleGeometry;
 
     public void PhysicsUpdate(ref PlatformerCharacterUpdateContext context,
         ref KinematicCharacterUpdateContext baseContext)

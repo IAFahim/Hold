@@ -16,9 +16,14 @@
         "Unity.Mathematics",
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
-        "Unity.Transforms"
+        "Unity.Transforms",
+        "Goals.Authoring",
+        "SchemaSettings.Authoring",
+        "Rewards.Authoring",
+        "Maps.Data",
+        "Goals.Data",
+        "Rewards.Data"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,

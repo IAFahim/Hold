@@ -6,6 +6,6 @@ namespace Rewards.Rewards.Data.Blob
 {
     public struct GoalRewardIntBlobComponent : IComponentData
     {
-        public BlobAssetReference<BlobArray<GoalRewardInt>> BlobAssetRef;
+        public BlobAssetReference<BlobArray<RewardGoalInt>> BlobAssetRef;
     }
 }

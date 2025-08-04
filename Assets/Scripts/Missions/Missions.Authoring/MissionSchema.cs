@@ -1,11 +1,12 @@
 using System.Linq;
 using BovineLabs.Core.ObjectManagement;
 using Goals.Goals.Authoring.Schema;
-using Rewards.Rewards.Data.GoalReward;
+using Maps.Maps.Data;
+using Rewards.Rewards.Authoring.Schema;
 using SchemaSettings.SchemaSettings.Authoring;
 using UnityEngine;
 
-namespace Maps.Maps.Data
+namespace Missions.Missions.Authoring
 {
     [CreateAssetMenu(menuName = "Hold/" + TypeString + "/Create " + FieldName, fileName = FieldName)]
     [
@@ -18,12 +19,12 @@ namespace Maps.Maps.Data
     {
         private const string FieldName = nameof(MissionSchema);
         private const string TypeString = "Mission";
-        
+
         public Segment segment;
         public GoalRangeIntSchema[] goalRangeInts;
         public GoalRangeFloatSchema[] goalRangeFloats;
-        public GoalRewardInt[] rewardInts;
-        public GoalRewardFloat[] rewardFloats;
+        public RewardGoalIntSchema[] rewardInts;
+        public RewardGoalFloatSchema[] rewardFloats;
 
         public override Mission ToData()
         {
@@ -33,8 +34,8 @@ namespace Maps.Maps.Data
                 segment = segment,
                 goalRangeInts = goalRangeInts.Select(g => g.ToData()).ToArray(),
                 goalRangeFloats = goalRangeFloats.Select(g => g.ToData()).ToArray(),
-                rewardInts = rewardInts.Select(g => g).ToArray(),
-                rewardFloats = rewardFloats.Select(g => g).ToArray()
+                rewardInts = rewardInts.Select(g => g.ToData()).ToArray(),
+                rewardFloats = rewardFloats.Select(g => g.ToData()).ToArray(),
             };
         }
     }

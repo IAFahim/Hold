@@ -61,6 +61,10 @@ MonoBehaviour:
     Path: Assets/Settings/Goal/GoalRangeIntSchema
   - Key: bl.ar.goalrangefloatschema
     Path: Assets/Settings/Goal/GoalRangeFloatSchema
+  - Key: bl.ar.rewardgoalintschema
+    Path: Assets/Settings/Reward/RewardGoalIntSchema
+  - Key: bl.ar.rewardgoalfloatschema
+    Path: Assets/Settings/Reward/RewardGoalFloatSchema
   prebakeScenes:
   - {fileID: 102900000, guid: 434fb67dd45f9d041bf501ddf6d84e87, type: 3}
   - {fileID: 102900000, guid: 12c3ac3f712fa6447934e2c76cb143b3, type: 3}

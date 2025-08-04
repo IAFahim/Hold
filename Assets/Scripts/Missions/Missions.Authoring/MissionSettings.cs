@@ -1,8 +1,9 @@
 using System;
 using BovineLabs.Core.Settings;
+using Maps.Maps.Data;
 using UnityEngine;
 
-namespace Maps.Maps.Data
+namespace Missions.Missions.Authoring
 {
     [SettingsGroup("Mission")]
     public class MissionSettings : ScriptableObject, ISettings

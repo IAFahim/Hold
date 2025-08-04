@@ -290,7 +290,7 @@ MonoBehaviour:
     KillVelocityWhenExceedMaxIterations: 1
     DetectObstructionsForParentBodyMovement: 0
     SimulateDynamicBody: 1
-    Mass: 1
+    Mass: 45
   Character:
     GroundRunMaxSpeed: 5
     GroundSprintMaxSpeed: 10
@@ -317,7 +317,7 @@ MonoBehaviour:
     WallRunJumpSpeed: 12
     JumpHeldAcceleration: 75
     MaxHeldJumpTime: 0.1
-    MaxUngroundedJumps: 1
+    MaxUngroundedJumps: 2
     JumpAfterUngroundedGraceTime: 0.1
     JumpBeforeGroundedGraceTime: 0.1
     LedgeMoveSpeed: 3
@@ -343,7 +343,6 @@ MonoBehaviour:
       x: 0
       y: 1.1
       z: 0
-    SlideStartMinSpeed: 4
     SlideFriction: 0.3
     SlideSteeringSharpness: 5
     SlideSpeedToExit: 2
@@ -508,6 +507,42 @@ MonoBehaviour:
       z: 0
     IsSprinting: 0
     IsOnStickySurface: 0
+  characterCapsuleGeometry:
+    standing:
+      Radius: 0.3
+      Height: 1.4
+      Center:
+        x: 0
+        y: 0.7
+        z: 0
+    crouching:
+      Radius: 0.3
+      Height: 0.9
+      Center:
+        x: 0
+        y: 0.45
+        z: 0
+    rolling:
+      Radius: 0.3
+      Height: 0.6
+      Center:
+        x: 0
+        y: 0.3
+        z: 0
+    climbing:
+      Radius: 1
+      Height: 2
+      Center:
+        x: 0
+        y: 0.7
+        z: 0
+    swimming:
+      Radius: 0.3
+      Height: 1.4
+      Center:
+        x: 0
+        y: 0.7
+        z: 0
   MeshPrefab: {fileID: 4260105767809303429, guid: e57eaae6195aaa243b4339327f1f99a5, type: 3}
   DefaultCameraTarget: {fileID: 6247949772695845543}
   SwimmingCameraTarget: {fileID: 4059659098717927741}

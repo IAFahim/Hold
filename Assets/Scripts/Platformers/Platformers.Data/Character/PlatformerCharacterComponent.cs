@@ -1,4 +1,6 @@
 using System;
+using System.Runtime.CompilerServices;
+using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -76,10 +78,8 @@ public struct PlatformerCharacterComponent : IComponentData
     public float RopeSwingDrag;
     public float RopeLength;
     public float3 LocalRopeAnchorPoint;
-    
-    [Header("Sliding")]
-    public float SlideStartMinSpeed;
-    public float SlideFriction;
+
+    [Header("Sliding")] public float SlideFriction;
     public float SlideSteeringSharpness;
     public float SlideSpeedToExit;
 
@@ -87,19 +87,17 @@ public struct PlatformerCharacterComponent : IComponentData
     public float ClimbingSpeed;
     public float ClimbingMovementSharpness;
     public float ClimbingRotationSharpness;
-    
+
 
     [Header("Step & Slope")] public BasicStepAndSlopeHandlingParameters StepAndSlopeHandling;
 
-    [Header("Misc")] 
-    public CustomPhysicsBodyTags StickySurfaceTag;
+    [Header("Misc")] public CustomPhysicsBodyTags StickySurfaceTag;
     public CustomPhysicsBodyTags ClimbableTag;
     public PhysicsCategoryTags WaterPhysicsCategory;
     public PhysicsCategoryTags RopeAnchorCategory;
     public float UpOrientationAdaptationSharpness;
-    
-    [Header("Geometry")]
-    public CapsuleGeometryDefinition StandingGeometry;
+
+    [Header("Geometry")] public CapsuleGeometryDefinition StandingGeometry;
     public CapsuleGeometryDefinition CrouchingGeometry;
     public CapsuleGeometryDefinition RollingGeometry;
     public CapsuleGeometryDefinition ClimbingGeometry;
@@ -121,7 +119,22 @@ public struct PlatformerCharacterComponent : IComponentData
     [HideInInspector] public float3 DirectionToWaterSurface;
     [HideInInspector] public bool IsSprinting;
     [HideInInspector] public bool IsOnStickySurface;
-    
+}
+
+
+[Serializable]
+public struct CharacterCapsuleGeometry
+{
+    public CapsuleGeometryDefinition standing;
+    public CapsuleGeometryDefinition crouching;
+    public CapsuleGeometryDefinition rolling;
+    public CapsuleGeometryDefinition climbing;
+    public CapsuleGeometryDefinition swimming;
+}
+
+public struct CapsuleGeometryBlobComponent : IComponentData
+{
+    public BlobAssetReference<CharacterCapsuleGeometry> BlobAssetRef;
 }
 
 public struct PlatformerCharacterInitialized : IComponentData
@@ -129,12 +142,15 @@ public struct PlatformerCharacterInitialized : IComponentData
 }
 
 [Serializable]
+[BurstCompile]
 public struct CapsuleGeometryDefinition
 {
     public float Radius;
     public float Height;
     public float3 Center;
 
+    [BurstCompile]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public CapsuleGeometry ToCapsuleGeometry()
     {
         Height = math.max(Height, (Radius + math.EPSILON) * 2f);

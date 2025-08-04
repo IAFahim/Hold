@@ -4,7 +4,7 @@ using BovineLabs.Essence.Data;
 namespace Rewards.Rewards.Data.GoalReward
 {
     [Serializable]
-    public struct GoalRewardFloat
+    public struct RewardGoalInt
     {
         public ushort id;
 
@@ -13,11 +13,10 @@ namespace Rewards.Rewards.Data.GoalReward
             readonly get => id;
             set => id = value;
         }
-
-        public ERewardGoalType goalType;
+        public ERewardGoalType rewardGoalType;
         public ushort goalId;
 
-        public StatKey statKey;
-        public float reward;
+        public IntrinsicKey intrinsicKey;
+        public int reward;
     }
 }

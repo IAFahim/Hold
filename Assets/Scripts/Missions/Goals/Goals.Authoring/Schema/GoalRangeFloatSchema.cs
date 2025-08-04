@@ -10,7 +10,7 @@ namespace Goals.Goals.Authoring.Schema
     [CreateAssetMenu(menuName = "Hold/" + TypeString + "/Create " + FieldName, fileName = FieldName)]
     [
         AutoRef(nameof(GoalRangeFloatSettings), nameof(GoalRangeFloatSettings.schemas),
-            FieldName, TypeString + "/" + FieldName, createNull: false
+            FieldName, TypeString + "/" + FieldName, createNull: false, defaultFileName: "Goal Range Float"
         )
     ]
     public class GoalRangeFloatSchema : GoalSchema<GoalRangeFloat>

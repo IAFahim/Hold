@@ -1,8 +1,10 @@
+using System.Runtime.CompilerServices;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics.Authoring;
 using UnityEngine;
 using Unity.CharacterController;
+using Unity.Collections;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(PhysicsShapeAuthoring))]
@@ -12,6 +14,9 @@ public class PlatformerCharacterAuthoring : MonoBehaviour
         AuthoringKinematicCharacterProperties.GetDefault();
 
     public PlatformerCharacterComponent Character = default;
+
+    [Header("Geometry")] [SerializeField]
+    private CharacterCapsuleGeometry characterCapsuleGeometry = CharacterCapsuleGeometryExt.Default();
 
     [Header("References")] public GameObject MeshPrefab;
     public GameObject DefaultCameraTarget;
@@ -53,11 +58,16 @@ public class PlatformerCharacterAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.Dynamic);
 
             AddComponent(entity, authoring.Character);
+            AddComponent(entity, new CapsuleGeometryBlobComponent
+            {
+                BlobAssetRef = authoring.characterCapsuleGeometry.CreateBlob()
+            });
             AddComponent(entity, new PlatformerCharacterControl());
             AddComponent(entity, new PlatformerCharacterStateMachine());
             AddComponentObject(entity, new PlatformerCharacterHybridData { MeshPrefab = authoring.MeshPrefab });
         }
     }
+
 
     private void OnDrawGizmosSelected()
     {
@@ -115,5 +125,31 @@ public class PlatformerCharacterAuthoring : MonoBehaviour
             topHemiCenter + characterRight * capsuleGeo.Radius);
         Gizmos.DrawLine(bottomHemiCenter - characterRight * capsuleGeo.Radius,
             topHemiCenter - characterRight * capsuleGeo.Radius);
+    }
+}
+
+public static class CharacterCapsuleGeometryExt
+{
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static CharacterCapsuleGeometry Default()
+    {
+        return new CharacterCapsuleGeometry
+        {
+            standing = new CapsuleGeometryDefinition { Radius = 0.3f, Height = 1.4f, Center = new float3(0, 0.7f, 0) },
+            crouching = new CapsuleGeometryDefinition { Radius = 0.3f, Height = .9f, Center = new float3(0, 0.45f, 0) },
+            rolling = new CapsuleGeometryDefinition { Radius = 0.3f, Height = 0.6f, Center = new float3(0, 0.3f, 0) },
+            climbing = new CapsuleGeometryDefinition { Radius = 1f, Height = 2f, Center = new float3(0, 0.7f, 0) },
+            swimming = new CapsuleGeometryDefinition { Radius = 0.3f, Height = 1.4f, Center = new float3(0, 0.7f, 0) }
+        };
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static BlobAssetReference<CharacterCapsuleGeometry> CreateBlob(in this CharacterCapsuleGeometry geometry)
+    {
+        using var builder = new BlobBuilder(Allocator.Temp);
+        ref var root = ref builder.ConstructRoot<CharacterCapsuleGeometry>();
+        root = geometry;
+        var blobRef = builder.CreateBlobAssetReference<CharacterCapsuleGeometry>(Allocator.Persistent);
+        return blobRef;
     }
 }

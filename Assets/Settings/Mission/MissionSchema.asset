@@ -17,15 +17,11 @@ MonoBehaviour:
     id: 0
     startLocationId: 0
     endLocationId: 0
-  goalInts: []
-  goalRangeInts: []
-  goalFloats: []
-  goalRangeFloats: []
-  rewardInts: []
-  rewardFloats: []
-  times:
-  - {fileID: 11400000, guid: 35760d8964705d7ee9c9ab72becde02c, type: 2}
-  timeRewards:
-  - goalId: 0
-    key: 0
-    reward: 0
+  goalRangeInts:
+  - {fileID: 0}
+  goalRangeFloats:
+  - {fileID: 0}
+  rewardInts:
+  - {fileID: 0}
+  rewardFloats:
+  - {fileID: 0}

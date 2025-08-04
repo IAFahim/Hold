@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f3fdb4a6c57b211286d1b575247c709, type: 3}
   m_Name: GoalIntRangeSettings
   m_EditorClassIdentifier: Goals.Authoring::Goals.Goals.Authoring.Settings.GoalIntRangeSettings
-  schemas: []
+  schemas:
+  - {fileID: 11400000, guid: 13ba7ce4ef3b5719aa71954047254327, type: 2}

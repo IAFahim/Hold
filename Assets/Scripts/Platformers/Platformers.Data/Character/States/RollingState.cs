@@ -13,8 +13,9 @@ public struct RollingState : IPlatformerCharacterState
         ref var characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
         ref var characterProperties = ref aspect.CharacterAspect.CharacterProperties.ValueRW;
         ref var character = ref aspect.Character.ValueRW;
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
 
-        aspect.SetCapsuleGeometry(character.RollingGeometry.ToCapsuleGeometry());
+        aspect.SetCapsuleGeometry(capsuleGeometry.rolling.ToCapsuleGeometry());
         characterProperties.EvaluateGrounding = false;
         characterBody.IsGrounded = false;
 
