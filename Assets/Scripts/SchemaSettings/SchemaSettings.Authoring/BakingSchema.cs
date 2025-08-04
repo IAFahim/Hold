@@ -5,6 +5,8 @@ namespace SchemaSettings.SchemaSettings.Authoring
 {
     public abstract class BakingSchema<T> : BaseSchema<T> where T : struct
     {
+        public abstract T ToData();
+        
         public static BlobAssetReference<BlobArray<T>> CreateBlobAssetRef(BakingSchema<T>[] datas)
         {
             using var builder = new BlobBuilder(Allocator.Temp);

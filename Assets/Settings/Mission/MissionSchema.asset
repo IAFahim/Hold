@@ -17,11 +17,12 @@ MonoBehaviour:
     id: 0
     startLocationId: 0
     endLocationId: 0
+  parcel: 0
   goalRangeInts:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 13ba7ce4ef3b5719aa71954047254327, type: 2}
   goalRangeFloats:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 71afe87f4288f8bf8889b482fec076e1, type: 2}
   rewardInts:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 4be8ac41f904b270ea090391bfc87b35, type: 2}
   rewardFloats:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 5cca46f3eb2969d99bf75a5b28cd6547, type: 2}

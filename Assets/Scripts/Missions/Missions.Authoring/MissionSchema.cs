@@ -1,9 +1,13 @@
-using System.Linq;
+using System;
+using System.Collections;
 using BovineLabs.Core.ObjectManagement;
 using Goals.Goals.Authoring.Schema;
 using Maps.Maps.Data;
+using Missions.Missions.Data;
 using Rewards.Rewards.Authoring.Schema;
 using SchemaSettings.SchemaSettings.Authoring;
+using Unity.Collections;
+using Unity.Entities;
 using UnityEngine;
 
 namespace Missions.Missions.Authoring
@@ -21,22 +25,39 @@ namespace Missions.Missions.Authoring
         private const string TypeString = "Mission";
 
         public Segment segment;
-        public GoalRangeIntSchema[] goalRangeInts;
-        public GoalRangeFloatSchema[] goalRangeFloats;
-        public RewardGoalIntSchema[] rewardInts;
-        public RewardGoalFloatSchema[] rewardFloats;
+        public EParcelType parcel;
+        public GoalRangeIntSchema[] goalRangeInts = Array.Empty<GoalRangeIntSchema>();
+        public GoalRangeFloatSchema[] goalRangeFloats = Array.Empty<GoalRangeFloatSchema>();
+        public RewardGoalIntSchema[] rewardInts = Array.Empty<RewardGoalIntSchema>();
+        public RewardGoalFloatSchema[] rewardFloats = Array.Empty<RewardGoalFloatSchema>();
 
-        public override Mission ToData()
+
+        public BlobAssetReference<Mission> ToBlobAssetReference()
         {
-            return new Mission
-            {
-                id = (ushort)ID,
-                segment = segment,
-                goalRangeInts = goalRangeInts.Select(g => g.ToData()).ToArray(),
-                goalRangeFloats = goalRangeFloats.Select(g => g.ToData()).ToArray(),
-                rewardInts = rewardInts.Select(g => g.ToData()).ToArray(),
-                rewardFloats = rewardFloats.Select(g => g.ToData()).ToArray(),
-            };
+            var builder = new BlobBuilder(Allocator.Temp);
+            ref var mission = ref builder.ConstructRoot<Mission>();
+
+            mission.id = id;
+            mission.segment = segment;
+            mission.parcel = parcel;
+
+            CreateBlobArray(ref builder, ref mission.goalRangeIntIndexes, goalRangeInts);
+            CreateBlobArray(ref builder, ref mission.goalRangeFloatIndexes, goalRangeFloats);
+            CreateBlobArray(ref builder, ref mission.rewardIntIndexes, rewardInts);
+            CreateBlobArray(ref builder, ref mission.rewardFloatIndexes, rewardFloats);
+
+            var blobAssetRef = builder.CreateBlobAssetReference<Mission>(Allocator.Persistent);
+            builder.Dispose();
+            return blobAssetRef;
+        }
+
+
+        public BlobBuilderArray<ushort> ToIndexBlob<T>(BlobBuilder builder, T list) where T : IList
+        {
+            ref var blobArray = ref builder.ConstructRoot<BlobArray<ushort>>();
+            BlobBuilderArray<ushort> arrayBuilder = builder.Allocate(ref blobArray, list.Count);
+            for (var i = 0; i < list.Count; i++) arrayBuilder[i] = (ushort)((IUID)list[i]).ID;
+            return arrayBuilder;
         }
     }
 }

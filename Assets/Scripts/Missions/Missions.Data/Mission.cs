@@ -1,13 +1,15 @@
 using System;
 using BovineLabs.Core.ObjectManagement;
 using Goals.Goals.Data.Goals;
+using Maps.Maps.Data;
 using Rewards.Rewards.Data;
 using Rewards.Rewards.Data.GoalReward;
+using Unity.Entities;
 
-namespace Maps.Maps.Data
+namespace Missions.Missions.Data
 {
     [Serializable]
-    public struct Mission : IUID
+    public struct Mission
     {
         public ushort id;
 
@@ -18,11 +20,12 @@ namespace Maps.Maps.Data
         }
 
         public Segment segment;
+        public EParcelType parcel;
 
-        public GoalRangeInt[] goalRangeInts;
-        public GoalRangeFloat[] goalRangeFloats;
-
-        public RewardGoalInt[] rewardInts;
-        public RewardGoalFloat[] rewardFloats;
+        public BlobArray<ushort> goalRangeIntIndexes;
+        public BlobArray<ushort> goalRangeFloatIndexes;
+        
+        public BlobArray<ushort> rewardIntIndexes;
+        public BlobArray<ushort> rewardFloatIndexes;
     }
 }

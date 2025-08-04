@@ -21,7 +21,6 @@ namespace BovineLabs.Sample.UI.Views.Game
             var root = visualTreeAsset.Instantiate().contentContainer[0];
             Add(root);
             var text = root.Q<Text>("text_gold");
-            Debug.Log(text.text);
         }
     }
 }
