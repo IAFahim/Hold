@@ -14217,8 +14217,8 @@ MonoBehaviour:
   missionSchema: {fileID: 11400000, guid: 59f05a8661c6dcf44928419404d35b67, type: 2}
   runTestOnStart: 1
   logDetailedInfo: 1
-  testPassed: 0
-  testResults: 
+  testPassed: 1
+  testResults: All validations passed successfully!
 --- !u!4 &1094765797
 Transform:
   m_ObjectHideFlags: 0
