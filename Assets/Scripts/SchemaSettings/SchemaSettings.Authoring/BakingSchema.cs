@@ -7,17 +7,15 @@ namespace SchemaSettings.SchemaSettings.Authoring
     {
         public abstract T ToData();
         
-        public static BlobAssetReference<BlobArray<T>> CreateBlobAssetRef(BakingSchema<T>[] datas)
+        public static BlobAssetReference<BlobArray<T>> ToBlobAssetRef(BakingSchema<T>[] datas)
         {
-            using var builder = new BlobBuilder(Allocator.Temp);
-            ref var blobArray = ref builder.ConstructRoot<BlobArray<T>>();
-            var arrayBuilder = builder.Allocate(ref blobArray, datas.Length);
-            for (int i = 0; i < datas.Length; i++) arrayBuilder[i] = datas[i].ToData();
-            var blobAssetRef = builder.CreateBlobAssetReference<BlobArray<T>>(Allocator.Persistent);
+            var builder = new BlobBuilder(Allocator.Temp);
+            var blobAssetRef = ToBlobAssetRef(ref builder, datas);
+            builder.Dispose();
             return blobAssetRef;
         }
         
-        public static BlobAssetReference<BlobArray<T>> CreateBlobAssetRef(ref BlobBuilder builder, BakingSchema<T>[] datas)
+        public static BlobAssetReference<BlobArray<T>> ToBlobAssetRef(ref BlobBuilder builder, BakingSchema<T>[] datas)
         {
             ref var blobArray = ref builder.ConstructRoot<BlobArray<T>>();
             var arrayBuilder = builder.Allocate(ref blobArray, datas.Length);

@@ -16,7 +16,7 @@ namespace Goals.Goals.Authoring
                 var entity = GetEntity(TransformUsageFlags.None);
                 AddComponent(entity, new GoalRangeIntBlobComponent
                 {
-                    BlobAssetRef = GoalRangeIntSchema.CreateBlobAssetRef(authoring.datas)
+                    BlobAssetRef = GoalRangeIntSchema.ToBlobAssetRef(authoring.datas)
                 });
             }
         }

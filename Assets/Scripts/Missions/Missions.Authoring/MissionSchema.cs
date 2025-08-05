@@ -41,10 +41,10 @@ namespace Missions.Missions.Authoring
             mission.segment = segment;
             mission.parcel = parcel;
 
-            CreateBlobArray(ref builder, ref mission.goalRangeIntIndexes, goalRangeInts);
-            CreateBlobArray(ref builder, ref mission.goalRangeFloatIndexes, goalRangeFloats);
-            CreateBlobArray(ref builder, ref mission.rewardIntIndexes, rewardInts);
-            CreateBlobArray(ref builder, ref mission.rewardFloatIndexes, rewardFloats);
+            ToBlobArray(ref builder, ref mission.goalRangeIntIndexes, goalRangeInts);
+            ToBlobArray(ref builder, ref mission.goalRangeFloatIndexes, goalRangeFloats);
+            ToBlobArray(ref builder, ref mission.rewardIntIndexes, rewardInts);
+            ToBlobArray(ref builder, ref mission.rewardFloatIndexes, rewardFloats);
 
             var blobAssetRef = builder.CreateBlobAssetReference<Mission>(Allocator.Persistent);
             builder.Dispose();

@@ -64,3 +64,7 @@ MonoBehaviour:
     x: 0
     y: 0.90548384
     z: 0.4243808
+  smartModeEnabled: 1
+  smartModeActivationDelay: 1
+  smartModeRotationSpeed: 90
+  smartModeAngleThreshold: 2.5

@@ -15,7 +15,7 @@ namespace SchemaSettings.SchemaSettings.Authoring
             set => id = (ushort)value;
         }
 
-        public static void CreateBlobArray<TV>(ref BlobBuilder builder, ref BlobArray<ushort> blobArray, TV[] schemas)
+        public static void ToBlobArray<TV>(ref BlobBuilder builder, ref BlobArray<ushort> blobArray, TV[] schemas)
             where TV : IUID
         {
             var array = builder.Allocate(ref blobArray, schemas.Length);

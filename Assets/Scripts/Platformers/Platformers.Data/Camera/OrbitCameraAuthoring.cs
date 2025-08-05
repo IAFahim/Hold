@@ -29,6 +29,11 @@ public class OrbitCameraAuthoring : MonoBehaviour
     public float pitchAngle = 25f;
     public float3 planarForward = math.forward();
 
+    public bool smartModeEnabled = true;
+    public float smartModeActivationDelay = 2.0f;
+    public float smartModeRotationSpeed = 90.0f;
+    public float smartModeAngleThreshold = 5.0f;
+
     private void OnValidate()
     {
         planarForward = math.normalize(planarForward);
@@ -64,7 +69,11 @@ public class OrbitCameraAuthoring : MonoBehaviour
                 ObstructedDistance = authoring.StartDistance,
 
                 PitchAngle = authoring.pitchAngle,
-                PlanarForward = math.normalize(authoring.planarForward)
+                PlanarForward = math.normalize(authoring.planarForward),
+                SmartModeEnabled = authoring.smartModeEnabled,
+                SmartModeActivationDelay = authoring.smartModeActivationDelay,
+                SmartModeRotationSpeed = authoring.smartModeRotationSpeed,
+                SmartModeAngleThreshold = authoring.smartModeAngleThreshold,
             });
 
             AddComponent(entity, new OrbitCameraControl());

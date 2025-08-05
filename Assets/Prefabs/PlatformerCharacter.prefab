@@ -80,6 +80,8 @@ GameObject:
   - component: {fileID: 7595669063680691565}
   - component: {fileID: 4054680451272068333}
   - component: {fileID: 5745564584817229127}
+  - component: {fileID: 423493731091036209}
+  - component: {fileID: 9214350057118364362}
   m_Layer: 0
   m_Name: PlatformerCharacter
   m_TagString: Untagged
@@ -444,41 +446,6 @@ MonoBehaviour:
       Category30: 0
       Category31: 0
     UpOrientationAdaptationSharpness: 8
-    StandingGeometry:
-      Radius: 0.3
-      Height: 1.4
-      Center:
-        x: 0
-        y: 0.7
-        z: 0
-    CrouchingGeometry:
-      Radius: 0.3
-      Height: 0.9
-      Center:
-        x: 0
-        y: 0.45
-        z: 0
-    RollingGeometry:
-      Radius: 0.3
-      Height: 0.6
-      Center:
-        x: 0
-        y: 0.3
-        z: 0
-    ClimbingGeometry:
-      Radius: 1
-      Height: 2
-      Center:
-        x: 0
-        y: 0.7
-        z: 0
-    SwimmingGeometry:
-      Radius: 0.3
-      Height: 1.4
-      Center:
-        x: 0
-        y: 0.7
-        z: 0
     LocalLedgeDetectionPoint:
       x: 0
       y: 1.084
@@ -647,6 +614,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Hacks.Authoring::Hacks.Hacks.Data.HackActiveAuthoring
   Enable: 0
+--- !u!114 &423493731091036209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692896102597148395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d1839be73e81ae4c97132df4493e93f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BovineLabs.Core.Extensions.Authoring::BovineLabs.Core.Authoring.LifeCycle.LifeCycleAuthoring
+--- !u!114 &9214350057118364362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692896102597148395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9741827b9d1c4e3da5cd60880e31ec59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BovineLabs.Reaction.Authoring::BovineLabs.Reaction.Authoring.Conditions.EventWriterAuthoring
+  subscriptionOnly: 0
 --- !u!1 &3057386589211996020
 GameObject:
   m_ObjectHideFlags: 0

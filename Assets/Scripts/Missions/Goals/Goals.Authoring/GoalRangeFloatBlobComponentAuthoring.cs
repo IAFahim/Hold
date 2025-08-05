@@ -14,7 +14,7 @@ namespace Goals.Goals.Authoring
             public override void Bake(GoalRangeFloatBlobComponentAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.None);
-                var blobAssetRef = GoalRangeFloatSchema.CreateBlobAssetRef(authoring.datas);
+                var blobAssetRef = GoalRangeFloatSchema.ToBlobAssetRef(authoring.datas);
                 AddComponent(entity, new GoalRangeFloatBlobComponent
                 {
                     BlobAssetRef = blobAssetRef
