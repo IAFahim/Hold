@@ -89,15 +89,26 @@ namespace Missions.Missions.Authoring.Editor
 
         private void DrawSchemaEntry(BaseSchema schema)
         {
-            Rect rowRect = EditorGUILayout.BeginHorizontal();
+            Rect rowRect = GUILayoutUtility.GetRect(GUIContent.none, EditorStyles.label, GUILayout.Height(20));
+
             if (selectedSchema == schema)
             {
-                // Use a rect that spans the full width by ignoring the indent
-                Rect fullWidthRect = new Rect(0, rowRect.y, position.width, rowRect.height);
-                EditorGUI.DrawRect(fullWidthRect, SelectionColor);
+                EditorGUI.DrawRect(new Rect(0, rowRect.y, position.width, rowRect.height), SelectionColor);
             }
 
-            if (GUILayout.Button(new GUIContent(schema.name, EditorGUIUtility.ObjectContent(schema, typeof(BaseSchema)).image), EditorStyles.label, GUILayout.Height(20)))
+            Rect indentedRect = EditorGUI.IndentedRect(rowRect);
+
+            int outgoingCount = outgoingConnections.TryGetValue(schema, out var uses) ? uses.Count : 0;
+            int incomingCount = incomingConnections.TryGetValue(schema, out var refs) ? refs.Count : 0;
+
+            var outgoingContent = new GUIContent($" {outgoingCount}", EditorGUIUtility.IconContent("d_forward").image, "Uses");
+            var incomingContent = new GUIContent($" {incomingCount}", EditorGUIUtility.IconContent("d_back").image, "Used By");
+
+            Rect buttonRect = new Rect(indentedRect.x, indentedRect.y, indentedRect.width - 80, indentedRect.height);
+            Rect outgoingRect = new Rect(indentedRect.x + indentedRect.width - 80, indentedRect.y, 40, indentedRect.height);
+            Rect incomingRect = new Rect(indentedRect.x + indentedRect.width - 40, indentedRect.y, 40, indentedRect.height);
+
+            if (GUI.Button(buttonRect, new GUIContent(schema.name, EditorGUIUtility.ObjectContent(schema, typeof(BaseSchema)).image), EditorStyles.label))
             {
                 selectedSchema = schema;
                 drillDownPath.Clear();
@@ -105,17 +116,8 @@ namespace Missions.Missions.Authoring.Editor
                 GUI.FocusControl(null);
             }
 
-            int outgoingCount = outgoingConnections.TryGetValue(schema, out var uses) ? uses.Count : 0;
-            int incomingCount = incomingConnections.TryGetValue(schema, out var refs) ? refs.Count : 0;
-
-            var outgoingContent = new GUIContent($" {outgoingCount}", EditorGUIUtility.IconContent("d_ArrowRight").image, "Uses");
-            var incomingContent = new GUIContent($" {incomingCount}", EditorGUIUtility.IconContent("d_ArrowLeft").image, "Used By");
-
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.LabelField(outgoingContent, GUILayout.Width(40));
-            EditorGUILayout.LabelField(incomingContent, GUILayout.Width(40));
-
-            EditorGUILayout.EndHorizontal();
+            GUI.Label(outgoingRect, outgoingContent);
+            GUI.Label(incomingRect, incomingContent);
         }
 
         private void DrawDetailsPanel()
@@ -153,7 +155,7 @@ namespace Missions.Missions.Authoring.Editor
                 GUI.enabled = true;
             }
             
-            if (GUILayout.Button(EditorGUIUtility.IconContent("d_ViewToolOrbit"), EditorStyles.miniButtonRight, GUILayout.ExpandWidth(false)))
+            if (GUILayout.Button(EditorGUIUtility.IconContent("d_Search"), EditorStyles.miniButtonRight, GUILayout.ExpandWidth(false)))
             {
                 EditorGUIUtility.PingObject(drillDownPath.Last());
             }
@@ -185,16 +187,19 @@ namespace Missions.Missions.Authoring.Editor
             {
                 foreach (var conn in connections)
                 {
-                    EditorGUILayout.BeginHorizontal();
-                    if (GUILayout.Button(new GUIContent(conn.name, EditorGUIUtility.ObjectContent(conn, typeof(BaseSchema)).image), EditorStyles.miniButtonLeft))
+                    Rect rowRect = GUILayoutUtility.GetRect(GUIContent.none, EditorStyles.miniButton, GUILayout.Height(20));
+                    float pingWidth = 25f;
+                    Rect mainButtonRect = new Rect(rowRect.x, rowRect.y, rowRect.width - pingWidth, rowRect.height);
+                    Rect pingButtonRect = new Rect(rowRect.x + rowRect.width - pingWidth, rowRect.y, pingWidth, rowRect.height);
+
+                    if (GUI.Button(mainButtonRect, new GUIContent(conn.name, EditorGUIUtility.ObjectContent(conn, typeof(BaseSchema)).image), EditorStyles.miniButtonLeft))
                     {
                         drillDownPath.Add(conn);
                     }
-                    if (GUILayout.Button(EditorGUIUtility.IconContent("d_ViewToolOrbit"), EditorStyles.miniButtonRight, GUILayout.ExpandWidth(false)))
+                    if (GUI.Button(pingButtonRect, EditorGUIUtility.IconContent("d_Search"), EditorStyles.miniButtonRight))
                     {
                         EditorGUIUtility.PingObject(conn);
                     }
-                    EditorGUILayout.EndHorizontal();
                 }
             }
             EditorGUILayout.EndVertical();
