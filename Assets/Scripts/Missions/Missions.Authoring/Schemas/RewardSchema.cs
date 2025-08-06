@@ -1,0 +1,35 @@
+
+using BovineLabs.Core.ObjectManagement;
+using Data;
+using Missions.Missions.Authoring.Settings;
+using UnityEngine;
+
+namespace Missions.Missions.Authoring.Schemas
+{
+    [CreateAssetMenu(menuName = "Hold/" + TypeString + "/Create " + FieldName, fileName = FieldName)]
+    [
+        AutoRef(
+            nameof(RewardSettings), nameof(RewardSettings.schemas),
+            FieldName, TypeString + "/" + FieldName
+        )
+    ]
+    public class RewardSchema : BakingSchema<Reward>
+    {
+        private const string FieldName = nameof(RewardSchema);
+        private const string TypeString = "Reward";
+
+        public BaseSchema crossLink;
+        public DataContainerSchema dataContainer;
+
+        public override Reward ToData()
+        {
+            return new Reward
+            {
+                id = (ushort)ID,
+                crossLinkType = crossLink.ToCrossLinkType(),
+                crossLinkID = (ushort)crossLink.ID,
+                dataContainerID = (ushort)dataContainer.ID
+            };
+        }
+    }
+}
