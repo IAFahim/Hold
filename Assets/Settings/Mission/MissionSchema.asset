@@ -13,16 +13,7 @@ MonoBehaviour:
   m_Name: MissionSchema
   m_EditorClassIdentifier: Missions.Data::Maps.Maps.Data.MissionSchema
   id: 0
-  segment:
-    id: 0
-    startLocationId: 0
-    endLocationId: 0
-  parcel: 0
-  goalRangeInts:
-  - {fileID: 11400000, guid: 13ba7ce4ef3b5719aa71954047254327, type: 2}
-  goalRangeFloats:
-  - {fileID: 11400000, guid: 71afe87f4288f8bf8889b482fec076e1, type: 2}
-  rewardInts:
-  - {fileID: 11400000, guid: 4be8ac41f904b270ea090391bfc87b35, type: 2}
-  rewardFloats:
-  - {fileID: 11400000, guid: 5cca46f3eb2969d99bf75a5b28cd6547, type: 2}
+  nameSchema: {fileID: 11400000, guid: 796897c01c6e09537a88f551e2b0f1ee, type: 2}
+  stationSchema: {fileID: 11400000, guid: ed47f73180570d6d5acfe9976065ed50, type: 2}
+  goals:
+  - {fileID: 11400000, guid: 71c5a5305f8bbc95bbae6520751d28f3, type: 2}

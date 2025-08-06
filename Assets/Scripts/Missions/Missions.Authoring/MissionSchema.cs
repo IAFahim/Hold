@@ -1,11 +1,6 @@
 using System;
-using System.Collections;
 using BovineLabs.Core.ObjectManagement;
-using Goals.Goals.Authoring.Schema;
-using Maps.Maps.Data;
-using Missions.Missions.Data;
-using Rewards.Rewards.Authoring.Schema;
-using SchemaSettings.SchemaSettings.Authoring;
+using Data;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -19,45 +14,60 @@ namespace Missions.Missions.Authoring
             FieldName, TypeString + "/" + FieldName
         )
     ]
-    public class MissionSchema : BaseSchema<Mission>
+    public class MissionSchema : BaseSchema
     {
         private const string FieldName = nameof(MissionSchema);
-        private const string TypeString = "Mission";
+        private const string TypeString = "Missions";
+        
+        public NameSchema nameSchema;
+        public StationSchema stationSchema;
+        public GoalSchema[] goals = Array.Empty<GoalSchema>();
 
-        public Segment segment;
-        public EParcelType parcel;
-        public GoalRangeIntSchema[] goalRangeInts = Array.Empty<GoalRangeIntSchema>();
-        public GoalRangeFloatSchema[] goalRangeFloats = Array.Empty<GoalRangeFloatSchema>();
-        public RewardGoalIntSchema[] rewardInts = Array.Empty<RewardGoalIntSchema>();
-        public RewardGoalFloatSchema[] rewardFloats = Array.Empty<RewardGoalFloatSchema>();
-
-
-        public BlobAssetReference<Mission> ToBlobAssetReference()
+        public static BlobAssetReference<BlobArray<Mission>> ToAssetRef(MissionSchema[] missions)
         {
             var builder = new BlobBuilder(Allocator.Temp);
-            ref var mission = ref builder.ConstructRoot<Mission>();
-
-            mission.id = id;
-            mission.segment = segment;
-            mission.parcel = parcel;
-
-            ToBlobArray(ref builder, ref mission.goalRangeIntIndexes, goalRangeInts);
-            ToBlobArray(ref builder, ref mission.goalRangeFloatIndexes, goalRangeFloats);
-            ToBlobArray(ref builder, ref mission.rewardIntIndexes, rewardInts);
-            ToBlobArray(ref builder, ref mission.rewardFloatIndexes, rewardFloats);
-
-            var blobAssetRef = builder.CreateBlobAssetReference<Mission>(Allocator.Persistent);
+            ref var blobArray = ref builder.ConstructRoot<BlobArray<Mission>>();
+            ToBlobArray(ref builder, ref blobArray, missions);
+            var blobAssetRef = builder.CreateBlobAssetReference<BlobArray<Mission>>(Allocator.Persistent);
             builder.Dispose();
             return blobAssetRef;
         }
-
-
-        public BlobBuilderArray<ushort> ToIndexBlob<T>(BlobBuilder builder, T list) where T : IList
+        
+        public static void ToBlobArray(ref BlobBuilder builder, ref BlobArray<Mission> blobArray,
+            MissionSchema[] schemas)
         {
-            ref var blobArray = ref builder.ConstructRoot<BlobArray<ushort>>();
-            BlobBuilderArray<ushort> arrayBuilder = builder.Allocate(ref blobArray, list.Count);
-            for (var i = 0; i < list.Count; i++) arrayBuilder[i] = (ushort)((IUID)list[i]).ID;
-            return arrayBuilder;
+            // Allocate space for all missions in the blob array
+            var missions = builder.Allocate(ref blobArray, schemas.Length);
+
+            for (int i = 0; i < schemas.Length; i++)
+            {
+                if(schemas[i] == null) continue;
+                // Convert basic mission properties
+                missions[i] = new Mission
+                {
+                    id = (ushort)schemas[i].ID,
+                    station = (ushort)schemas[i].stationSchema.ID,
+                    name = (ushort)schemas[i].nameSchema.ID
+                };
+
+                // Handle the goals array efficiently
+                if (schemas[i].goals != null && schemas[i].goals.Length > 0)
+                {
+                    // Allocate exactly the right amount of space for goals
+                    var goalsBlobArray = builder.Allocate(ref missions[i].Goals, schemas[i].goals.Length);
+
+                    // Convert each goal schema to its ID in a single pass
+                    for (int j = 0; j < schemas[i].goals.Length; j++)
+                    {
+                        goalsBlobArray[j] = (ushort)schemas[i].goals[j].ID;
+                    }
+                }
+                else
+                {
+                    // Initialize empty goals array to prevent null reference issues
+                    builder.Allocate(ref missions[i].Goals, 0);
+                }
+            }
         }
     }
 }

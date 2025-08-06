@@ -1,6 +1,5 @@
 using System;
 using BovineLabs.Core.Settings;
-using Maps.Maps.Data;
 using UnityEngine;
 
 namespace Missions.Missions.Authoring

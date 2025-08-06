@@ -17,12 +17,8 @@
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
         "Unity.Transforms",
-        "Goals.Authoring",
         "SchemaSettings.Authoring",
-        "Rewards.Authoring",
-        "Maps.Data",
-        "Goals.Data",
-        "Rewards.Data"
+        "Goals.Authoring"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
