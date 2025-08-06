@@ -1,10 +1,9 @@
-using System;
 using BovineLabs.Core.ObjectManagement;
-using BovineLabs.Core.Settings;
 using Data;
+using Missions.Missions.Authoring.Settings;
 using UnityEngine;
 
-namespace Missions.Missions.Authoring
+namespace Missions.Missions.Authoring.Schemas
 {
     [CreateAssetMenu(menuName = "Hold/" + TypeString + "/Create " + FieldName, fileName = FieldName)]
     [
@@ -31,10 +30,5 @@ namespace Missions.Missions.Authoring
                 rangeId = (ushort)rangeSchema.ID
             };
         }
-    }
-
-    public class GoalSettings : ScriptableObject, ISettings
-    {
-        public GoalSchema[] schemas = Array.Empty<GoalSchema>();
     }
 }

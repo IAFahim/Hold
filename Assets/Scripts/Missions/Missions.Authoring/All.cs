@@ -1,6 +1,7 @@
 using System;
 using BovineLabs.Core.ObjectManagement;
 using Missions.Missions.Authoring;
+using Missions.Missions.Authoring.Schemas;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;

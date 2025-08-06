@@ -137,8 +137,8 @@ public partial struct PlatformerPlayerFixedStepControlSystem : ISystem
 
                 // Get camera rotation data, since our movement is relative to it
                 var cameraRotation = quaternion.identity;
-                // if (SystemAPI.HasComponent<LocalTransform>(player.ControlledCamera))
-                //     cameraRotation = SystemAPI.GetComponent<LocalTransform>(player.ControlledCamera).Rotation;
+                if (SystemAPI.HasComponent<LocalTransform>(player.ControlledCamera))
+                    cameraRotation = SystemAPI.GetComponent<LocalTransform>(player.ControlledCamera).Rotation;
 
                 stateMachine.GetMoveVectorFromPlayerInput(stateMachine.CurrentState, in playerInputs.ValueRO,
                     cameraRotation, out characterControl.MoveVector);

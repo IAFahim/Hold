@@ -1,9 +1,10 @@
 using System;
 using BovineLabs.Core.Settings;
 using Data;
+using Missions.Missions.Authoring.Schemas;
 using UnityEngine;
 
-namespace Missions.Missions.Authoring
+namespace Missions.Missions.Authoring.Settings
 {
     public class NameSettings : ScriptableObject, ISettings
     {

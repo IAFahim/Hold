@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: MissionSettings
   m_EditorClassIdentifier: Missions.Data::Maps.Maps.Data.MissionSettings
   schemas:
-  - {fileID: 11400000, guid: 59f05a8661c6dcf44928419404d35b67, type: 2}
+  - {fileID: 11400000, guid: 5f2bac0ce4193f5d795ef121fe59a481, type: 2}

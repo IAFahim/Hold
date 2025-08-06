@@ -1,11 +1,10 @@
-using System;
 using BovineLabs.Core.ObjectManagement;
-using BovineLabs.Core.Settings;
 using Data;
+using Missions.Missions.Authoring.Settings;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Missions.Missions.Authoring
+namespace Missions.Missions.Authoring.Schemas
 {
     [CreateAssetMenu(menuName = "Hold/" + TypeString + "/Create " + FieldName, fileName = FieldName)]
     [
@@ -31,10 +30,5 @@ namespace Missions.Missions.Authoring
                 position = position
             };
         }
-    }
-
-    public class StationSettings : ScriptableObject, ISettings
-    {
-        public StationSchema[] schemas = Array.Empty<StationSchema>();
     }
 }

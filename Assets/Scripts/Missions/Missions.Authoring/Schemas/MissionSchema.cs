@@ -1,11 +1,12 @@
 using System;
 using BovineLabs.Core.ObjectManagement;
 using Data;
+using Missions.Missions.Authoring.Settings;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
-namespace Missions.Missions.Authoring
+namespace Missions.Missions.Authoring.Schemas
 {
     [CreateAssetMenu(menuName = "Hold/" + TypeString + "/Create " + FieldName, fileName = FieldName)]
     [
