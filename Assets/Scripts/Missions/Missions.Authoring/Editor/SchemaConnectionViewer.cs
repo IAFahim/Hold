@@ -1,23 +1,29 @@
-using System.Collections.Generic;
-using System.Linq;
-using BovineLabs.Core.Settings;
-using Data;
 using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+using Data;
 
 namespace Missions.Missions.Authoring.Editor
 {
     public class SchemaConnectionViewer : EditorWindow
     {
+        // Data
         private List<BaseSchema> allSchemas = new List<BaseSchema>();
-        private List<ISettings> allSettings = new List<ISettings>();
-        private Dictionary<BaseSchema, List<BaseSchema>> connections = new Dictionary<BaseSchema, List<BaseSchema>>();
-        private Vector2 scrollPosition;
+        private Dictionary<BaseSchema, List<BaseSchema>> outgoingConnections = new Dictionary<BaseSchema, List<BaseSchema>>();
+        private Dictionary<BaseSchema, List<BaseSchema>> incomingConnections = new Dictionary<BaseSchema, List<BaseSchema>>();
 
-        [MenuItem("Window/Schema Connection Viewer")]
+        // UI State
+        private Vector2 listScrollPos;
+        private Vector2 detailsScrollPos;
+        private BaseSchema selectedSchema;
+        private string searchQuery = "";
+
+        [MenuItem("Window/Hold/Schema Connection Viewer")]
         public static void ShowWindow()
         {
-            GetWindow<SchemaConnectionViewer>("Schema Connection Viewer");
+            var window = GetWindow<SchemaConnectionViewer>("Schema Connections");
+            window.minSize = new Vector2(400, 300);
         }
 
         private void OnEnable()
@@ -27,95 +33,165 @@ namespace Missions.Missions.Authoring.Editor
 
         private void OnGUI()
         {
-            if (GUILayout.Button("Refresh"))
+            DrawToolbar();
+            DrawPanels();
+        }
+
+        private void DrawToolbar()
+        {
+            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+            
+            // Refresh Button
+            if (GUILayout.Button(new GUIContent(" Refresh", EditorGUIUtility.IconContent("d_Refresh").image), EditorStyles.toolbarButton))
             {
                 RefreshData();
             }
 
-            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+            GUILayout.FlexibleSpace();
 
-            foreach (var schema in allSchemas)
+            // Search Field
+            searchQuery = EditorGUILayout.TextField(searchQuery, EditorStyles.toolbarSearchField, GUILayout.Width(200));
+            if (GUILayout.Button("", EditorStyles.toolbarButton))
             {
-                EditorGUILayout.ObjectField(schema, typeof(BaseSchema), false);
+                searchQuery = "";
+                GUI.FocusControl(null);
+            }
 
-                if (connections.TryGetValue(schema, out var connectedSchemas))
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawPanels()
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            DrawSchemaListPanel();
+            DrawDetailsPanel();
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawSchemaListPanel()
+        {
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(position.width * 0.4f));
+            
+            EditorGUILayout.LabelField("All Schemas", EditorStyles.boldLabel);
+            listScrollPos = EditorGUILayout.BeginScrollView(listScrollPos);
+
+            var filteredSchemas = string.IsNullOrEmpty(searchQuery)
+                ? allSchemas
+                : allSchemas.Where(s => s.name.ToLower().Contains(searchQuery.ToLower())).ToList();
+
+            foreach (var schema in filteredSchemas)
+            {
+                var style = selectedSchema == schema ? new GUIStyle(EditorStyles.label) { fontStyle = FontStyle.Bold, normal = { textColor = Color.cyan } } : EditorStyles.label;
+                if (GUILayout.Button(schema.name, style))
                 {
-                    foreach (var connectedSchema in connectedSchemas)
-                    {
-                        EditorGUILayout.LabelField("    -> " + connectedSchema.name);
-                    }
+                    selectedSchema = schema;
+                    GUI.FocusControl(null); // Deselect search bar
                 }
             }
 
             EditorGUILayout.EndScrollView();
+            EditorGUILayout.EndVertical();
+        }
+
+        private void DrawDetailsPanel()
+        {
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.ExpandWidth(true));
+            detailsScrollPos = EditorGUILayout.BeginScrollView(detailsScrollPos);
+
+            if (selectedSchema == null)
+            {
+                EditorGUILayout.HelpBox("Select a schema from the list on the left to view its connections.", MessageType.Info);
+            }
+            else
+            {
+                DrawDetailContent();
+            }
+
+            EditorGUILayout.EndScrollView();
+            EditorGUILayout.EndVertical();
+        }
+        
+        private void DrawDetailContent()
+        {
+            // --- Header ---
+            EditorGUILayout.LabelField(selectedSchema.name, EditorStyles.largeLabel);
+            if (GUILayout.Button("Ping Asset", GUILayout.Width(100)))
+            {
+                EditorGUIUtility.PingObject(selectedSchema);
+            }
+            
+            EditorGUILayout.Space();
+
+            // --- Outgoing Connections ---
+            EditorGUILayout.LabelField("Uses (Outgoing Connections)", EditorStyles.boldLabel);
+            if (outgoingConnections.TryGetValue(selectedSchema, out var uses) && uses.Any())
+            {
+                foreach (var usedSchema in uses)
+                {
+                    EditorGUILayout.ObjectField(usedSchema.name, usedSchema, typeof(BaseSchema), false);
+                }
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("This schema does not reference any other schemas.", MessageType.None);
+            }
+
+            EditorGUILayout.Space();
+
+            // --- Incoming Connections ---
+            EditorGUILayout.LabelField("Referenced By (Incoming Connections)", EditorStyles.boldLabel);
+            if (incomingConnections.TryGetValue(selectedSchema, out var refs) && refs.Any())
+            {
+                foreach (var referencingSchema in refs)
+                {
+                    EditorGUILayout.ObjectField(referencingSchema.name, referencingSchema, typeof(BaseSchema), false);
+                }
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("This schema is not referenced by any other schemas.", MessageType.None);
+            }
         }
 
         private void RefreshData()
         {
             allSchemas.Clear();
-            allSettings.Clear();
-            connections.Clear();
+            outgoingConnections.Clear();
+            incomingConnections.Clear();
 
-            var schemaGuids = AssetDatabase.FindAssets("t:BaseSchema");
-            foreach (var guid in schemaGuids)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                allSchemas.Add(AssetDatabase.LoadAssetAtPath<BaseSchema>(path));
-            }
-
-            var settingsGuids = AssetDatabase.FindAssets("t:ScriptableObject");
-            foreach (var guid in settingsGuids)
-            {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                var asset = AssetDatabase.LoadAssetAtPath<ScriptableObject>(path);
-                if (asset is ISettings settings)
-                {
-                    allSettings.Add(settings);
-                }
-            }
+            var guids = AssetDatabase.FindAssets("t:BaseSchema");
+            allSchemas = guids
+                .Select(guid => AssetDatabase.LoadAssetAtPath<BaseSchema>(AssetDatabase.GUIDToAssetPath(guid)))
+                .OrderBy(s => s.name)
+                .ToList();
 
             foreach (var schema in allSchemas)
             {
-                connections[schema] = new List<BaseSchema>();
-                var serializedObject = new SerializedObject(schema);
-                var iterator = serializedObject.GetIterator();
-                while (iterator.NextVisible(true))
-                {
-                    if (iterator.propertyType == SerializedPropertyType.ObjectReference)
-                    {
-                        if (iterator.objectReferenceValue is BaseSchema referencedSchema)
-                        {
-                            connections[schema].Add(referencedSchema);
-                        }
-                    }
-                }
-            }
+                // Initialize dictionaries
+                if (!outgoingConnections.ContainsKey(schema)) outgoingConnections[schema] = new List<BaseSchema>();
+                if (!incomingConnections.ContainsKey(schema)) incomingConnections[schema] = new List<BaseSchema>();
 
-            foreach (var setting in allSettings)
-            {
-                var serializedObject = new SerializedObject(setting as ScriptableObject);
-                var iterator = serializedObject.GetIterator();
+                // Find outgoing connections
+                var so = new SerializedObject(schema);
+                var iterator = so.GetIterator();
                 while (iterator.NextVisible(true))
                 {
-                    if (iterator.isArray && iterator.propertyType != SerializedPropertyType.String)
+                    if (iterator.propertyType == SerializedPropertyType.ObjectReference && iterator.objectReferenceValue is BaseSchema referencedSchema)
                     {
-                        for (int i = 0; i < iterator.arraySize; i++)
+                        outgoingConnections[schema].Add(referencedSchema);
+
+                        // While we're here, add the incoming connection for the other schema
+                        if (!incomingConnections.ContainsKey(referencedSchema)) incomingConnections[referencedSchema] = new List<BaseSchema>();
+                        if (!incomingConnections[referencedSchema].Contains(schema))
                         {
-                            var element = iterator.GetArrayElementAtIndex(i);
-                            if (element.propertyType == SerializedPropertyType.ObjectReference)
-                            {
-                                if (element.objectReferenceValue is BaseSchema referencedSchema)
-                                {
-                                    if (!connections.ContainsKey(referencedSchema))
-                                    {
-                                        connections[referencedSchema] = new List<BaseSchema>();
-                                    }
-                                }
-                            }
+                            incomingConnections[referencedSchema].Add(schema);
                         }
                     }
                 }
             }
+            Repaint();
         }
     }
 }
