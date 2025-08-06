@@ -1,8 +1,7 @@
 using BovineLabs.Core.ObjectManagement;
-using Data;
 using Missions.Missions.Authoring.Settings;
 using UnityEngine;
-using RangeInt = Data.RangeInt;
+using RangeInt = Missions.Missions.Authoring.RangeInt;
 
 namespace Missions.Missions.Authoring.Schemas
 {

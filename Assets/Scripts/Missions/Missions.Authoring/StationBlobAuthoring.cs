@@ -1,4 +1,4 @@
-using Data;
+using Missions.Missions.Authoring.BlobComponents;
 using Missions.Missions.Authoring.Schemas;
 using Unity.Entities;
 using UnityEngine;

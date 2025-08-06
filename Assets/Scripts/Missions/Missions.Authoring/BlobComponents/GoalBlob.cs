@@ -1,4 +1,3 @@
-using Data;
 using Unity.Entities;
 
 namespace Missions.Missions.Authoring.BlobComponents

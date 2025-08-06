@@ -1,7 +1,7 @@
 using System;
 using Unity.Entities;
 
-namespace Data
+namespace Missions.Missions.Authoring.BlobComponents
 {
     [Serializable]
     public struct StationBlob: IComponentData

@@ -1,8 +1,8 @@
-using Data;
+using Missions.Missions.Authoring.BlobComponents;
 using Missions.Missions.Authoring.Schemas;
 using Unity.Entities;
 using UnityEngine;
-using RangeInt = Data.RangeInt;
+using RangeInt = Missions.Missions.Authoring.RangeInt;
 
 namespace Missions.Missions.Authoring
 {

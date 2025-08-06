@@ -1,49 +1,13 @@
 using System;
 using BovineLabs.Core.ObjectManagement;
-using Missions.Missions.Authoring;
 using Missions.Missions.Authoring.Schemas;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Data
+namespace Missions.Missions.Authoring
 {
-    public interface IHasID
-    {
-        int ID { get; set; }
-    }
-
-    public struct MissionBlob : IComponentData
-    {
-        public BlobAssetReference<BlobArray<Mission>> BlobAssetRef;
-    }
-
-    public struct RewardBlob : IComponentData
-    {
-        public BlobAssetReference<BlobArray<Reward>> BlobAssetRef;
-    }
-
-    public struct DataContainerBlob : IComponentData
-    {
-        public BlobAssetReference<BlobArray<DataContainer>> BlobAssetRef;
-    }
-
-    public struct RangeFloatBlob : IComponentData
-    {
-        public BlobAssetReference<BlobArray<RangeFloat>> BlobAssetRef;
-    }
-
-    public struct RangeIntBlob : IComponentData
-    {
-        public BlobAssetReference<BlobArray<RangeInt>> BlobAssetRef;
-    }
-
-    public struct TimeBlob : IComponentData
-    {
-        public BlobAssetReference<BlobArray<Time>> BlobAssetRef;
-    }
-
     [Serializable]
     public struct Mission : IHasID, IEquatable<ushort>
     {

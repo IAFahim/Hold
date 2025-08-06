@@ -1,8 +1,7 @@
 using BovineLabs.Core.ObjectManagement;
-using Data;
 using Missions.Missions.Authoring.Settings;
 using UnityEngine;
-using Time = Data.Time;
+using Time = Missions.Missions.Authoring.Time;
 
 namespace Missions.Missions.Authoring.Schemas
 {

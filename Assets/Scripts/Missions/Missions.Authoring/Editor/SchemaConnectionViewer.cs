@@ -2,7 +2,6 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using Data;
 using System;
 
 namespace Missions.Missions.Authoring.Editor
@@ -15,35 +14,35 @@ namespace Missions.Missions.Authoring.Editor
     public class SchemaConnectionViewer : EditorWindow
     {
         #region Constants & Static
-        private const float LIST_PANEL_WIDTH_RATIO = 0.45f;
-        private const float CONNECTION_COLUMN_WIDTH_RATIO = 0.5f; // Relative to the details panel
-        private const float ROW_HEIGHT = 20f;
-        private const float PING_BUTTON_WIDTH = 50f;
-        private const int HUB_THRESHOLD = 5;
-        private static readonly Color SelectionColor = new Color(0.2f, 0.45f, 0.8f, 0.7f);
+        private const float ListPanelWidthRatio = 0.45f;
+        private const float ConnectionColumnWidthRatio = 0.5f; // Relative to the details panel
+        private const float RowHeight = 20f;
+        private const float PingButtonWidth = 50f;
+        private const int HubThreshold = 5;
+        private static readonly Color SelectionColor = new(0.2f, 0.45f, 0.8f, 0.7f);
         #endregion
 
         #region Private Fields
         // Data Stores
-        private Dictionary<Type, List<BaseSchema>> _categorizedSchemas = new Dictionary<Type, List<BaseSchema>>();
-        private Dictionary<BaseSchema, List<BaseSchema>> _outgoingConnections = new Dictionary<BaseSchema, List<BaseSchema>>();
-        private Dictionary<BaseSchema, List<BaseSchema>> _incomingConnections = new Dictionary<BaseSchema, List<BaseSchema>>();
+        private Dictionary<Type, List<BaseSchema>> _categorizedSchemas = new();
+        private Dictionary<BaseSchema, List<BaseSchema>> _outgoingConnections = new();
+        private Dictionary<BaseSchema, List<BaseSchema>> _incomingConnections = new();
 
         // UI State
         private Vector2 _listScrollPos, _detailsScrollPos;
         private BaseSchema _selectedSchema;
         private string _searchQuery = "";
-        private Dictionary<Type, bool> _categoryFoldouts = new Dictionary<Type, bool>();
+        private Dictionary<Type, bool> _categoryFoldouts = new();
         private FilterMode _filterMode = FilterMode.All;
-        private List<BaseSchema> _drillDownPath = new List<BaseSchema>();
+        private List<BaseSchema> _drillDownPath = new();
         #endregion
 
         private enum FilterMode { All, Orphans, Endpoints, Hubs }
 
-        [MenuItem("Window/Hold/Schema Connection Viewer Pro")]
+        [MenuItem("Tools/Schema Connection Viewer")]
         public static void ShowWindow()
         {
-            var window = GetWindow<SchemaConnectionViewer>("Schema Connections Pro");
+            var window = GetWindow<SchemaConnectionViewer>("Schema Connections");
             window.minSize = new Vector2(800, 400);
         }
 
@@ -156,7 +155,7 @@ namespace Missions.Missions.Authoring.Editor
 
         private void DrawSchemaListPanel()
         {
-            float panelWidth = position.width * LIST_PANEL_WIDTH_RATIO;
+            float panelWidth = position.width * ListPanelWidthRatio;
             EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(panelWidth));
             _listScrollPos = EditorGUILayout.BeginScrollView(_listScrollPos);
 
@@ -185,7 +184,7 @@ namespace Missions.Missions.Authoring.Editor
 
         private void DrawSchemaEntry(BaseSchema schema)
         {
-            Rect rowRect = GUILayoutUtility.GetRect(GUIContent.none, EditorStyles.label, GUILayout.Height(ROW_HEIGHT));
+            Rect rowRect = GUILayoutUtility.GetRect(GUIContent.none, EditorStyles.label, GUILayout.Height(RowHeight));
 
             // Draw selection highlight across the full, non-indented width
             if (_selectedSchema == schema)
@@ -199,8 +198,8 @@ namespace Missions.Missions.Authoring.Editor
             var schemaContent = new GUIContent(schema.name, EditorGUIUtility.ObjectContent(schema, typeof(BaseSchema)).image);
             int outgoingCount = _outgoingConnections.TryGetValue(schema, out var uses) ? uses.Count : 0;
             int incomingCount = _incomingConnections.TryGetValue(schema, out var refs) ? refs.Count : 0;
-            var outgoingContent = new GUIContent($"> {outgoingCount}", "Uses");
-            var incomingContent = new GUIContent($"< {incomingCount}", "Used By");
+            var outgoingContent = new GUIContent($"{outgoingCount}>", "Uses");
+            var incomingContent = new GUIContent($"<{incomingCount}", "Used By");
 
             float outgoingWidth = 40f;
             float incomingWidth = 40f;
@@ -261,7 +260,7 @@ namespace Missions.Missions.Authoring.Editor
         private void DrawDrillDownView()
         {
             var currentSchema = _drillDownPath.Last();
-            float panelWidth = (position.width * (1 - LIST_PANEL_WIDTH_RATIO)) - 20; // Details panel width
+            float panelWidth = (position.width * (1 - ListPanelWidthRatio)) - 20; // Details panel width
 
             EditorGUILayout.BeginHorizontal(GUILayout.ExpandHeight(true));
             DrawConnectionColumn("Uses (Outgoing)", _outgoingConnections.ContainsKey(currentSchema) ? _outgoingConnections[currentSchema] : new List<BaseSchema>(), panelWidth);
@@ -271,7 +270,7 @@ namespace Missions.Missions.Authoring.Editor
 
         private void DrawConnectionColumn(string label, List<BaseSchema> connections, float panelWidth)
         {
-            EditorGUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins, GUILayout.Width(panelWidth * CONNECTION_COLUMN_WIDTH_RATIO));
+            EditorGUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins, GUILayout.Width(panelWidth * ConnectionColumnWidthRatio));
             EditorGUILayout.LabelField(label, EditorStyles.boldLabel);
 
             if (!connections.Any()) { EditorGUILayout.HelpBox("No connections.", MessageType.None); }
@@ -284,9 +283,9 @@ namespace Missions.Missions.Authoring.Editor
 
         private void DrawConnectionColumnEntry(BaseSchema schema)
         {
-            Rect rowRect = GUILayoutUtility.GetRect(GUIContent.none, EditorStyles.miniButton, GUILayout.Height(ROW_HEIGHT));
-            Rect mainButtonRect = new Rect(rowRect.x, rowRect.y, rowRect.width - PING_BUTTON_WIDTH, rowRect.height);
-            Rect pingButtonRect = new Rect(rowRect.x + rowRect.width - PING_BUTTON_WIDTH, rowRect.y, PING_BUTTON_WIDTH, rowRect.height);
+            Rect rowRect = GUILayoutUtility.GetRect(GUIContent.none, EditorStyles.miniButton, GUILayout.Height(RowHeight));
+            Rect mainButtonRect = new Rect(rowRect.x, rowRect.y, rowRect.width - PingButtonWidth, rowRect.height);
+            Rect pingButtonRect = new Rect(rowRect.x + rowRect.width - PingButtonWidth, rowRect.y, PingButtonWidth, rowRect.height);
 
             if (GUI.Button(mainButtonRect, new GUIContent(schema.name, EditorGUIUtility.ObjectContent(schema, typeof(BaseSchema)).image), EditorStyles.miniButtonLeft)) { _drillDownPath.Add(schema); }
             if (GUI.Button(pingButtonRect, "Ping", EditorStyles.miniButtonRight)) { EditorGUIUtility.PingObject(schema); }
@@ -305,7 +304,7 @@ namespace Missions.Missions.Authoring.Editor
                 {
                     FilterMode.Orphans => schemasToProcess.Where(s => !_incomingConnections.ContainsKey(s) || !_incomingConnections[s].Any()),
                     FilterMode.Endpoints => schemasToProcess.Where(s => !_outgoingConnections.ContainsKey(s) || !_outgoingConnections[s].Any()),
-                    FilterMode.Hubs => schemasToProcess.Where(s => (_incomingConnections.get(s)?.Count ?? 0) + (_outgoingConnections.get(s)?.Count ?? 0) >= HUB_THRESHOLD),
+                    FilterMode.Hubs => schemasToProcess.Where(s => (_incomingConnections.Get(s)?.Count ?? 0) + (_outgoingConnections.Get(s)?.Count ?? 0) >= HubThreshold),
                     _ => schemasToProcess,
                 };
 
@@ -321,7 +320,7 @@ namespace Missions.Missions.Authoring.Editor
 
     public static class DictionaryExtensions
     {
-        public static TValue get<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
+        public static TValue Get<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
         {
             dict.TryGetValue(key, out TValue val);
             return val;
