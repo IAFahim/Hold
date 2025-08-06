@@ -9,7 +9,7 @@ namespace Missions.Missions.Authoring.Schemas
     [
         AutoRef(
             nameof(GoalSettings), nameof(GoalSettings.schemas),
-            FieldName, TypeString + "/" + FieldName, createNull: false, defaultFileName: "Goal Range Int"
+            FieldName, TypeString + "/" + FieldName
         )
     ]
     public class GoalSchema : BakingSchema<Goal>

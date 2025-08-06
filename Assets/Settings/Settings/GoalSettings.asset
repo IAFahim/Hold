@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1bd559fbdf241aeb9bbe29e6dc7a8ad, type: 3}
   m_Name: GoalSettings
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Settings.GoalSettings
-  schemas: []
+  schemas:
+  - {fileID: 11400000, guid: 5917b25d73b9f8533be9dde235180d22, type: 2}
