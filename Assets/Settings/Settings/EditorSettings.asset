@@ -69,6 +69,16 @@ MonoBehaviour:
     Path: Assets/Settings/Name/NameSchema
   - Key: bl.ar.stationschema
     Path: Assets/Settings/Name/StationSchema
+  - Key: bl.ar.datacontainerschema
+    Path: Assets/Settings/DataContainer/DataContainerSchema
+  - Key: bl.ar.rangeintschema
+    Path: Assets/Settings/RangeInt/RangeIntSchema
+  - Key: bl.ar.rangefloatschema
+    Path: Assets/Settings/RangeFloat/RangeFloatSchema
+  - Key: bl.ar.timeschema
+    Path: Assets/Settings/Time/TimeSchema
+  - Key: bl.ar.rewardschema
+    Path: Assets/Settings/Reward/RewardSchema
   prebakeScenes:
   - {fileID: 102900000, guid: 434fb67dd45f9d041bf501ddf6d84e87, type: 3}
   - {fileID: 102900000, guid: 12c3ac3f712fa6447934e2c76cb143b3, type: 3}

@@ -19,6 +19,31 @@ namespace Data
         public BlobAssetReference<BlobArray<Mission>> BlobAssetRef;
     }
 
+    public struct RewardBlob : IComponentData
+    {
+        public BlobAssetReference<BlobArray<Reward>> BlobAssetRef;
+    }
+
+    public struct DataContainerBlob : IComponentData
+    {
+        public BlobAssetReference<BlobArray<DataContainer>> BlobAssetRef;
+    }
+
+    public struct RangeFloatBlob : IComponentData
+    {
+        public BlobAssetReference<BlobArray<RangeFloat>> BlobAssetRef;
+    }
+
+    public struct RangeIntBlob : IComponentData
+    {
+        public BlobAssetReference<BlobArray<RangeInt>> BlobAssetRef;
+    }
+
+    public struct TimeBlob : IComponentData
+    {
+        public BlobAssetReference<BlobArray<Time>> BlobAssetRef;
+    }
+
     [Serializable]
     public struct Mission : IHasID, IEquatable<ushort>
     {
@@ -273,106 +298,6 @@ namespace Data
     }
 
     // ====================== BAKING SCHEMAS ======================
-
-
-    [Serializable]
-    public struct StationBlob: IComponentData
-    {
-        public BlobAssetReference<BlobArray<Station>> BlobAssetRef;
-    }
-
-    public struct GoalBlob : IComponentData
-    {
-        public BlobAssetReference<BlobArray<Goal>> BlobAssetRef;
-    }
-
-
-    public class RewardSchema : BakingSchema<Reward>
-    {
-        public BaseSchema crossLink;
-        public DataContainerSchema dataContainer;
-
-        public override Reward ToData()
-        {
-            return new Reward
-            {
-                id = (ushort)ID,
-                crossLinkType = crossLink.ToCrossLinkType(),
-                crossLinkID = (ushort)crossLink.ID,
-                dataContainerID = (ushort)dataContainer.ID
-            };
-        }
-    }
-
-    public class DataContainerSchema : BakingSchema<DataContainer>
-    {
-        public TargetType targetType;
-        public NumType numType;
-        public float valueFloat;
-        public int valueInt;
-
-        public override DataContainer ToData()
-        {
-            return new DataContainer
-            {
-                id = (ushort)ID,
-                targetType = targetType,
-                numType = numType,
-                valueFloat = valueFloat,
-                valueInt = valueInt
-            };
-        }
-    }
-
-    public class RangeFloatSchema : BakingSchema<RangeFloat>
-    {
-        public CheckType checkType;
-        public float lower;
-        public float upper;
-
-        public override RangeFloat ToData()
-        {
-            return new RangeFloat
-            {
-                id = (ushort)ID,
-                checkType = checkType,
-                lower = lower,
-                upper = upper
-            };
-        }
-    }
-
-    public class RangeIntSchema : BakingSchema<RangeInt>
-    {
-        public CheckType checkType;
-        public int lower;
-        public int upper;
-
-        public override RangeInt ToData()
-        {
-            return new RangeInt
-            {
-                id = (ushort)ID,
-                checkType = checkType,
-                lower = lower,
-                upper = upper
-            };
-        }
-    }
-
-    public class TimeSchema : BakingSchema<Time>
-    {
-        public BaseSchema crossLinkType;
-
-        public override Time ToData()
-        {
-            return new Time
-            {
-                id = (ushort)ID,
-                crossLinkType = crossLinkType.ToCrossLinkType()
-            };
-        }
-    }
 
     internal static class BaseSchemaExt
     {
