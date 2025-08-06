@@ -16,8 +16,8 @@ namespace Missions.Missions.Authoring.Schemas
         private const string FieldName = nameof(DataContainerSchema);
         private const string TypeString = "DataContainer";
 
-        public TargetType targetType;
-        public NumType numType;
+        public ETargetType targetType;
+        public ENumType numType;
         public float valueFloat;
         public int valueInt;
 

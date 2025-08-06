@@ -17,7 +17,7 @@ namespace Missions.Missions.Authoring.Schemas
         private const string FieldName = nameof(RangeIntSchema);
         private const string TypeString = "RangeInt";
 
-        public CheckType checkType;
+        public ECheckType checkType;
         public int lower;
         public int upper;
 

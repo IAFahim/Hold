@@ -16,7 +16,7 @@ namespace Missions.Missions.Authoring.Schemas
         private const string FieldName = nameof(GoalSchema);
         private const string TypeString = "Goals";
 
-        public TargetType targetType;
+        public ETargetType targetType;
         public BaseSchema rangeSchema;
 
         public override Goal ToData()

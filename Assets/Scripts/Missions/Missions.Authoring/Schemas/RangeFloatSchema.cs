@@ -16,7 +16,7 @@ namespace Missions.Missions.Authoring.Schemas
         private const string FieldName = nameof(RangeFloatSchema);
         private const string TypeString = "RangeFloat";
 
-        public CheckType checkType;
+        public ECheckType checkType;
         public float lower;
         public float upper;
 
