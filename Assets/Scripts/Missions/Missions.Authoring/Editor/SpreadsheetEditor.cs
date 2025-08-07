@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Missions.Missions.Authoring.Scriptable;
 using UnityEditor;
 using UnityEngine;
@@ -84,17 +85,23 @@ namespace Missions.Missions.Authoring.Editor
         {
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
 
-            foreach (var (type, schemaList) in _schemas)
+            var schemasList = _schemas.ToList(); // Convert to list if it's not already
+
+            for (int i = schemasList.Count - 1; i >= 0; i--)
             {
+                var (type, schemaList) = schemasList[i];
                 var filteredList = schemaList.Where(s =>
                     string.IsNullOrEmpty(_searchQuery) || s.name.ToLower().Contains(_searchQuery.ToLower())).ToList();
+
                 if (filteredList.Count == 0) continue;
 
                 _foldouts[type] = EditorGUILayout.Foldout(_foldouts[type], $"{type.Name} ({filteredList.Count})", true);
+
                 if (!_foldouts[type]) continue;
 
                 DrawSchemaType(type, filteredList);
             }
+
 
             EditorGUILayout.EndScrollView();
         }
@@ -155,7 +162,7 @@ namespace Missions.Missions.Authoring.Editor
                 var so = new SerializedObject(schema);
 
                 GUI.backgroundColor = i % 2 == 0 ? Color.white : new Color(0.9f, 0.9f, 0.9f);
-                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                EditorGUILayout.BeginHorizontal();
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField(schema, typeof(BaseSchema), false, GUILayout.Width(200));
                 EditorGUI.EndDisabledGroup();
@@ -168,12 +175,10 @@ namespace Missions.Missions.Authoring.Editor
                 }
 
                 // Add flexible space to push the button to the right
-                GUILayout.FlexibleSpace();
-
-                // Right-aligned "Create New" button
-                if (GUILayout.Button("Create New", GUILayout.Width(100)))
+                GUILayout.Space(10);
+                if (GUILayout.Button("New", GUILayout.Width(100)))
                 {
-                    CreateNewSchema(schema);
+                    CreateNewSchema(schema, i);
                 }
 
                 EditorGUILayout.EndHorizontal();
@@ -183,53 +188,47 @@ namespace Missions.Missions.Authoring.Editor
             GUI.backgroundColor = Color.white;
         }
 
-        private void CreateNewSchema(BaseSchema originalSchema)
+        private void CreateNewSchema(BaseSchema originalSchema, int i)
         {
-            var type = originalSchema.GetType();
-            var schemasOfType = _schemas[type];
-
-            // Find max ID
-            int maxId = 0;
-            var idPropName = _properties[type][0].path; // Assuming first property is ID
-            foreach (var schema in schemasOfType)
-            {
-                var so = new SerializedObject(schema);
-                var idProp = so.FindProperty(idPropName);
-                if (idProp.propertyType == SerializedPropertyType.Integer)
-                {
-                    maxId = Mathf.Max(maxId, idProp.intValue);
-                }
-            }
-
-            int newId = maxId + 1;
-
-            // Get the folder of the original schema
             string originalPath = AssetDatabase.GetAssetPath(originalSchema);
             string folder = System.IO.Path.GetDirectoryName(originalPath);
 
             // Generate a unique asset path
-            string newPath = AssetDatabase.GenerateUniqueAssetPath(folder + "/New Schema.asset");
+            var assetName = $"/{IncrementLastNumber(originalSchema.name)}.asset";
+            string newPath = AssetDatabase.GenerateUniqueAssetPath(folder + assetName);
 
             // Copy the asset
             AssetDatabase.CopyAsset(originalPath, newPath);
 
-            // Load the new asset
-            var newSchema = AssetDatabase.LoadAssetAtPath<BaseSchema>(newPath);
-
-            // Set the new ID
-            var newSo = new SerializedObject(newSchema);
-            var newIdProp = newSo.FindProperty(idPropName);
-            if (newIdProp.propertyType == SerializedPropertyType.Integer)
-            {
-                newIdProp.intValue = newId;
-                newSo.ApplyModifiedProperties();
-            }
-
             // Save assets
             AssetDatabase.SaveAssets();
 
-            // Refresh the editor
             LoadSchemas();
+        }
+
+
+        static string IncrementLastNumber(string input)
+        {
+            // Use a regular expression to find the last number in the string
+            Match match = Regex.Match(input, @"\d+", RegexOptions.RightToLeft);
+
+            if (match.Success)
+            {
+                // Get the last number and its position
+                int number = int.Parse(match.Value);
+                int index = match.Index;
+
+                // Increment the number
+                int incrementedNumber = number + 1;
+
+                // Replace the last number with the incremented number
+                string result = input.Remove(index, match.Length).Insert(index, incrementedNumber.ToString());
+
+                return result;
+            }
+
+            // Return the original string if no number is found
+            return input;
         }
     }
 }

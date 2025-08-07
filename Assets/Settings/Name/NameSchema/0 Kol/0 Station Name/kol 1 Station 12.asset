@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1876274246944668b8e31a8ee4915898, type: 3}
-  m_Name: kol 1 Station 6
+  m_Name: kol 1 Station 12
   m_EditorClassIdentifier: Missions.Authoring::Data.NameSchema
-  id: 6
-  fixed32: Baranagar
+  id: 12
+  fixed32: Park Street

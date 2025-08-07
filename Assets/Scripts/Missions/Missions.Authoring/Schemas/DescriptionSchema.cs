@@ -16,7 +16,7 @@ namespace Missions.Missions.Authoring.Schemas
     public class DescriptionSchema : BakingSchema<Description>
     {
         private const string FieldName = nameof(DescriptionSchema);
-        private const string TypeString = "Name";
+        private const string TypeString = "Description";
 
         public string fixed64;
 
