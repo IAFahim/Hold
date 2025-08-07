@@ -1,4 +1,5 @@
 using BovineLabs.Core.PhysicsStates;
+using Unity.CharacterController;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -14,6 +15,7 @@ public struct CollisionDamage : IComponentData
 }
 
 [UpdateInGroup(typeof(PhysicsSystemGroup))]
+[UpdateBefore(typeof(KinematicCharacterPhysicsUpdateGroup))]
 public partial struct HeadOnCollisionDamageSystem : ISystem
 {
     public void OnUpdate(ref SystemState state)
@@ -83,7 +85,7 @@ public partial struct HeadOnCollisionDamageSystem : ISystem
 }
 
 
-public class CollisionDamageAuthoring : UnityEngine.MonoBehaviour
+public class CollisionDamageAuthoring : MonoBehaviour
 {
     public float baseDamage = 10f;
     public float headOnMultiplier = 2f;

@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Missions.Missions.Authoring.Scriptable;
 
 namespace Missions.Missions.Authoring.Editor
 {
@@ -39,7 +40,7 @@ namespace Missions.Missions.Authoring.Editor
 
         private enum FilterMode { All, Orphans, Endpoints, Hubs }
 
-        [MenuItem("Tools/Schema Connection Viewer")]
+        [MenuItem("Tools/Schema/Connections Viewer")]
         public static void ShowWindow()
         {
             var window = GetWindow<SchemaConnectionViewer>("Schema Connections");

@@ -2,7 +2,7 @@ using System;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Missions.Missions.Authoring
+namespace Missions.Missions.Authoring.Scriptable
 {
     public abstract class BakingSchema<T> : BaseSchema where T : struct
     {

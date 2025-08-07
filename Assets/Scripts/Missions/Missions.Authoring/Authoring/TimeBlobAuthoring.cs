@@ -1,5 +1,6 @@
 using Missions.Missions.Authoring.BlobComponents;
 using Missions.Missions.Authoring.Schemas;
+using Missions.Missions.Authoring.Scriptable;
 using Unity.Entities;
 using UnityEngine;
 using Time = Missions.Missions.Authoring.Time;

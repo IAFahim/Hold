@@ -1,7 +1,7 @@
 using BovineLabs.Core.ObjectManagement;
 using UnityEngine;
 
-namespace Missions.Missions.Authoring
+namespace Missions.Missions.Authoring.Scriptable
 {
     public abstract class BaseSchema : ScriptableObject, IUID
     {

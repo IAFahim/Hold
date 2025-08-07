@@ -545,7 +545,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Missions::Data.MissionAuthoring
   missions:
-  - {fileID: 11400000, guid: 59f05a8661c6dcf44928419404d35b67, type: 2}
+  - {fileID: 0}
 --- !u!4 &303422628
 Transform:
   m_ObjectHideFlags: 0
@@ -1079,7 +1079,7 @@ Transform:
   m_GameObject: {fileID: 346245831}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 32.86, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14260,11 +14260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1079c31e595343828ecc0f4e9cc245c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.MissionSchemaTestAuthoring
-  missionSchema: {fileID: 11400000, guid: 59f05a8661c6dcf44928419404d35b67, type: 2}
-  runTestOnStart: 1
-  logDetailedInfo: 1
-  testPassed: 1
-  testResults: All validations passed successfully!
 --- !u!4 &1094765797
 Transform:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Missions.Missions.Authoring.Scriptable;
 
 namespace Missions.Missions.Authoring.Editor
 {

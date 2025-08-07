@@ -1,4 +1,5 @@
 using BovineLabs.Core.ObjectManagement;
+using Missions.Missions.Authoring.Scriptable;
 using Missions.Missions.Authoring.Settings;
 using UnityEngine;
 using Time = Missions.Missions.Authoring.Time;
@@ -16,15 +17,16 @@ namespace Missions.Missions.Authoring.Schemas
     {
         private const string FieldName = nameof(TimeSchema);
         private const string TypeString = "Time";
-
-        public BaseSchema crossLinkType;
+        public BaseSchema crossLink;
+        public RangeFloat rangeFloat;
+        
 
         public override Time ToData()
         {
             return new Time
             {
                 id = (ushort)ID,
-                crossLinkType = crossLinkType.ToCrossLinkType()
+                crossLinkType = crossLink.ToCrossLinkType()
             };
         }
     }

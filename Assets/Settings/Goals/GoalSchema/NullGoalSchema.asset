@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: NullGoalSchema
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Schemas.GoalSchema
   id: 0
-  targetType: 0
+  targetType: 3
   rangeSchema: {fileID: 0}

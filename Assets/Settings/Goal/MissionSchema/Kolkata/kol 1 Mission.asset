@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecea87eb4cdf4524aad476ebcbb62195, type: 3}
-  m_Name: NullMissionSchema
+  m_Name: kol 1 Mission
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.MissionSchema
   id: 0
   nameSchema: {fileID: 11400000, guid: 796897c01c6e09537a88f551e2b0f1ee, type: 2}
-  stationSchema: {fileID: 0}
-  goals: []
+  stationSchema: {fileID: 11400000, guid: ed47f73180570d6d5acfe9976065ed50, type: 2}
+  goals:
+  - {fileID: 11400000, guid: 5917b25d73b9f8533be9dde235180d22, type: 2}

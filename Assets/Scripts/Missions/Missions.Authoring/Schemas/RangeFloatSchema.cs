@@ -1,4 +1,5 @@
 using BovineLabs.Core.ObjectManagement;
+using Missions.Missions.Authoring.Scriptable;
 using Missions.Missions.Authoring.Settings;
 using UnityEngine;
 

@@ -1,4 +1,5 @@
 using BovineLabs.Core.ObjectManagement;
+using Missions.Missions.Authoring.Scriptable;
 using Missions.Missions.Authoring.Settings;
 using UnityEngine;
 using RangeInt = Missions.Missions.Authoring.RangeInt;
@@ -12,6 +13,7 @@ namespace Missions.Missions.Authoring.Schemas
             FieldName, TypeString + "/" + FieldName
         )
     ]
+    
     public class RangeIntSchema : BakingSchema<RangeInt>
     {
         private const string FieldName = nameof(RangeIntSchema);
