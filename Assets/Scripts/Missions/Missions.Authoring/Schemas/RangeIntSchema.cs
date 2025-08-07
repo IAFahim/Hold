@@ -1,6 +1,8 @@
 using BovineLabs.Core.ObjectManagement;
+using BovineLabs.Core.PropertyDrawers;
 using Missions.Missions.Authoring.Scriptable;
 using Missions.Missions.Authoring.Settings;
+using Unity.Mathematics;
 using UnityEngine;
 using RangeInt = Missions.Missions.Authoring.RangeInt;
 
@@ -13,15 +15,14 @@ namespace Missions.Missions.Authoring.Schemas
             FieldName, TypeString + "/" + FieldName
         )
     ]
-    
     public class RangeIntSchema : BakingSchema<RangeInt>
     {
         private const string FieldName = nameof(RangeIntSchema);
         private const string TypeString = "RangeInt";
 
         public ECheckType checkType;
-        public int lower;
-        public int upper;
+        public int min;
+        public int max;
 
         public override RangeInt ToData()
         {
@@ -29,8 +30,8 @@ namespace Missions.Missions.Authoring.Schemas
             {
                 id = (ushort)ID,
                 checkType = checkType,
-                lower = lower,
-                upper = upper
+                min = min,
+                max = max
             };
         }
     }

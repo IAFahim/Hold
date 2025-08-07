@@ -1,6 +1,8 @@
+using System;
 using BovineLabs.Core.ObjectManagement;
 using Missions.Missions.Authoring.Scriptable;
 using Missions.Missions.Authoring.Settings;
+using Unity.Collections;
 using UnityEngine;
 
 namespace Missions.Missions.Authoring.Schemas
@@ -16,12 +18,20 @@ namespace Missions.Missions.Authoring.Schemas
     {
         private const string FieldName = nameof(NameSchema);
         private const string TypeString = "Name";
+
+        public string fixed32;
+
+        private void OnValidate()
+        {
+            FixedString32Bytes test = fixed32;
+        }
+
         public override Name ToData()
         {
             return new Name
             {
                 id = (ushort)ID,
-                name = name
+                name = fixed32
             };
         }
     }

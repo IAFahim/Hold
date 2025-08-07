@@ -7,8 +7,8 @@ namespace Missions.Missions.Authoring
     {
         public ushort id;
         public ECheckType checkType;
-        public int lower;
-        public int upper;
+        public int min;
+        public int max;
 
         public int ID
         {

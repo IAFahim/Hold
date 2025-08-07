@@ -18,8 +18,8 @@ namespace Missions.Missions.Authoring.Schemas
         private const string TypeString = "RangeFloat";
 
         public ECheckType checkType;
-        public float lower;
-        public float upper;
+        public float min;
+        public float max;
 
         public override RangeFloat ToData()
         {
@@ -27,8 +27,8 @@ namespace Missions.Missions.Authoring.Schemas
             {
                 id = (ushort)ID,
                 checkType = checkType,
-                lower = lower,
-                upper = upper
+                min = min,
+                max = max
             };
         }
     }

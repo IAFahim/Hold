@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Schemas.RangeFloatSchema
   id: 0
   checkType: 0
-  lower: 0
-  upper: 0
+  min: 0
+  max: 0

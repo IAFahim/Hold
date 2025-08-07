@@ -2,9 +2,9 @@ namespace Missions.Missions.Authoring
 {
     public enum ETargetType : byte
     {
-        Intrinsic,
-        Stat,
-        Inventory,
-        Time
+        Time = 0,
+        Intrinsic = 1,
+        Stat = 2,
+        Inventory = 3
     }
 }

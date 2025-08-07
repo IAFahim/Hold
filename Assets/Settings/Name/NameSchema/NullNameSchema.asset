@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: NullNameSchema
   m_EditorClassIdentifier: Missions.Authoring::Data.NameSchema
   id: 0
+  fixed32: Hello world I am fahim
