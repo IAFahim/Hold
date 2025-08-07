@@ -15,7 +15,7 @@ namespace Missions.Missions.Authoring.Editor
         private Dictionary<Type, bool> _foldouts = new();
         private string _searchQuery = "";
 
-        [MenuItem("Tools/Base Schema/Spreadsheet Editor")]
+        [MenuItem("Tools/Schema/Spreadsheet Editor")]
         public static void ShowWindow()
         {
             GetWindow<SpreadsheetEditor>("Spreadsheet Editor");
@@ -105,7 +105,7 @@ namespace Missions.Missions.Authoring.Editor
 
             // Header
             EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-            EditorGUILayout.LabelField("Object", EditorStyles.boldLabel, GUILayout.Width(200));
+            EditorGUILayout.LabelField(props.Count.ToString(), EditorStyles.centeredGreyMiniLabel, GUILayout.Width(200));
             for (var j = 0; j < props.Count; j++)
             {
                 var prop = props[j];

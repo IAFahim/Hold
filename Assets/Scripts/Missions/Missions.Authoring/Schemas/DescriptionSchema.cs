@@ -9,28 +9,28 @@ namespace Missions.Missions.Authoring.Schemas
     [CreateAssetMenu(menuName = "Hold/" + TypeString + "/Create " + FieldName, fileName = FieldName)]
     [
         AutoRef(
-            nameof(NameSettings), nameof(NameSettings.schemas),
+            nameof(DescriptionSettings), nameof(DescriptionSettings.schemas),
             FieldName, TypeString + "/" + FieldName
         )
     ]
-    public class NameSchema : BakingSchema<Name>
+    public class DescriptionSchema : BakingSchema<Description>
     {
-        private const string FieldName = nameof(NameSchema);
+        private const string FieldName = nameof(DescriptionSchema);
         private const string TypeString = "Name";
 
-        public string fixed32;
+        public string fixed64;
 
         private void OnValidate()
         {
-            FixedString32Bytes test = fixed32;
+            FixedString32Bytes test = fixed64;
         }
 
-        public override Name ToData()
+        public override Description ToData()
         {
-            return new Name
+            return new Description
             {
                 id = (ushort)ID,
-                name = fixed32
+                description = fixed64
             };
         }
     }

@@ -1,11 +1,12 @@
+
 using Missions.Missions.Authoring.Schemas;
 using UnityEditor;
 using UnityEngine;
 
 namespace Missions.Missions.Authoring.Editor
 {
-    [CustomEditor(typeof(StationSchema))]
-    public class StationSchemaEditor : BaseSchemaEditor
+    [CustomEditor(typeof(LocationSchema))]
+    public class LocationSchemaEditor : BaseSchemaEditor
     {
         public override void OnInspectorGUI()
         {
@@ -13,9 +14,14 @@ namespace Missions.Missions.Authoring.Editor
             base.OnInspectorGUI();
 
             // Add StationSchema-specific functionality
-            var stationSchema = (StationSchema)target;
+            var stationSchema = (LocationSchema)target;
 
             EditorGUILayout.Space(5);
+#if ALINE
+            Drawing.Draw.WireSphere(stationSchema.position, stationSchema.range, Color.antiqueWhite);
+            Drawing.Draw.Label2D(stationSchema.position, stationSchema.name);
+            
+#endif
             EditorGUILayout.LabelField("Station Tools", EditorStyles.boldLabel);
 
             if (GUILayout.Button("Focus Camera"))

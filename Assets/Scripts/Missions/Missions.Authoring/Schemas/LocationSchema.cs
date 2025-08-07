@@ -9,25 +9,27 @@ namespace Missions.Missions.Authoring.Schemas
     [CreateAssetMenu(menuName = "Hold/" + TypeString + "/Create " + FieldName, fileName = FieldName)]
     [
         AutoRef(
-            nameof(StationSettings), nameof(StationSettings.schemas),
+            nameof(LocationSettings), nameof(LocationSettings.schemas),
             FieldName, TypeString + "/" + FieldName
         )
     ]
-    public class StationSchema : BakingSchema<Station>
+    public class LocationSchema : BakingSchema<Location>
     {
-        private const string FieldName = nameof(StationSchema);
+        private const string FieldName = nameof(LocationSchema);
         private const string TypeString = "Station";
 
         public NameSchema nameSchema;
         public float3 position;
+        public float range;
 
-        public override Station ToData()
+        public override Location ToData()
         {
-            return new Station
+            return new Location
             {
                 id = (ushort)ID,
                 nameId = (ushort)nameSchema.ID,
-                position = position
+                position = position,
+                range = range
             };
         }
     }

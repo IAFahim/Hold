@@ -81,6 +81,8 @@ MonoBehaviour:
     Path: Assets/Settings/Reward/RewardSchema
   - Key: bl.ar.goalschema
     Path: Assets/Settings/Goals/GoalSchema
+  - Key: bl.ar.descriptionschema
+    Path: Assets/Settings/Name/DescriptionSchema
   prebakeScenes:
   - {fileID: 102900000, guid: 434fb67dd45f9d041bf501ddf6d84e87, type: 3}
   - {fileID: 102900000, guid: 12c3ac3f712fa6447934e2c76cb143b3, type: 3}

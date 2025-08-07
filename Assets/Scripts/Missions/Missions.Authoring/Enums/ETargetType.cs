@@ -5,6 +5,7 @@ namespace Missions.Missions.Authoring
         Time = 0,
         Intrinsic = 1,
         Stat = 2,
-        Inventory = 3
+        Inventory = 3,
+        Location =4
     }
 }

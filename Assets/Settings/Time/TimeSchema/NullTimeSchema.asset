@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: NullTimeSchema
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Schemas.TimeSchema
   id: 0
-  crossLinkType: {fileID: 0}
+  crossLink: {fileID: 11400000, guid: 5f2bac0ce4193f5d795ef121fe59a481, type: 2}
+  rangeFloat: {fileID: 0}

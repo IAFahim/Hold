@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace Missions.Missions.Authoring.Settings
 {
-    public class StationSettings : ScriptableObject, ISettings
+    public class LocationSettings : ScriptableObject, ISettings
     {
-        public StationSchema[] schemas = Array.Empty<StationSchema>();
+        public LocationSchema[] schemas = Array.Empty<LocationSchema>();
     }
 }

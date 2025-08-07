@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2b555639b43a0d96b49c28dfc0d64af, type: 3}
   m_Name: DataContainerSettings
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Settings.DataContainerSettings
-  schemas: []
+  schemas:
+  - {fileID: 11400000, guid: fcd66de6eae2af78192e3e42e6e298bd, type: 2}

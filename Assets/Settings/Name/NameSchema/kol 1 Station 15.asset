@@ -9,12 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38cccbfa7a394987b09d5bbfe6119386, type: 3}
-  m_Name: NullStationSchema
-  m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.StationSchema
-  id: 0
-  nameSchema: {fileID: 0}
-  position:
-    x: 0
-    y: 0
-    z: 0
+  m_Script: {fileID: 11500000, guid: 1876274246944668b8e31a8ee4915898, type: 3}
+  m_Name: kol 1 Station 15
+  m_EditorClassIdentifier: Missions.Authoring::Data.NameSchema
+  id: 14
+  fixed32: Baranagar

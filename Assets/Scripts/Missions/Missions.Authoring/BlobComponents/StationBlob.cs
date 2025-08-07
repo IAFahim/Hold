@@ -6,6 +6,6 @@ namespace Missions.Missions.Authoring.BlobComponents
     [Serializable]
     public struct StationBlob: IComponentData
     {
-        public BlobAssetReference<BlobArray<Station>> BlobAssetRef;
+        public BlobAssetReference<BlobArray<Location>> BlobAssetRef;
     }
 }

@@ -22,7 +22,7 @@ namespace Missions.Missions.Authoring.Schemas
         private const string TypeString = "Missions";
         
         public NameSchema nameSchema;
-        public StationSchema stationSchema;
+        public LocationSchema locationSchema;
         public GoalSchema[] goals = Array.Empty<GoalSchema>();
 
         public static BlobAssetReference<BlobArray<Mission>> ToAssetRef(MissionSchema[] missions)
@@ -48,7 +48,7 @@ namespace Missions.Missions.Authoring.Schemas
                 missions[i] = new Mission
                 {
                     id = (ushort)schemas[i].ID,
-                    station = (ushort)schemas[i].stationSchema.ID,
+                    station = (ushort)schemas[i].locationSchema.ID,
                     name = (ushort)schemas[i].nameSchema.ID
                 };
 
