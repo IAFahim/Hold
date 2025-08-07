@@ -106,9 +106,29 @@ namespace Missions.Missions.Authoring.Editor
             // Header
             EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
             EditorGUILayout.LabelField("Object", EditorStyles.boldLabel, GUILayout.Width(200));
-            foreach (var prop in props)
+            for (var j = 0; j < props.Count; j++)
             {
-                EditorGUILayout.LabelField(prop.displayName, EditorStyles.boldLabel, GUILayout.Width(150));
+                var prop = props[j];
+                var width = j == 0 ? 50 : 150; // Default width
+                if (prop.propertyType == SerializedPropertyType.ObjectReference)
+                {
+                    var fieldInfo = type.GetField(prop.name,
+                        System.Reflection.BindingFlags.Public |
+                        System.Reflection.BindingFlags.NonPublic |
+                        System.Reflection.BindingFlags.Instance
+                    );
+                    if (fieldInfo != null &&
+                        (fieldInfo.FieldType.IsClass || fieldInfo.FieldType.IsSubclassOf(typeof(ScriptableObject))))
+                    {
+                        width = 250; // Width for ScriptableObject or class
+                    }
+                }
+                else if (prop.isArray)
+                {
+                    width = 350; // Width for arrays
+                }
+
+                EditorGUILayout.LabelField(prop.displayName, EditorStyles.boldLabel, GUILayout.Width(width));
             }
 
             EditorGUILayout.EndHorizontal();
@@ -129,10 +149,29 @@ namespace Missions.Missions.Authoring.Editor
                     var prop = props[j];
                     var serializedProperty = so.FindProperty(prop.name);
                     var width = j == 0 ? 50 : 150;
-                    //TODO: HELP AI?? if its a class(scriptableObject mainly) increase padding;
+                    if (serializedProperty.propertyType == SerializedPropertyType.ObjectReference)
+                    {
+                        var fieldInfo = type.GetField(prop.name,
+                            System.Reflection.BindingFlags.Public |
+                            System.Reflection.BindingFlags.NonPublic |
+                            System.Reflection.BindingFlags.Instance
+                        );
+                        if (fieldInfo != null &&
+                            (fieldInfo.FieldType.IsClass || fieldInfo.FieldType.IsSubclassOf(typeof(ScriptableObject))))
+                        {
+                            width = 250;
+                        }
+                    }
+                    else if (serializedProperty.isArray)
+                    {
+                        width = 350;
+                    }
 
                     EditorGUILayout.PropertyField(serializedProperty, GUIContent.none, GUILayout.Width(width));
-                    if (j == 0) EditorGUI.EndDisabledGroup();
+                    if (j == 0)
+                    {
+                        EditorGUI.EndDisabledGroup();
+                    }
                 }
 
                 EditorGUILayout.EndHorizontal();

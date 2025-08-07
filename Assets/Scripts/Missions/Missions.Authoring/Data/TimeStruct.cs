@@ -3,7 +3,7 @@ using System;
 namespace Missions.Missions.Authoring
 {
     [Serializable]
-    public struct Time : IHasID, IEquatable<ushort>
+    public struct TimeStruct : IHasID, IEquatable<ushort>
     {
         public ushort id;
         public ECrossLinkType crossLinkType;
@@ -15,7 +15,7 @@ namespace Missions.Missions.Authoring
             set => id = (ushort)value;
         }
 
-        public bool Equals(Time other) => id == other.id;
+        public bool Equals(TimeStruct other) => id == other.id;
         public override int GetHashCode() => id.GetHashCode();
         public bool Equals(ushort other) => id == other;
     }
