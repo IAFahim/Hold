@@ -52,6 +52,7 @@ namespace Missions.Missions.Authoring.Editor
                         _properties[type].Add(so.FindProperty(iterator.name));
                     }
                 }
+
                 _schemas[type].Add(schema);
             }
         }
@@ -70,10 +71,12 @@ namespace Missions.Missions.Authoring.Editor
             {
                 LoadSchemas();
             }
+
             if (GUILayout.Button("Save Changes", EditorStyles.toolbarButton))
             {
                 AssetDatabase.SaveAssets();
             }
+
             EditorGUILayout.EndHorizontal();
         }
 
@@ -83,8 +86,9 @@ namespace Missions.Missions.Authoring.Editor
 
             foreach (var (type, schemaList) in _schemas)
             {
-                var filteredList = schemaList.Where(s => string.IsNullOrEmpty(_searchQuery) || s.name.ToLower().Contains(_searchQuery.ToLower())).ToList();
-                if(filteredList.Count == 0) continue;
+                var filteredList = schemaList.Where(s =>
+                    string.IsNullOrEmpty(_searchQuery) || s.name.ToLower().Contains(_searchQuery.ToLower())).ToList();
+                if (filteredList.Count == 0) continue;
 
                 _foldouts[type] = EditorGUILayout.Foldout(_foldouts[type], $"{type.Name} ({filteredList.Count})", true);
                 if (!_foldouts[type]) continue;
@@ -106,6 +110,7 @@ namespace Missions.Missions.Authoring.Editor
             {
                 EditorGUILayout.LabelField(prop.displayName, EditorStyles.boldLabel, GUILayout.Width(150));
             }
+
             EditorGUILayout.EndHorizontal();
 
             // Rows
@@ -113,19 +118,27 @@ namespace Missions.Missions.Authoring.Editor
             {
                 var schema = schemaList[i];
                 var so = new SerializedObject(schema);
-                
+
                 GUI.backgroundColor = i % 2 == 0 ? Color.white : new Color(0.9f, 0.9f, 0.9f);
                 EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+                EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField(schema, typeof(BaseSchema), false, GUILayout.Width(200));
 
-                foreach (var prop in props)
+                for (var j = 0; j < props.Count; j++)
                 {
+                    var prop = props[j];
                     var serializedProperty = so.FindProperty(prop.name);
-                    EditorGUILayout.PropertyField(serializedProperty, GUIContent.none, GUILayout.Width(150));
+                    var width = j == 0 ? 50 : 150;
+                    //TODO: HELP AI?? if its a class(scriptableObject mainly) increase padding;
+
+                    EditorGUILayout.PropertyField(serializedProperty, GUIContent.none, GUILayout.Width(width));
+                    if (j == 0) EditorGUI.EndDisabledGroup();
                 }
+
                 EditorGUILayout.EndHorizontal();
                 so.ApplyModifiedProperties();
             }
+
             GUI.backgroundColor = Color.white;
         }
     }
