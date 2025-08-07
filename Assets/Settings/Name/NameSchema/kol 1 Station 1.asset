@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: kol 1 Station 1
   m_EditorClassIdentifier: Missions.Authoring::Data.NameSchema
   id: 1
-  fixed32: Dakshineswar
+  fixed32: Baranagar

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: NameSettings
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Settings.NameSettings
   schemas:
+  - {fileID: 11400000, guid: d91e538d1176769fe9f9a7035ad56668, type: 2}
   - {fileID: 11400000, guid: 796897c01c6e09537a88f551e2b0f1ee, type: 2}
   - {fileID: 11400000, guid: 3f2cd198ee268af8ba397506021b954b, type: 2}
   - {fileID: 11400000, guid: 29f54fb527c998e6ba7941b6eea7d49d, type: 2}

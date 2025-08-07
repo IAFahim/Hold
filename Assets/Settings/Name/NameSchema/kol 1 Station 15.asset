@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1876274246944668b8e31a8ee4915898, type: 3}
   m_Name: kol 1 Station 15
   m_EditorClassIdentifier: Missions.Authoring::Data.NameSchema
-  id: 14
+  id: 15
   fixed32: Baranagar

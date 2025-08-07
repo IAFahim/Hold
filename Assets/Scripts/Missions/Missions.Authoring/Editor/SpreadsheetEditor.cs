@@ -10,7 +10,7 @@ namespace Missions.Missions.Authoring.Editor
     public class SpreadsheetEditor : EditorWindow
     {
         private Dictionary<Type, List<BaseSchema>> _schemas = new();
-        private Dictionary<Type, List<SerializedProperty>> _properties = new();
+        private Dictionary<Type, List<(string path, SerializedPropertyType type)>> _properties = new();
         private Vector2 _scrollPosition;
         private Dictionary<Type, bool> _foldouts = new();
         private string _searchQuery = "";
@@ -41,7 +41,7 @@ namespace Missions.Missions.Authoring.Editor
                 if (!_schemas.ContainsKey(type))
                 {
                     _schemas[type] = new List<BaseSchema>();
-                    _properties[type] = new List<SerializedProperty>();
+                    _properties[type] = new List<(string path, SerializedPropertyType type)>();
                     _foldouts[type] = true;
 
                     var so = new SerializedObject(schema);
@@ -49,7 +49,7 @@ namespace Missions.Missions.Authoring.Editor
                     iterator.NextVisible(true);
                     while (iterator.NextVisible(false))
                     {
-                        _properties[type].Add(so.FindProperty(iterator.name));
+                        _properties[type].Add((iterator.propertyPath, iterator.propertyType));
                     }
                 }
 
@@ -103,37 +103,52 @@ namespace Missions.Missions.Authoring.Editor
         {
             var props = _properties[type];
 
-            // Header
-            EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-            EditorGUILayout.LabelField(props.Count.ToString(), EditorStyles.centeredGreyMiniLabel, GUILayout.Width(200));
+            // Calculate widths for properties
+            var widths = new List<float>();
             for (var j = 0; j < props.Count; j++)
             {
-                var prop = props[j];
-                var width = j == 0 ? 50 : 150; // Default width
-                if (prop.propertyType == SerializedPropertyType.ObjectReference)
+                var (path, propType) = props[j];
+                float width = j == 0 ? 50 : 150;
+                if (propType == SerializedPropertyType.ObjectReference)
                 {
-                    var fieldInfo = type.GetField(prop.name,
-                        System.Reflection.BindingFlags.Public |
-                        System.Reflection.BindingFlags.NonPublic |
-                        System.Reflection.BindingFlags.Instance
-                    );
-                    if (fieldInfo != null &&
-                        (fieldInfo.FieldType.IsClass || fieldInfo.FieldType.IsSubclassOf(typeof(ScriptableObject))))
+                    var fieldName = path;
+                    var fieldInfo = type.GetField(fieldName,
+                        System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic |
+                        System.Reflection.BindingFlags.Instance);
+                    if (fieldInfo != null && (fieldInfo.FieldType.IsClass ||
+                                              fieldInfo.FieldType.IsSubclassOf(typeof(ScriptableObject))))
                     {
-                        width = 250; // Width for ScriptableObject or class
+                        width = 250;
                     }
                 }
-                else if (prop.isArray)
+                else if (propType == SerializedPropertyType.Generic)
                 {
-                    width = 350; // Width for arrays
+                    var sampleSo = new SerializedObject(schemaList[0]);
+                    var sampleProp = sampleSo.FindProperty(path);
+                    if (sampleProp.isArray)
+                    {
+                        width = 350;
+                    }
                 }
 
-                EditorGUILayout.LabelField(prop.displayName, EditorStyles.boldLabel, GUILayout.Width(width));
+                widths.Add(width);
             }
 
+            // Draw header
+            EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+            EditorGUILayout.LabelField("Asset", EditorStyles.boldLabel, GUILayout.Width(200));
+            for (var j = 0; j < props.Count; j++)
+            {
+                var (path, _) = props[j];
+                var sampleSo = new SerializedObject(schemaList[0]);
+                var sampleProp = sampleSo.FindProperty(path);
+                EditorGUILayout.LabelField(sampleProp.displayName, EditorStyles.boldLabel, GUILayout.Width(widths[j]));
+            }
+
+            EditorGUILayout.LabelField("", GUILayout.Width(100)); // Space reserved for the button column
             EditorGUILayout.EndHorizontal();
 
-            // Rows
+            // Draw schema rows
             for (int i = 0; i < schemaList.Count; i++)
             {
                 var schema = schemaList[i];
@@ -143,35 +158,22 @@ namespace Missions.Missions.Authoring.Editor
                 EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField(schema, typeof(BaseSchema), false, GUILayout.Width(200));
+                EditorGUI.EndDisabledGroup();
 
                 for (var j = 0; j < props.Count; j++)
                 {
-                    var prop = props[j];
-                    var serializedProperty = so.FindProperty(prop.name);
-                    var width = j == 0 ? 50 : 150;
-                    if (serializedProperty.propertyType == SerializedPropertyType.ObjectReference)
-                    {
-                        var fieldInfo = type.GetField(prop.name,
-                            System.Reflection.BindingFlags.Public |
-                            System.Reflection.BindingFlags.NonPublic |
-                            System.Reflection.BindingFlags.Instance
-                        );
-                        if (fieldInfo != null &&
-                            (fieldInfo.FieldType.IsClass || fieldInfo.FieldType.IsSubclassOf(typeof(ScriptableObject))))
-                        {
-                            width = 250;
-                        }
-                    }
-                    else if (serializedProperty.isArray)
-                    {
-                        width = 350;
-                    }
+                    var (path, _) = props[j];
+                    var serializedProperty = so.FindProperty(path);
+                    EditorGUILayout.PropertyField(serializedProperty, GUIContent.none, GUILayout.Width(widths[j]));
+                }
 
-                    EditorGUILayout.PropertyField(serializedProperty, GUIContent.none, GUILayout.Width(width));
-                    if (j == 0)
-                    {
-                        EditorGUI.EndDisabledGroup();
-                    }
+                // Add flexible space to push the button to the right
+                GUILayout.FlexibleSpace();
+
+                // Right-aligned "Create New" button
+                if (GUILayout.Button("Create New", GUILayout.Width(100)))
+                {
+                    CreateNewSchema(schema);
                 }
 
                 EditorGUILayout.EndHorizontal();
@@ -179,6 +181,55 @@ namespace Missions.Missions.Authoring.Editor
             }
 
             GUI.backgroundColor = Color.white;
+        }
+
+        private void CreateNewSchema(BaseSchema originalSchema)
+        {
+            var type = originalSchema.GetType();
+            var schemasOfType = _schemas[type];
+
+            // Find max ID
+            int maxId = 0;
+            var idPropName = _properties[type][0].path; // Assuming first property is ID
+            foreach (var schema in schemasOfType)
+            {
+                var so = new SerializedObject(schema);
+                var idProp = so.FindProperty(idPropName);
+                if (idProp.propertyType == SerializedPropertyType.Integer)
+                {
+                    maxId = Mathf.Max(maxId, idProp.intValue);
+                }
+            }
+
+            int newId = maxId + 1;
+
+            // Get the folder of the original schema
+            string originalPath = AssetDatabase.GetAssetPath(originalSchema);
+            string folder = System.IO.Path.GetDirectoryName(originalPath);
+
+            // Generate a unique asset path
+            string newPath = AssetDatabase.GenerateUniqueAssetPath(folder + "/New Schema.asset");
+
+            // Copy the asset
+            AssetDatabase.CopyAsset(originalPath, newPath);
+
+            // Load the new asset
+            var newSchema = AssetDatabase.LoadAssetAtPath<BaseSchema>(newPath);
+
+            // Set the new ID
+            var newSo = new SerializedObject(newSchema);
+            var newIdProp = newSo.FindProperty(idPropName);
+            if (newIdProp.propertyType == SerializedPropertyType.Integer)
+            {
+                newIdProp.intValue = newId;
+                newSo.ApplyModifiedProperties();
+            }
+
+            // Save assets
+            AssetDatabase.SaveAssets();
+
+            // Refresh the editor
+            LoadSchemas();
         }
     }
 }

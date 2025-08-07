@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: kol 1 Station 2
   m_EditorClassIdentifier: Missions.Authoring::Data.NameSchema
   id: 2
-  fixed32: Baranagar
+  fixed32: Noapara
