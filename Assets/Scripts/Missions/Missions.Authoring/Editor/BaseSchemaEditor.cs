@@ -33,6 +33,14 @@ namespace Missions.Missions.Authoring.Editor
 
         public override VisualElement CreateInspectorGUI()
         {
+            // Ensure connections lists are initialized
+            if (outgoingConnections == null) outgoingConnections = new List<BaseSchema>();
+            if (incomingConnections == null) incomingConnections = new List<BaseSchema>();
+            if (outgoingConnections.Count == 0 && incomingConnections.Count == 0)
+            {
+                FindConnections();
+            }
+
             // Load UXML/USS
             var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/BaseSchemaInspector.uxml");
             var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/MissionsEditor.uss");
@@ -84,8 +92,10 @@ namespace Missions.Missions.Authoring.Editor
                 // Panel
                 var panel = new VisualElement();
                 panel.AddToClassList("panel");
-                outgoingFoldout = new Foldout { text = $"Uses ({outgoingConnections.Count})", value = showOutgoing };
-                incomingFoldout = new Foldout { text = $"Referenced By ({incomingConnections.Count})", value = showIncoming };
+                int outCount = outgoingConnections?.Count ?? 0;
+                int inCount = incomingConnections?.Count ?? 0;
+                outgoingFoldout = new Foldout { text = $"Uses ({outCount})", value = showOutgoing };
+                incomingFoldout = new Foldout { text = $"Referenced By ({inCount})", value = showIncoming };
                 outgoingListView = new ListView();
                 incomingListView = new ListView();
                 SetupConnectionsListView(outgoingListView, outgoingConnections);
