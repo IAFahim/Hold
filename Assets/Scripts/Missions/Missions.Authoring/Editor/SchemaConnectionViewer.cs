@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Missions.Missions.Authoring.Scriptable;
+using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 
 namespace Missions.Missions.Authoring.Editor
 {
@@ -116,6 +118,20 @@ namespace Missions.Missions.Authoring.Editor
         private int _endpointCount;
         private static GUIStyle _boldFoldoutStyle;
 
+        // UI Toolkit
+        private TwoPaneSplitView _splitView;
+        private VisualElement _leftPanel;
+        private VisualElement _rightPanel;
+        private ScrollView _leftScroll;
+        private ScrollView _rightScroll;
+        private Label _statusLabel;
+        private ToolbarToggle _sortAscToggle;
+        private EnumField _filterField;
+        private EnumField _sortField;
+        private ToolbarSearchField _searchField;
+        private VisualElement _breadcrumbs;
+        private ListView _outgoingListView;
+        private ListView _incomingListView;
         #endregion
 
         #region Unity Lifecycle
@@ -138,21 +154,79 @@ namespace Missions.Missions.Authoring.Editor
             EditorApplication.projectChanged -= OnProjectChanged;
         }
 
-        private void OnProjectChanged()
-        {
-            _isDirty = true;
-        }
-
         private void OnFocus()
         {
             if (_isDirty || EditorApplication.timeSinceStartup - _lastRefreshTime > DATA_REFRESH_INTERVAL)
             {
                 RefreshData();
+                RebuildUI();
             }
+        }
+
+        public void CreateGUI()
+        {
+            // Root styles
+            rootVisualElement.style.paddingLeft = 6;
+            rootVisualElement.style.paddingRight = 6;
+            rootVisualElement.style.paddingTop = 4;
+            rootVisualElement.style.paddingBottom = 6;
+
+            // Toolbar
+            var toolbar = new Toolbar();
+            var refreshBtn = new ToolbarButton(() => { RefreshData(force: true); RebuildUI(); }) { text = "Refresh" };
+            _filterField = new EnumField(_viewState.filterMode);
+            _filterField.RegisterValueChangedCallback(evt => { _viewState.filterMode = (FilterMode)evt.newValue; InvalidateFilterCache(); RebuildUI(); });
+            _sortField = new EnumField(_viewState.sortMode);
+            _sortField.RegisterValueChangedCallback(evt => { _viewState.sortMode = (SortMode)evt.newValue; InvalidateFilterCache(); RebuildUI(); });
+            _sortAscToggle = new ToolbarToggle { text = "Ascending", value = _viewState.sortAscending };
+            _sortAscToggle.RegisterValueChangedCallback(evt => { _viewState.sortAscending = evt.newValue; InvalidateFilterCache(); RebuildUI(); });
+            _searchField = new ToolbarSearchField();
+            _searchField.value = _viewState.searchQuery;
+            _searchField.RegisterValueChangedCallback(evt => { _viewState.searchQuery = evt.newValue; InvalidateFilterCache(); RebuildUI(); });
+
+            toolbar.Add(refreshBtn);
+            toolbar.Add(new ToolbarSpacer());
+            toolbar.Add(new Label("Filter:"));
+            toolbar.Add(_filterField);
+            toolbar.Add(new Label("Sort:"));
+            toolbar.Add(_sortField);
+            toolbar.Add(_sortAscToggle);
+            toolbar.Add(new ToolbarSpacer());
+            toolbar.Add(_searchField);
+
+            rootVisualElement.Add(toolbar);
+
+            // Split view
+            _splitView = new TwoPaneSplitView(0, position.width * LIST_PANEL_WIDTH_RATIO, TwoPaneSplitViewOrientation.Horizontal);
+            _leftPanel = new VisualElement();
+            _rightPanel = new VisualElement();
+            _leftScroll = new ScrollView();
+            _rightScroll = new ScrollView();
+            _leftPanel.Add(_leftScroll);
+            _rightPanel.Add(_rightScroll);
+            _splitView.Add(_leftPanel);
+            _splitView.Add(_rightPanel);
+            rootVisualElement.Add(_splitView);
+
+            // Status bar
+            var statusBar = new VisualElement { style = { flexDirection = FlexDirection.Row, marginTop = 4 } };
+            _statusLabel = new Label();
+            statusBar.Add(_statusLabel);
+            rootVisualElement.Add(statusBar);
+
+            RebuildUI();
+        }
+
+        private void OnProjectChanged()
+        {
+            _isDirty = true;
         }
 
         private void OnGUI()
         {
+            // IMGUI fallback only when UIToolkit not initialized
+            if (rootVisualElement != null && rootVisualElement.childCount > 0) return;
+
             HandleKeyboardInput();
             DrawToolbar();
             DrawMainContent();
@@ -319,6 +393,198 @@ namespace Missions.Missions.Authoring.Editor
         }
         #endregion
 
+        #region UI Toolkit UI
+        private void RebuildUI()
+        {
+            if (_leftScroll == null || _rightScroll == null) return;
+            BuildLeftPanel();
+            BuildRightPanel();
+            UpdateStatusBar();
+        }
+
+        private void BuildLeftPanel()
+        {
+            _leftScroll.Clear();
+            var filtered = GetFilteredAndSortedSchemas();
+            if (!filtered.Any())
+            {
+                _leftScroll.Add(new HelpBox("No schemas match the current filter.", HelpBoxMessageType.Info));
+                return;
+            }
+
+            foreach (var kvp in filtered)
+            {
+                var type = kvp.Key;
+                var schemas = kvp.Value;
+                if (!_viewState.categoryFoldouts.ContainsKey(type)) _viewState.categoryFoldouts[type] = true;
+
+                var fold = new Foldout { text = $"{type.Name} ({schemas.Count})", value = _viewState.categoryFoldouts[type] };
+                fold.RegisterValueChangedCallback(evt => _viewState.categoryFoldouts[type] = evt.newValue);
+
+                var list = new ListView
+                {
+                    itemsSource = schemas,
+                    selectionType = SelectionType.Single,
+                    virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight
+                };
+                list.makeItem = () =>
+                {
+                    var row = new VisualElement { style = { flexDirection = FlexDirection.Row, height = ROW_HEIGHT } };
+                    var nameLabel = new Label { style = { flexGrow = 1 } };
+                    var info = new Label { style = { width = 90, unityTextAlign = TextAnchor.MiddleRight, color = new Color(0.7f,0.7f,0.7f) } };
+                    row.Add(nameLabel);
+                    row.Add(info);
+                    return row;
+                };
+                list.bindItem = (el, i) =>
+                {
+                    var schema = schemas[i];
+                    var metrics = _schemaMetrics.GetValueOrDefault(schema);
+                    el.Q<Label>(className: null).text = schema.name; // first label
+                    var labels = el.Query<Label>().ToList();
+                    if (labels.Count > 1)
+                    {
+                        labels[1].text = metrics != null ? $"{metrics.outgoingCount}→ ←{metrics.incomingCount}" : "";
+                    }
+                };
+                list.onItemsChosen += objs =>
+                {
+                    var chosen = objs?.OfType<BaseSchema>().FirstOrDefault();
+                    if (chosen != null) SelectSchema(chosen);
+                };
+                list.onSelectionChange += objs =>
+                {
+                    var selected = objs?.OfType<BaseSchema>().FirstOrDefault();
+                    if (selected != null) SelectSchema(selected);
+                };
+
+                fold.Add(list);
+                _leftScroll.Add(fold);
+            }
+        }
+
+        private void BuildRightPanel()
+        {
+            _rightScroll.Clear();
+
+            if (_viewState.selectedSchema == null || !_viewState.drillDownPath.Any())
+            {
+                var info = new Label("Select a schema from the list to explore its connections")
+                {
+                    style = { unityTextAlign = TextAnchor.MiddleCenter, marginTop = 40 }
+                };
+                _rightScroll.Add(info);
+                var tips = new VisualElement();
+                tips.Add(new Label("Keyboard shortcuts:") { style = { unityFontStyleAndWeight = FontStyle.Bold, marginTop = 8 } });
+                tips.Add(new Label("• F5 - Refresh data"));
+                tips.Add(new Label("• Enter - Ping selected asset"));
+                tips.Add(new Label("• Escape - Go back or clear search"));
+                _rightScroll.Add(tips);
+                return;
+            }
+
+            // Breadcrumbs
+            _breadcrumbs = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center, marginBottom = 6 } };
+            _breadcrumbs.Add(new Label("Navigation:") { style = { width = 80 } });
+            for (int i = 0; i < _viewState.drillDownPath.Count; i++)
+            {
+                var schema = _viewState.drillDownPath[i];
+                bool isLast = i == _viewState.drillDownPath.Count - 1;
+                var btn = new Button(() =>
+                {
+                    int idx = _viewState.drillDownPath.IndexOf(schema);
+                    if (idx >= 0 && idx < _viewState.drillDownPath.Count - 1)
+                    {
+                        _viewState.drillDownPath.RemoveRange(idx + 1, _viewState.drillDownPath.Count - (idx + 1));
+                        RebuildUI();
+                    }
+                }) { text = schema.name };
+                btn.SetEnabled(!isLast);
+                _breadcrumbs.Add(btn);
+                if (!isLast) _breadcrumbs.Add(new Label("→") { style = { width = 15, unityTextAlign = TextAnchor.MiddleCenter } });
+            }
+            var pingBtn = new Button(() => { EditorGUIUtility.PingObject(_viewState.drillDownPath.Last()); }) { text = "Ping Asset" };
+            pingBtn.style.marginLeft = 6;
+            _breadcrumbs.Add(pingBtn);
+            _rightScroll.Add(_breadcrumbs);
+
+            // Columns
+            var columns = new VisualElement { style = { flexDirection = FlexDirection.Row } };
+            var currentSchema = _viewState.drillDownPath.Last();
+            var outgoing = _outgoingConnections.GetValueOrDefault(currentSchema) ?? new List<BaseSchema>();
+            var incoming = _incomingConnections.GetValueOrDefault(currentSchema) ?? new List<BaseSchema>();
+
+            columns.Add(BuildConnectionColumn("Uses (Outgoing)", outgoing));
+            var spacer = new VisualElement { style = { width = 8 } };
+            columns.Add(spacer);
+            columns.Add(BuildConnectionColumn("Used By (Incoming)", incoming));
+            _rightScroll.Add(columns);
+        }
+
+        private VisualElement BuildConnectionColumn(string title, List<BaseSchema> connections)
+        {
+            var column = new VisualElement { style = { flexDirection = FlexDirection.Column, flexGrow = 1 } };
+
+            var header = new VisualElement { style = { flexDirection = FlexDirection.Row, height = 22 } };
+            header.Add(new Label(title + $" ({connections.Count})") { style = { unityFontStyleAndWeight = FontStyle.Bold } });
+            column.Add(header);
+
+            if (!connections.Any())
+            {
+                column.Add(new HelpBox("No connections", HelpBoxMessageType.None));
+                return column;
+            }
+
+            var list = new ListView
+            {
+                itemsSource = connections,
+                selectionType = SelectionType.None,
+                virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight
+            };
+            list.makeItem = () =>
+            {
+                var row = new VisualElement { style = { flexDirection = FlexDirection.Row, height = ROW_HEIGHT } };
+                var label = new Label { style = { flexGrow = 1 } };
+                var ping = new Button { text = "Ping" };
+                ping.style.width = PING_BUTTON_WIDTH;
+                row.Add(label);
+                row.Add(ping);
+                return row;
+            };
+            list.bindItem = (el, i) =>
+            {
+                var schema = connections[i];
+                el.Q<Label>().text = schema != null ? schema.name : "<null>";
+                var btn = el.Q<Button>();
+                btn.clicked -= null;
+                btn.clicked += () => { if (schema != null) EditorGUIUtility.PingObject(schema); };
+                el.RegisterCallback<MouseUpEvent>(_ =>
+                {
+                    if (schema == null) return;
+                    if (_viewState.drillDownPath.Count >= MAX_DRILL_DOWN_DEPTH) {
+                        EditorUtility.DisplayDialog("Maximum Depth Reached", "You've reached the maximum drill-down depth to prevent infinite loops.", "OK");
+                        return;
+                    }
+                    if (!_viewState.drillDownPath.Contains(schema))
+                    {
+                        _viewState.drillDownPath.Add(schema);
+                        _viewState.selectedSchema = schema;
+                        RebuildUI();
+                    }
+                });
+            };
+            column.Add(list);
+
+            return column;
+        }
+
+        private void UpdateStatusBar()
+        {
+            if (_statusLabel == null) return;
+            _statusLabel.text = $"Schemas: {_totalSchemas}    Categories: {_categorizedSchemas.Count}    Connections: {_totalConnections}    Hubs: {_hubCount}    Orphans: {_orphanCount}    Endpoints: {_endpointCount}";
+        }
+        #endregion
+
         #region Input Handling
         private void HandleKeyboardInput()
         {
@@ -358,12 +624,11 @@ namespace Missions.Missions.Authoring.Editor
         }
         #endregion
 
-        #region UI Drawing
+        #region IMGUI Fallback Drawing (kept minimal)
         private void DrawToolbar()
         {
             using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
             {
-                // Refresh button with tooltip
                 var refreshContent = new GUIContent("Refresh", "Refresh all data (F5)");
                 if (GUILayout.Button(refreshContent, EditorStyles.toolbarButton, GUILayout.Width(60)))
                 {
@@ -372,7 +637,6 @@ namespace Missions.Missions.Authoring.Editor
 
                 GUILayout.Space(10);
 
-                // Filter dropdown
                 EditorGUI.BeginChangeCheck();
                 var newFilterMode = (FilterMode)EditorGUILayout.EnumPopup(_viewState.filterMode, EditorStyles.toolbarPopup, GUILayout.Width(120));
                 if (EditorGUI.EndChangeCheck())
@@ -381,7 +645,6 @@ namespace Missions.Missions.Authoring.Editor
                     InvalidateFilterCache();
                 }
 
-                // Sort controls
                 GUILayout.Space(10);
                 EditorGUI.BeginChangeCheck();
                 var newSortMode = (SortMode)EditorGUILayout.EnumPopup(_viewState.sortMode, EditorStyles.toolbarPopup, GUILayout.Width(120));
@@ -395,7 +658,6 @@ namespace Missions.Missions.Authoring.Editor
 
                 GUILayout.FlexibleSpace();
 
-                // Search field
                 EditorGUI.BeginChangeCheck();
                 var newSearchQuery = EditorGUILayout.TextField(_viewState.searchQuery, EditorStyles.toolbarSearchField, GUILayout.Width(200));
                 if (EditorGUI.EndChangeCheck())
@@ -572,6 +834,7 @@ namespace Missions.Missions.Authoring.Editor
             _viewState.drillDownPath.Add(schema);
             GUI.FocusControl(null);
             Repaint();
+            RebuildUI();
         }
 
         private string GetSchemaTooltip(BaseSchema schema, SchemaMetrics metrics)
@@ -589,147 +852,6 @@ namespace Missions.Missions.Authoring.Editor
             
             return tooltip.TrimEnd('\n');
         }
-
-        private void DrawDetailsPanel()
-        {
-            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox, GUILayout.ExpandWidth(true)))
-            {
-                using (var scrollView = new EditorGUILayout.ScrollViewScope(_viewState.detailsScrollPos, GUILayout.ExpandHeight(true)))
-                {
-                    _viewState.detailsScrollPos = scrollView.scrollPosition;
-
-                    if (_viewState.selectedSchema == null || !_viewState.drillDownPath.Any())
-                    {
-                        DrawEmptyDetailsState();
-                    }
-                    else
-                    {
-                        DrawBreadcrumbs();
-                        EditorGUILayout.Space(5);
-                        DrawConnectionColumns();
-                    }
-                }
-            }
-        }
-
-        private void DrawEmptyDetailsState()
-        {
-            EditorGUILayout.Space(50);
-            var style = new GUIStyle(EditorStyles.centeredGreyMiniLabel) { fontSize = 14 };
-            EditorGUILayout.LabelField("Select a schema from the list to explore its connections", style);
-            EditorGUILayout.Space(10);
-            EditorGUILayout.LabelField("Keyboard shortcuts:", EditorStyles.boldLabel);
-            EditorGUILayout.LabelField("• F5 - Refresh data");
-            EditorGUILayout.LabelField("• Enter - Ping selected asset");
-            EditorGUILayout.LabelField("• Escape - Go back or clear search");
-        }
-
-        private void DrawBreadcrumbs()
-        {
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                EditorGUILayout.LabelField("Navigation:", GUILayout.Width(70));
-                
-                for (int i = 0; i < _viewState.drillDownPath.Count; i++)
-                {
-                    var schema = _viewState.drillDownPath[i];
-                    var isLast = i == _viewState.drillDownPath.Count - 1;
-                    
-                    GUI.enabled = !isLast;
-                    var buttonStyle = isLast ? EditorStyles.miniButtonMid : EditorStyles.miniButtonLeft;
-                    
-                    if (GUILayout.Button(schema.name, buttonStyle, GUILayout.MaxWidth(150)))
-                    {
-                        _viewState.drillDownPath.RemoveRange(i + 1, _viewState.drillDownPath.Count - (i + 1));
-                        break;
-                    }
-                    
-                    if (!isLast)
-                    {
-                        GUILayout.Label("→", GUILayout.Width(15));
-                    }
-                }
-                GUI.enabled = true;
-
-                GUILayout.FlexibleSpace();
-                
-                if (GUILayout.Button("Ping Asset", EditorStyles.miniButtonRight, GUILayout.Width(80)))
-                {
-                    EditorGUIUtility.PingObject(_viewState.drillDownPath.Last());
-                }
-            }
-        }
-
-        private void DrawConnectionColumns()
-        {
-            var currentSchema = _viewState.drillDownPath.Last();
-            var detailsPanelWidth = position.width * (1 - LIST_PANEL_WIDTH_RATIO) - 20;
-
-            using (new EditorGUILayout.HorizontalScope(GUILayout.ExpandHeight(true)))
-            {
-                var outgoingConnections = _outgoingConnections.GetValueOrDefault(currentSchema) ?? new List<BaseSchema>();
-                var incomingConnections = _incomingConnections.GetValueOrDefault(currentSchema) ?? new List<BaseSchema>();
-
-                DrawConnectionColumn("Uses (Outgoing)", outgoingConnections, detailsPanelWidth, Color.cyan);
-                GUILayout.Space(5);
-                DrawConnectionColumn("Used By (Incoming)", incomingConnections, detailsPanelWidth, Color.yellow);
-            }
-        }
-
-        private void DrawConnectionColumn(string title, List<BaseSchema> connections, float panelWidth, Color accentColor)
-        {
-            var columnWidth = panelWidth * CONNECTION_COLUMN_WIDTH_RATIO;
-            
-            using (new EditorGUILayout.VerticalScope(EditorStyles.inspectorDefaultMargins, GUILayout.Width(columnWidth)))
-            {
-                // Header
-                var headerRect = GUILayoutUtility.GetRect(GUIContent.none, EditorStyles.boldLabel, GUILayout.Height(22));
-                EditorGUI.DrawRect(new Rect(headerRect.x, headerRect.y, 3, headerRect.height), accentColor);
-                EditorGUI.LabelField(new Rect(headerRect.x + 5, headerRect.y, headerRect.width - 5, headerRect.height), 
-                                   $"{title} ({connections.Count})", EditorStyles.boldLabel);
-
-                if (!connections.Any())
-                {
-                    EditorGUILayout.HelpBox("No connections", MessageType.None);
-                    return;
-                }
-
-                // Connection entries
-                foreach (var connection in connections)
-                {
-                    DrawConnectionEntry(connection);
-                }
-            }
-        }
-
-        private void DrawConnectionEntry(BaseSchema schema)
-        {
-            var rect = GUILayoutUtility.GetRect(GUIContent.none, EditorStyles.miniButton, GUILayout.Height(ROW_HEIGHT));
-            var mainButtonRect = new Rect(rect.x, rect.y, rect.width - PING_BUTTON_WIDTH - 2, rect.height);
-            var pingButtonRect = new Rect(rect.xMax - PING_BUTTON_WIDTH, rect.y, PING_BUTTON_WIDTH, rect.height);
-
-            var icon = EditorGUIUtility.ObjectContent(schema, typeof(BaseSchema)).image;
-            var content = new GUIContent(schema.name, icon);
-
-            if (GUI.Button(mainButtonRect, content, EditorStyles.miniButtonLeft))
-            {
-                if (_viewState.drillDownPath.Count >= MAX_DRILL_DOWN_DEPTH)
-                {
-                    EditorUtility.DisplayDialog("Maximum Depth Reached", 
-                                              "You've reached the maximum drill-down depth to prevent infinite loops.", "OK");
-                }
-                else if (!_viewState.drillDownPath.Contains(schema))
-                {
-                    _viewState.drillDownPath.Add(schema);
-                }
-            }
-
-            if (GUI.Button(pingButtonRect, "Ping", EditorStyles.miniButtonRight))
-            {
-                EditorGUIUtility.PingObject(schema);
-            }
-        }
-
         #endregion
 
         #region Filtering & Sorting

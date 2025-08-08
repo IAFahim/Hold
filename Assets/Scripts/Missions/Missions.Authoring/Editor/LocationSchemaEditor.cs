@@ -2,30 +2,35 @@
 using Missions.Missions.Authoring.Schemas;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 
 namespace Missions.Missions.Authoring.Editor
 {
     [CustomEditor(typeof(LocationSchema))]
     public class LocationSchemaEditor : BaseSchemaEditor
     {
-        public override void OnInspectorGUI()
+        public override VisualElement CreateInspectorGUI()
         {
-            // Call the base implementation to get all the BaseSchema functionality
-            base.OnInspectorGUI();
+            var root = base.CreateInspectorGUI();
 
-            // Add StationSchema-specific functionality
-            var stationSchema = (LocationSchema)target;
+            var separator = new VisualElement { style = { height = 8 } };
+            root.Add(separator);
 
-            EditorGUILayout.Space(5);
-#if ALINE
-            Drawing.Draw.WireSphere(stationSchema.position, stationSchema.range, Color.antiqueWhite);
-            Drawing.Draw.Label2D(stationSchema.position, stationSchema.name);
-            
-#endif
-            EditorGUILayout.LabelField("Station Tools", EditorStyles.boldLabel);
+            var box = new HelpBox("", HelpBoxMessageType.None);
+            box.style.marginTop = 4;
+            box.style.marginBottom = 4;
 
-            if (GUILayout.Button("Focus Camera"))
+            var header = new Label("Location Tools")
             {
+                style = { unityFontStyleAndWeight = FontStyle.Bold }
+            };
+            box.Add(header);
+
+            var toolbar = new Toolbar();
+            var focusBtn = new ToolbarButton(() =>
+            {
+                var stationSchema = (LocationSchema)target;
                 if (SceneView.lastActiveSceneView != null)
                 {
                     SceneView.lastActiveSceneView.LookAt(stationSchema.position);
@@ -34,7 +39,27 @@ namespace Missions.Missions.Authoring.Editor
                 {
                     Debug.Log("No scene view open to focus.");
                 }
-            }
+            }) { text = "Focus Camera" };
+            toolbar.Add(focusBtn);
+            box.Add(toolbar);
+
+            root.Add(box);
+            return root;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            // IMGUI fallback to base
+            base.OnInspectorGUI();
+        }
+
+        private void OnSceneGUI()
+        {
+#if ALINE
+            var stationSchema = (LocationSchema)target;
+            Drawing.Draw.WireSphere(stationSchema.position, stationSchema.range, Color.antiqueWhite);
+            Drawing.Draw.Label2D(stationSchema.position, stationSchema.name);
+#endif
         }
     }
 }
