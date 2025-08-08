@@ -253,7 +253,7 @@ namespace Missions.Missions.Authoring.Editor
             splitRoot.Add(_splitView);
 
             // Handle window resize and split drag
-            RegisterCallback<GeometryChangedEvent>(_ => UpdateSplitWidth());
+            
             _splitView.RegisterCallback<MouseUpEvent>(_ => PersistSplitWidth());
 
             RebuildUI();
@@ -822,7 +822,6 @@ namespace Missions.Missions.Authoring.Editor
             using (new EditorGUILayout.HorizontalScope())
             {
                 DrawSchemaListPanel();
-                DrawDetailsPanel();
             }
         }
 

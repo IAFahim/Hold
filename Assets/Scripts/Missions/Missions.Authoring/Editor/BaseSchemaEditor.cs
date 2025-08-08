@@ -11,6 +11,10 @@ namespace Missions.Missions.Authoring.Editor
     [CustomEditor(typeof(BaseSchema), true)]
     public class BaseSchemaEditor : UnityEditor.Editor
     {
+        [SerializeField] private VisualTreeAsset uxml;
+        [SerializeField] private StyleSheet uss;
+        
+        
         private List<BaseSchema> outgoingConnections;
         private List<BaseSchema> incomingConnections;
 
@@ -42,15 +46,12 @@ namespace Missions.Missions.Authoring.Editor
             }
 
             // Load UXML/USS
-            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/BaseSchemaInspector.uxml");
-            var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/MissionsEditor.uss");
+            // var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/BaseSchemaInspector.uxml");
+            // var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/MissionsEditor.uss");
 
             root = new VisualElement();
             if (uss != null) root.styleSheets.Add(uss);
-            if (uxml != null)
-            {
-                uxml.CloneTree(root);
-            }
+            if (uxml != null) uxml.CloneTree(root);
 
             // Theme
             ApplyThemeClass(root);

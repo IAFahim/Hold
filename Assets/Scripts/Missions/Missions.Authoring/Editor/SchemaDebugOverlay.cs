@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Missions.Missions.Authoring.Schemas;
+using Missions.Missions.Authoring.Scriptable;
 using Missions.Missions.Authoring.Settings;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Missions.Missions.Debug.Runtime
+namespace Missions.Missions.Authoring.Editor
 {
     [DefaultExecutionOrder(-1000)]
     public class SchemaDebugOverlay : MonoBehaviour
@@ -148,7 +149,7 @@ namespace Missions.Missions.Debug.Runtime
                     break;
                 case ItemSchema isch:
                     _detailsLabel.text =
-                        $"Item\nID: {isch.ID}\nName: {SafeName(isch.name)}\nWeight: {isch.weightKg} kg\nFlags: {isch.flags}";
+                        $"Item\nID: {isch.ID}\nName: {SafeName(isch.name)}\nWeight: {isch.weightKg} kg\n";
                     break;
                 case NameSchema n:
                     _detailsLabel.text = $"Name\nID: {n.ID}\nText: {n.fixed32}";
@@ -217,7 +218,7 @@ namespace Missions.Missions.Debug.Runtime
                     goals = s.goals?.Where(g => g).Select(g => g.name).ToArray() ?? Array.Empty<string>()
                 }).ToArray() ?? Array.Empty<object>(),
                 times = timeSettings?.schemas?.Where(s => s).Select(s => new { s.ID, cross = SafeName(s.crossLink) }).ToArray() ?? Array.Empty<object>(),
-                items = itemSettings?.schemas?.Where(s => s).Select(s => new { s.ID, name = SafeName(s.name), s.weightKg, flags = s.flags.ToString() }).ToArray() ?? Array.Empty<object>()
+                items = itemSettings?.schemas?.Where(s => s).Select(s => new { s.ID, name = SafeName(s.name), s.weightKg }).ToArray() ?? Array.Empty<object>()
             };
             var json = JsonUtility.ToJson(new Wrapper(payload), true);
 #if UNITY_EDITOR

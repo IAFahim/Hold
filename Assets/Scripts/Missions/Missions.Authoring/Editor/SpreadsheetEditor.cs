@@ -18,7 +18,7 @@ namespace Missions.Missions.Authoring.Editor
         private string _searchQuery = "";
 
         // UI Toolkit
-        private TextField _searchField;
+        private ToolbarSearchField _searchField;
         private ScrollView _mainScroll;
 
         [MenuItem("Tools/Schema/Spreadsheet Editor")]
@@ -216,7 +216,7 @@ namespace Missions.Missions.Authoring.Editor
         private void OnGUI()
         {
             // Fallback to IMGUI if UI Toolkit not initialized
-            if (rootVisualElement != null && rootVisualElement.childCount > 0) return;
+            if (rootVisualElement is { childCount: > 0 }) return;
 
             DrawToolbar();
             DrawSpreadsheet();
