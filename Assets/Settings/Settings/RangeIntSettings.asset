@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d6a180d111d8d7d8aa83538ec0af8b9, type: 3}
   m_Name: RangeIntSettings
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Settings.RangeIntSettings
-  schemas: []
+  schemas:
+  - {fileID: 11400000, guid: bf90b121078cc028b95e2441e5327e0a, type: 2}

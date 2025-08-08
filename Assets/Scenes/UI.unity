@@ -908,8 +908,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce47cb5e694f48b7b796eee74855d4cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BovineLabs.Sample::UIToolkitJoystick
+  Value: {x: 0, y: 0}
+  IsPressed: 0
+  IsLocked: 0
   deadZone: 0.12
-  noLockRadiusRatio: 0.45
+  noLockRadiusRatio: 1.95
   springTime: 0.14
   useUnscaledTime: 1
   onValueChanged:
@@ -928,7 +931,7 @@ MonoBehaviour:
   noLockRadius: 0
   activePointer: -1
   dragging: 0
-  gap: 3000
+  gap: 30
   springing: 0
   springStart: {x: 0, y: 0}
   springTarget: {x: 0, y: 0}

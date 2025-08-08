@@ -26,26 +26,8 @@ namespace Missions.Missions.Authoring.Editor
         {
             var window = GetWindow<SpreadsheetEditor>("Spreadsheet Editor");
             window.minSize = new Vector2(800, 400);
-            window.titleContent = new GUIContent("Spreadsheet Editor", EditorGUIUtility.IconContent("d_UnityEditor.HierarchyWindow").image);
-        }
-
-        // Open without stealing focus (if window already exists)
-        [MenuItem("Tools/Schema/Spreadsheet Editor (No Focus)")]
-        public static void ShowWindowNoFocus()
-        {
-            var window = GetWindow<SpreadsheetEditor>("Spreadsheet Editor", false);
-            window.minSize = new Vector2(800, 400);
-            window.titleContent = new GUIContent("Spreadsheet Editor", EditorGUIUtility.IconContent("d_UnityEditor.HierarchyWindow").image);
-        }
-
-        // Open as floating utility window (always on top within Unity)
-        [MenuItem("Tools/Schema/Spreadsheet Editor (Utility)")]
-        public static void ShowWindowUtility()
-        {
-            var window = CreateInstance<SpreadsheetEditor>();
-            window.titleContent = new GUIContent("Spreadsheet Editor", EditorGUIUtility.IconContent("d_UnityEditor.HierarchyWindow").image);
-            window.minSize = new Vector2(800, 400);
-            window.ShowUtility();
+            window.titleContent = new GUIContent("Spreadsheet Editor",
+                EditorGUIUtility.IconContent("d_UnityEditor.HierarchyWindow").image);
         }
 
         private void OnEnable()
@@ -87,11 +69,14 @@ namespace Missions.Missions.Authoring.Editor
             RebuildUISections();
         }
 
+        public VisualTreeAsset uxml;
+        public StyleSheet uss;
+
         public void CreateGUI()
         {
             // Load UXML/USS
-            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/SpreadsheetEditor.uxml");
-            var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/MissionsEditor.uss");
+            // uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/SpreadsheetEditor.uxml");
+            // uss = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/MissionsEditor.uss");
 
             rootVisualElement.Clear();
             if (uss != null) rootVisualElement.styleSheets.Add(uss);
@@ -109,8 +94,13 @@ namespace Missions.Missions.Authoring.Editor
             if (_searchField != null)
             {
                 _searchField.value = _searchQuery;
-                _searchField.RegisterValueChangedCallback(evt => { _searchQuery = evt.newValue; RebuildUISections(); });
+                _searchField.RegisterValueChangedCallback(evt =>
+                {
+                    _searchQuery = evt.newValue;
+                    RebuildUISections();
+                });
             }
+
             if (refreshBtn != null) refreshBtn.clicked += () => LoadSchemas();
             if (saveBtn != null) saveBtn.clicked += () => AssetDatabase.SaveAssets();
 
@@ -134,10 +124,12 @@ namespace Missions.Missions.Authoring.Editor
             for (int i = schemasList.Count - 1; i >= 0; i--)
             {
                 var (type, schemaList) = schemasList[i];
-                var filteredList = schemaList.Where(s => string.IsNullOrEmpty(_searchQuery) || s.name.ToLower().Contains(_searchQuery.ToLower())).ToList();
+                var filteredList = schemaList.Where(s =>
+                    string.IsNullOrEmpty(_searchQuery) || s.name.ToLower().Contains(_searchQuery.ToLower())).ToList();
                 if (filteredList.Count == 0) continue;
 
-                var foldout = new Foldout { text = $"{type.Name} ({filteredList.Count})", value = _foldouts.GetValueOrDefault(type, true) };
+                var foldout = new Foldout
+                    { text = $"{type.Name} ({filteredList.Count})", value = _foldouts.GetValueOrDefault(type, true) };
                 foldout.RegisterValueChangedCallback(evt => _foldouts[type] = evt.newValue);
 
                 var section = BuildTypeSection(type, filteredList);
@@ -162,66 +154,111 @@ namespace Missions.Missions.Authoring.Editor
                 {
                     var sampleSo = new SerializedObject(schemaList[0]);
                     var sampleProp = sampleSo.FindProperty(props[j].path);
-                    if (sampleProp != null && sampleProp.isArray) width = 350;
+                    if (sampleProp is { isArray: true }) width = 350;
                 }
+
                 widths.Add(width);
             }
 
             // Header row
-            var header = new VisualElement { style = { flexDirection = FlexDirection.Row, marginBottom = 2 } };
-            var assetHeader = new Label("Asset") { style = { width = 200, unityFontStyleAndWeight = FontStyle.Bold } };
-            header.Add(assetHeader);
+            var header = new VisualElement
+                { style = { flexDirection = FlexDirection.Row, marginBottom = 2, paddingLeft = 10 } };
+            var holdFirstHeader = false;
             for (var j = 0; j < props.Count; j++)
             {
                 var sampleSo = new SerializedObject(schemaList[0]);
                 var sampleProp = sampleSo.FindProperty(props[j].path);
                 var label = new Label(sampleProp != null ? sampleProp.displayName : props[j].path)
                 {
-                    style = { width = widths[j], unityFontStyleAndWeight = FontStyle.Bold }
+                    style =
+                    {
+                        width = widths[j], unityFontStyleAndWeight = FontStyle.Bold
+                    }
                 };
                 header.Add(label);
+                if (!holdFirstHeader)
+                {
+                    var assetHeader = new Label("Asset")
+                    {
+                        style =
+                        {
+                            width = 200, unityFontStyleAndWeight = FontStyle.Bold
+                        }
+                    };
+                    header.Add(assetHeader);
+                    holdFirstHeader = true;
+                }
             }
+
             header.Add(new Label("") { style = { width = 100 } });
             container.Add(header);
 
             // Rows
-            for (int i = 0; i < schemaList.Count; i++)
-            {
-                var schema = schemaList[i];
-                var so = new SerializedObject(schema);
-
-                var row = new VisualElement { style = { flexDirection = FlexDirection.Row, paddingLeft = 4, paddingRight = 4 } };
-                row.EnableInClassList("schema-row--odd", i % 2 == 1);
-                row.EnableInClassList("schema-row--even", i % 2 == 0);
-
-                var objField = new ObjectField { objectType = typeof(BaseSchema), value = schema, allowSceneObjects = false };
-                objField.SetEnabled(false);
-                objField.style.width = 200;
-                row.Add(objField);
-
-                for (var j = 0; j < props.Count; j++)
-                {
-                    var propPath = props[j].path;
-                    var serializedProperty = so.FindProperty(propPath);
-                    var field = serializedProperty != null ? new PropertyField(serializedProperty, "") : new PropertyField();
-                    field.style.width = widths[j];
-                    row.Add(field);
-                }
-
-                var newBtn = new Button(() => { CreateNewSchema(schema, i); }) { text = "New" };
-                newBtn.style.width = 100;
-                newBtn.style.marginLeft = 6;
-                row.Add(newBtn);
-
-                // Bind once per-row to ensure all PropertyFields connect
-                row.Bind(so);
-                container.Add(row);
-            }
-
+            for (int i = 0; i < schemaList.Count; i++) CreateRow(i, schemaList, props, widths, container);
             return container;
         }
 
-        private void CreateNewSchema(BaseSchema originalSchema, int i)
+        private void CreateRow(
+            int rowIndex,
+            List<BaseSchema> schemaList,
+            List<(string path, SerializedPropertyType type)> props,
+            List<float> widths, VisualElement container
+        )
+        {
+            var schema = schemaList[rowIndex];
+            var so = new SerializedObject(schema);
+
+            var row = new VisualElement
+            {
+                style =
+                {
+                    flexDirection = FlexDirection.Row, paddingRight = 4
+                }
+            };
+            row.EnableInClassList("schema-row--odd", rowIndex % 2 == 1);
+            row.EnableInClassList("schema-row--even", rowIndex % 2 == 0);
+
+            AddProperty(props, widths, 0, so, row);
+            AddMainScriptableObject(schema, row);
+            for (var i = 1; i < props.Count; i++) AddProperty(props, widths, i, so, row);
+            var newBtn = new Button(() => { CreateNewSchema(schema); })
+            {
+                text = "New",
+                style =
+                {
+                    width = 100,
+                    marginLeft = 6
+                }
+            };
+            row.Add(newBtn);
+
+            // Bind once per-row to ensure all PropertyFields connect
+            row.Bind(so);
+            container.Add(row);
+        }
+
+        private static void AddMainScriptableObject(BaseSchema schema, VisualElement row)
+        {
+            var objField = new ObjectField
+                { objectType = typeof(BaseSchema), value = schema, allowSceneObjects = false };
+            objField.SetEnabled(false);
+            objField.style.width = 200;
+            row.Add(objField);
+        }
+
+        private static void AddProperty(List<(string path, SerializedPropertyType type)> props, List<float> widths,
+            int j, SerializedObject so, VisualElement row)
+        {
+            var propPath = props[j].path;
+            var serializedProperty = so.FindProperty(propPath);
+            var field = serializedProperty != null
+                ? new PropertyField(serializedProperty, "")
+                : new PropertyField();
+            field.style.width = widths[j];
+            row.Add(field);
+        }
+
+        private void CreateNewSchema(BaseSchema originalSchema)
         {
             string originalPath = AssetDatabase.GetAssetPath(originalSchema);
             string folder = System.IO.Path.GetDirectoryName(originalPath);
@@ -251,10 +288,12 @@ namespace Missions.Missions.Authoring.Editor
             {
                 LoadSchemas();
             }
+
             if (GUILayout.Button("Save Changes", EditorStyles.toolbarButton))
             {
                 AssetDatabase.SaveAssets();
             }
+
             EditorGUILayout.EndHorizontal();
         }
 
@@ -267,7 +306,8 @@ namespace Missions.Missions.Authoring.Editor
             for (int i = schemasList.Count - 1; i >= 0; i--)
             {
                 var (type, schemaList) = schemasList[i];
-                var filteredList = schemaList.Where(s => string.IsNullOrEmpty(_searchQuery) || s.name.ToLower().Contains(_searchQuery.ToLower())).ToList();
+                var filteredList = schemaList.Where(s =>
+                    string.IsNullOrEmpty(_searchQuery) || s.name.ToLower().Contains(_searchQuery.ToLower())).ToList();
                 if (filteredList.Count == 0) continue;
 
                 _foldouts[type] = EditorGUILayout.Foldout(_foldouts[type], $"{type.Name} ({filteredList.Count})", true);
@@ -279,6 +319,7 @@ namespace Missions.Missions.Authoring.Editor
                     EditorGUILayout.ObjectField(s, typeof(BaseSchema), false);
                 }
             }
+
             EditorGUILayout.EndScrollView();
         }
 
@@ -293,6 +334,7 @@ namespace Missions.Missions.Authoring.Editor
                 string result = input.Remove(index, match.Length).Insert(index, incrementedNumber.ToString());
                 return result;
             }
+
             return input;
         }
     }

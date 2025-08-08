@@ -18,11 +18,11 @@ namespace Missions.Missions.Authoring.Schemas
         private const string FieldName = nameof(DescriptionSchema);
         private const string TypeString = "Description";
 
-        public string fixed64;
+        public string fixed128;
 
         private void OnValidate()
         {
-            FixedString32Bytes test = fixed64;
+            FixedString128Bytes test = fixed128;
         }
 
         public override Description ToData()
@@ -30,7 +30,7 @@ namespace Missions.Missions.Authoring.Schemas
             return new Description
             {
                 id = (ushort)ID,
-                description = fixed64
+                description = fixed128
             };
         }
     }

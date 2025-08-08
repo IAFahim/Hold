@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 541bfce0ae3614c0c9e7d2f327e67b3a, type: 3}
   m_Name: RangeFloatSettings
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Settings.RangeFloatSettings
-  schemas: []
+  schemas:
+  - {fileID: 11400000, guid: e1eb3b5597e30666ebcebc9fcb093383, type: 2}
+  - {fileID: 11400000, guid: cac9d53d281aac68bafaca12bfdf4291, type: 2}

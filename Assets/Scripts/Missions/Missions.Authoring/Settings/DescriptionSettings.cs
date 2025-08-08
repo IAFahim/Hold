@@ -7,6 +7,6 @@ namespace Missions.Missions.Authoring.Settings
 {
     public class DescriptionSettings : ScriptableObject, ISettings
     {
-        public NameSchema[] schemas = Array.Empty<NameSchema>();
+        public DescriptionSchema[] schemas = Array.Empty<DescriptionSchema>();
     }
 }

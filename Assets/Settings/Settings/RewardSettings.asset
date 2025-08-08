@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10265e6459364a75381a9b84a81f6dea, type: 3}
   m_Name: RewardSettings
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Settings.RewardSettings
-  schemas: []
+  schemas:
+  - {fileID: 11400000, guid: 9d923662688221318a998e370a9b3ea6, type: 2}

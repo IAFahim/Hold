@@ -2,7 +2,9 @@ using System;
 using BovineLabs.Core.ObjectManagement;
 using Missions.Missions.Authoring.Scriptable;
 using Missions.Missions.Authoring.Settings;
+using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.Search;
 
 namespace Missions.Missions.Authoring.Schemas
 {
@@ -25,9 +27,13 @@ namespace Missions.Missions.Authoring.Schemas
     ]
     public class ItemSchema : BakingSchema<Item>
     {
-        [Tooltip("Display name reference")] public NameSchema name;
+        [Tooltip("Display name reference")] [SearchContext("item")]
+        public NameSchema name;
+
         [Min(0)] public float weightKg;
-        [Tooltip("Bitmask flags describing item properties")] public ItemFlags flags;
+
+        [Tooltip("Bitmask flags describing item properties")]
+        public ItemFlags flags;
 
         public override Item ToData()
         {

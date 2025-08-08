@@ -5,10 +5,9 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class UIToolkitJoystick : MonoBehaviour
 {
-    [Header("Output")]
-    public Vector2 Value { get; set; } // [-1..1], x right+, y up+
-    public bool IsPressed { get; set; }
-    public bool IsLocked { get; set; }
+    [Header("Output")] public Vector2 Value;
+    public bool IsPressed;
+    public bool IsLocked;
 
     [Header("Tuning")]
     [Range(0.0f, 0.6f)] public float deadZone = 0.12f;

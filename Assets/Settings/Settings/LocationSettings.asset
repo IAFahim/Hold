@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Settings.StationSettings
   schemas:
   - {fileID: 11400000, guid: ed47f73180570d6d5acfe9976065ed50, type: 2}
+  - {fileID: 11400000, guid: 5fb6330992cf37a07b0a782a5bac1bca, type: 2}

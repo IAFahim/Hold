@@ -2,6 +2,7 @@ using BovineLabs.Core.ObjectManagement;
 using Missions.Missions.Authoring.Scriptable;
 using Missions.Missions.Authoring.Settings;
 using UnityEngine;
+using UnityEngine.Search;
 
 namespace Missions.Missions.Authoring.Schemas
 {
@@ -18,6 +19,7 @@ namespace Missions.Missions.Authoring.Schemas
         private const string TypeString = "Goals";
 
         public ETargetType targetType;
+        [SearchContext("range")]
         public BaseSchema rangeSchema;
 
         public override Goal ToData()
@@ -25,7 +27,7 @@ namespace Missions.Missions.Authoring.Schemas
             return new Goal
             {
                 id = (ushort)ID,
-                rangeType = rangeSchema.ToNumType(),
+                rangeType = rangeSchema.ToRangeType(),
                 targetType = targetType,
                 rangeId = (ushort)rangeSchema.ID
             };

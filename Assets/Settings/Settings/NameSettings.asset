@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: NameSettings
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Settings.NameSettings
   schemas:
+  - {fileID: 11400000, guid: 189773e69cdb25affb93b4656c8b4575, type: 2}
   - {fileID: 11400000, guid: 796897c01c6e09537a88f551e2b0f1ee, type: 2}
   - {fileID: 11400000, guid: 3f2cd198ee268af8ba397506021b954b, type: 2}
   - {fileID: 11400000, guid: 29f54fb527c998e6ba7941b6eea7d49d, type: 2}
@@ -40,3 +41,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 003fd2b8baa7aacd4ae416a813029daf, type: 2}
   - {fileID: 11400000, guid: 7c676554294e5d61fadad567a76b9c89, type: 2}
   - {fileID: 11400000, guid: 8aa08985cc5c148538ea9ff9be3bfdb8, type: 2}
+  - {fileID: 11400000, guid: c5d2b8be40775a407bf8ce9c780fff0f, type: 2}
+  - {fileID: 11400000, guid: 20dbda32fda88e31db6247931b0683de, type: 2}
+  - {fileID: 11400000, guid: 0e57a247d8a720eaeaa5e8cb6cc49e48, type: 2}
+  - {fileID: 11400000, guid: 9ae388caf2ffc7a7098098f3b6b1a314, type: 2}
+  - {fileID: 11400000, guid: 2ca18a6dd492fafeab07a3cde2c6189b, type: 2}
+  - {fileID: 11400000, guid: 85e1a8b5a157beeaaa9bcb39ea10d824, type: 2}
+  - {fileID: 11400000, guid: 87ca177304d2f295e8b99e9295d83a9a, type: 2}
+  - {fileID: 11400000, guid: 2d3682eb4cf5888be8473ea6b2ac889f, type: 2}
+  - {fileID: 11400000, guid: 93f278d2ed6d5bef6bdd7af9996b158e, type: 2}
+  - {fileID: 11400000, guid: f3edaa3d6236fff1a996cfb692310dfb, type: 2}
+  - {fileID: 11400000, guid: 2f513e95e707019b98c593f114f5d9cb, type: 2}
+  - {fileID: 11400000, guid: 5fc055b887f0efc05b99c01074a897c6, type: 2}
+  - {fileID: 11400000, guid: f2810677839385e059fcdb0a48a77ebd, type: 2}
+  - {fileID: 11400000, guid: d62483797ee86f888924d76b0bbecd71, type: 2}
+  - {fileID: 11400000, guid: 6d095e533dcba939e872b9862323e48f, type: 2}
+  - {fileID: 11400000, guid: 36fa30b84846d521a8496c38b153712e, type: 2}
+  - {fileID: 11400000, guid: 3d3310272e34218f09eb2b04125e375e, type: 2}
+  - {fileID: 11400000, guid: f3264c0efc22438d29c252bbe1767463, type: 2}

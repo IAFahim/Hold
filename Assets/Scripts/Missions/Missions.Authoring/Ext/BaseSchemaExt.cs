@@ -6,7 +6,7 @@ namespace Missions.Missions.Authoring
 {
     internal static class BaseSchemaExt
     {
-        public static ENumType ToNumType(this BaseSchema baseSchema)
+        public static ENumType ToRangeType(this BaseSchema baseSchema)
         {
             return baseSchema switch
             {
