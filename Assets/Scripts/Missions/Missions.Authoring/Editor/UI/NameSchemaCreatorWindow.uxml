@@ -28,7 +28,7 @@
       <ui:Button name="clearButton" text="Clear Input" />
     </ui:VisualElement>
 
-    <uie:Foldout name="existingFoldout" text="Existing Names (0)" style="margin-top: 10px;">
+    <ui:Foldout name="existingFoldout" text="Existing Names (0)" style="margin-top: 10px;">
       <ui:ListView name="existingList" />
     </uie:Foldout>
   </ui:VisualElement>

@@ -9,12 +9,12 @@
       <ui:Label name="statsLabel" class="mini-label" />
     </uie:Toolbar>
     <ui:VisualElement class="panel">
-      <uie:Foldout name="outgoingFoldout" text="Uses (0)">
+      <ui:Foldout name="outgoingFoldout" text="Uses (0)">
         <ui:ListView name="outgoingList" />
-      </uie:Foldout>
-      <uie:Foldout name="incomingFoldout" text="Referenced By (0)">
-        <ui:ListView name="incomingList" />
-      </uie:Foldout>
+              </ui:Foldout>
+        <ui:Foldout name="incomingFoldout" text="Referenced By (0)">
+               <ui:ListView name="incomingList" />
+        </ui:Foldout>
     </ui:VisualElement>
   </ui:VisualElement>
 </ui:UXML>

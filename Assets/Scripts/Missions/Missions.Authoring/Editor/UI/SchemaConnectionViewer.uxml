@@ -4,9 +4,9 @@
       <uie:ToolbarButton name="refreshButton" text="Refresh" />
       <uie:ToolbarSpacer />
       <ui:Label text="Filter:" />
-      <uie:EnumField name="filterField" />
+      <ui:EnumField name="filterField" />
       <ui:Label text="Sort:" />
-      <uie:EnumField name="sortField" />
+      <ui:EnumField name="sortField" />
       <uie:ToolbarToggle name="ascToggle" text="Ascending" value="true" />
       <uie:ToolbarSpacer />
       <uie:ToolbarSearchField name="searchField" />
