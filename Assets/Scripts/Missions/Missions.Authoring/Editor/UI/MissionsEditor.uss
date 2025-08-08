@@ -144,3 +144,39 @@
 .chip--active { background-color: var(--accent-blue); color: #111; }
 
 .hoverable:hover { background-color: rgba(255,255,255,0.05); }
+
+/* THEME: Dark */
+.theme--dark .panel { background-color: #2b2f36; border-color: #3a3f47; }
+.theme--dark .panel__header { color: #e6e6e6; }
+.theme--dark .schema-row--odd { background-color: rgba(255,255,255,0.03); }
+.theme--dark .schema-row--even { background-color: rgba(255,255,255,0.08); }
+.theme--dark .schema-row__name { color: #e6e6e6; }
+.theme--dark .schema-row__metrics { color: #b0b0b0; }
+.theme--dark .badge--hub { background-color: #ff9f2b; }
+.theme--dark .badge--orphan { background-color: #ff6b6b; }
+.theme--dark .badge--endpoint { background-color: #4cd964; }
+.theme--dark .status-bar { background-color: #23262c; color: #b0b0b0; border-top-color: #3a3f47; }
+.theme--dark .card { background-color: #2b2f36; border-color: #3a3f47; }
+.theme--dark .card__title { color: #b0b0b0; }
+.theme--dark .card__value { color: #e6e6e6; }
+.theme--dark .chip { background-color: #2b2f36; border-color: #3a3f47; color: #e6e6e6; }
+.theme--dark .chip--active { background-color: #4aa3ff; color: #111; }
+.theme--dark .hoverable:hover { background-color: rgba(255,255,255,0.05); }
+
+/* THEME: Light */
+.theme--light .panel { background-color: #f4f6f8; border-color: #d6dbe1; }
+.theme--light .panel__header { color: #1f2328; }
+.theme--light .schema-row--odd { background-color: #ffffff; }
+.theme--light .schema-row--even { background-color: #eef1f4; }
+.theme--light .schema-row__name { color: #1f2328; }
+.theme--light .schema-row__metrics { color: #5a6570; }
+.theme--light .badge--hub { background-color: #ff991f; color: #ffffff; }
+.theme--light .badge--orphan { background-color: #e45757; color: #ffffff; }
+.theme--light .badge--endpoint { background-color: #2fb25e; color: #ffffff; }
+.theme--light .status-bar { background-color: #eef1f4; color: #5a6570; border-top-color: #d6dbe1; }
+.theme--light .card { background-color: #ffffff; border-color: #d6dbe1; }
+.theme--light .card__title { color: #5a6570; }
+.theme--light .card__value { color: #1f2328; }
+.theme--light .chip { background-color: #ffffff; border-color: #d6dbe1; color: #1f2328; }
+.theme--light .chip--active { background-color: #4aa3ff; color: #ffffff; }
+.theme--light .hoverable:hover { background-color: rgba(0,0,0,0.05); }

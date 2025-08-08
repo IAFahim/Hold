@@ -138,6 +138,7 @@ namespace Missions.Missions.Authoring.Editor
         private Label _cardOrphans;
         private Label _cardEndpoints;
         private Label _chipAll, _chipHubs, _chipOrphans, _chipEndpoints, _chipHas, _chipNone;
+        private float _splitRatio = LIST_PANEL_WIDTH_RATIO;
         #endregion
 
         #region Unity Lifecycle
@@ -178,6 +179,9 @@ namespace Missions.Missions.Authoring.Editor
             rootVisualElement.Clear();
             if (uss != null) rootVisualElement.styleSheets.Add(uss);
             if (uxml != null) uxml.CloneTree(rootVisualElement);
+
+            // Theme class
+            ApplyThemeClass(rootVisualElement);
 
             // Toolbar wiring
             var refreshBtn = rootVisualElement.Q<ToolbarButton>("refreshButton");
@@ -233,7 +237,7 @@ namespace Missions.Missions.Authoring.Editor
             // Split root
             var splitRoot = rootVisualElement.Q<VisualElement>("splitRoot");
             splitRoot.Clear();
-            _splitView = new TwoPaneSplitView(0, position.width * LIST_PANEL_WIDTH_RATIO, TwoPaneSplitViewOrientation.Horizontal);
+            _splitView = new TwoPaneSplitView(0, position.width * _splitRatio, TwoPaneSplitViewOrientation.Horizontal);
             _leftPanel = new VisualElement();
             _rightPanel = new VisualElement();
             _leftScroll = new ScrollView();
@@ -244,7 +248,34 @@ namespace Missions.Missions.Authoring.Editor
             _splitView.Add(_rightPanel);
             splitRoot.Add(_splitView);
 
+            // Handle window resize and split drag
+            RegisterCallback<GeometryChangedEvent>(_ => UpdateSplitWidth());
+            _splitView.RegisterCallback<MouseUpEvent>(_ => PersistSplitWidth());
+
             RebuildUI();
+        }
+
+        private void UpdateSplitWidth()
+        {
+            if (_splitView == null) return;
+            float newWidth = position.width * _splitRatio;
+            _splitView.fixedPaneInitialDimension = newWidth;
+        }
+
+        private void PersistSplitWidth()
+        {
+            if (_leftPanel == null) return;
+            float current = _leftPanel.resolvedStyle.width;
+            _splitRatio = Mathf.Clamp01(current / Mathf.Max(position.width, 1f));
+        }
+
+        private void ApplyThemeClass(VisualElement root)
+        {
+            // Unity has EditorGUIUtility.isProSkin for dark theme
+            bool dark = EditorGUIUtility.isProSkin;
+            root.RemoveFromClassList("theme--dark");
+            root.RemoveFromClassList("theme--light");
+            root.AddToClassList(dark ? "theme--dark" : "theme--light");
         }
 
         private void OnProjectChanged()
