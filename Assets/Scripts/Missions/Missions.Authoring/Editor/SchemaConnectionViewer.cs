@@ -211,8 +211,8 @@ namespace Missions.Missions.Authoring.Editor
 
             if (_filterField != null)
             {
-                _filterField.Init(_viewState.filterMode);
-                _filterField.RegisterValueChangedCallback(evt => { _viewState.filterMode = (FilterMode)evt.newValue; InvalidateFilterCache(); RebuildUI(); });
+                // Removed explicit filter dropdown; chips handle filtering
+                _filterField.visible = false;
             }
             if (_sortField != null)
             {
@@ -233,6 +233,10 @@ namespace Missions.Missions.Authoring.Editor
             {
                 refreshBtn.clicked += () => { RefreshData(force: true); RebuildUI(); };
             }
+            var exportJsonBtn = rootVisualElement.Q<ToolbarButton>("exportJsonButton");
+            var exportCsvBtn = rootVisualElement.Q<ToolbarButton>("exportCsvButton");
+            if (exportJsonBtn != null) exportJsonBtn.clicked += ExportCurrentViewJson;
+            if (exportCsvBtn != null) exportCsvBtn.clicked += ExportCurrentViewCsv;
 
             // Split root
             var splitRoot = rootVisualElement.Q<VisualElement>("splitRoot");
@@ -681,6 +685,7 @@ namespace Missions.Missions.Authoring.Editor
         private void UpdateStatusBar()
         {
             if (_statusLabel == null) return;
+            _statusLabel.style.whiteSpace = WhiteSpace.NoWrap;
             _statusLabel.text = $"Schemas: {_totalSchemas}    Categories: {_categorizedSchemas.Count}    Connections: {_totalConnections}    Hubs: {_hubCount}    Orphans: {_orphanCount}    Endpoints: {_endpointCount}";
 
             if (_cardSchemas != null) _cardSchemas.text = _totalSchemas.ToString();
@@ -1067,5 +1072,59 @@ namespace Missions.Missions.Authoring.Editor
             _filteredCache.Clear();
         }
         #endregion
+
+        private void ExportCurrentViewJson()
+        {
+            var data = new
+            {
+                totalSchemas = _totalSchemas,
+                totalConnections = _totalConnections,
+                hubs = _hubCount,
+                orphans = _orphanCount,
+                endpoints = _endpointCount,
+                filter = _viewState.filterMode.ToString(),
+                sort = _viewState.sortMode.ToString(),
+                ascending = _viewState.sortAscending,
+                search = _viewState.searchQuery,
+                categories = GetFilteredAndSortedSchemas()
+                    .ToDictionary(kv => kv.Key.Name, kv => kv.Value.Select(s => s.name).ToArray())
+            };
+            var json = JsonUtility.ToJson(new SerializableWrapper(data), true);
+            var path = EditorUtility.SaveFilePanel("Export JSON", Application.dataPath, "SchemaView", "json");
+            if (!string.IsNullOrEmpty(path)) System.IO.File.WriteAllText(path, json);
+        }
+
+        private void ExportCurrentViewCsv()
+        {
+            var path = EditorUtility.SaveFilePanel("Export CSV", Application.dataPath, "SchemaView", "csv");
+            if (string.IsNullOrEmpty(path)) return;
+            var lines = new List<string> { "Category,Schema,Outgoing,Incoming" };
+            var filtered = GetFilteredAndSortedSchemas();
+            foreach (var (type, schemas) in filtered)
+            {
+                foreach (var s in schemas)
+                {
+                    var m = _schemaMetrics.GetValueOrDefault(s);
+                    lines.Add($"{type.Name},{EscapeCsv(s.name)},{m?.outgoingCount ?? 0},{m?.incomingCount ?? 0}");
+                }
+            }
+            System.IO.File.WriteAllLines(path, lines);
+        }
+
+        [Serializable]
+        private class SerializableWrapper
+        {
+            public object payload;
+            public SerializableWrapper(object payload) { this.payload = payload; }
+        }
+
+        private string EscapeCsv(string input)
+        {
+            if (input.Contains(",") || input.Contains("\""))
+            {
+                return $"\"{input.Replace("\"", "\"\"")}\"";
+            }
+            return input;
+        }
     }
 }
