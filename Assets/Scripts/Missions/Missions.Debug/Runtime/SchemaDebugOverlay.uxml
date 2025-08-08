@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+  <ui:VisualElement style="flex-direction: column; padding: 8px;">
+    <ui:VisualElement style="flex-direction: row; gap: 6px;">
+      <ui:DropdownField name="datasetDropdown" style="flex-grow: 1;" />
+      <ui:TextField name="searchField" style="flex-grow: 2;" />
+    </ui:VisualElement>
+    <ui:VisualElement style="flex-direction: row; gap: 6px; margin-top: 6px;">
+      <ui:Button name="validateButton" text="Validate" style="flex-grow: 1;" />
+      <ui:Button name="exportButton" text="Export" style="flex-grow: 1;" />
+      <ui:Button name="copyButton" text="Copy" style="flex-grow: 1;" />
+    </ui:VisualElement>
+    <ui:ListView name="itemsList" style="flex-grow: 1; margin-top: 6px;" />
+    <ui:Label name="detailsLabel" style="margin-top: 6px; white-space: normal;" />
+  </ui:VisualElement>
+</ui:UXML>
