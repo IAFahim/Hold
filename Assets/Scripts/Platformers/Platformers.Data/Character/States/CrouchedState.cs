@@ -40,6 +40,8 @@ public struct CrouchedState : IPlatformerCharacterState
         }
 
         var chosenMaxSpeed = character.CrouchedMaxSpeed;
+        var speedMultiplier = aspect.Carrying.ValueRO.ComputeSpeedMultiplier();
+        chosenMaxSpeed *= speedMultiplier;
 
         var chosenSharpness = character.CrouchedMovementSharpness;
         if (context.CharacterFrictionModifierLookup.TryGetComponent(characterBody.GroundHit.Entity,

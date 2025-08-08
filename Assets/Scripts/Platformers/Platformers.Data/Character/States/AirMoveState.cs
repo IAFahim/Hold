@@ -34,8 +34,10 @@ public struct AirMoveState : IPlatformerCharacterState
         if (math.lengthsq(airAcceleration) > 0f)
         {
             var tmpVelocity = characterBody.RelativeVelocity;
+            var speedMultiplier = aspect.Carrying.ValueRO.ComputeSpeedMultiplier();
+            var airMax = character.AirMaxSpeed * speedMultiplier;
             CharacterControlUtilities.StandardAirMove(ref characterBody.RelativeVelocity, airAcceleration,
-                character.AirMaxSpeed, characterBody.GroundingUp, deltaTime, false);
+                airMax, characterBody.GroundingUp, deltaTime, false);
 
             // Cancel air acceleration from input if we would hit a non-grounded surface (prevents air-climbing slopes at high air accelerations)
             if (aspect.CharacterAspect.MovementWouldHitNonGroundedObstruction(in aspect, ref context, ref baseContext,

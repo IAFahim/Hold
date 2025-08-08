@@ -73,7 +73,8 @@ public struct ClimbingState : IPlatformerCharacterState
             var climbMoveVector =
                 math.normalizesafe(MathUtilities.ProjectOnPlane(characterControl.MoveVector, LastKnownClimbNormal)) *
                 math.length(characterControl.MoveVector);
-            var targetVelocity = climbMoveVector * character.ClimbingSpeed;
+            var speedMultiplier = aspect.Carrying.ValueRO.ComputeSpeedMultiplier();
+            var targetVelocity = climbMoveVector * (character.ClimbingSpeed * speedMultiplier);
             CharacterControlUtilities.InterpolateVelocityTowardsTarget(ref characterBody.RelativeVelocity,
                 targetVelocity, deltaTime, character.ClimbingMovementSharpness);
             characterBody.RelativeVelocity =

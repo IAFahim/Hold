@@ -13,7 +13,7 @@ public class UIToolkitJoystick : MonoBehaviour
     [Header("Tuning")]
     [Range(0.0f, 0.6f)] public float deadZone = 0.12f;
     [Tooltip("Fraction of max radius that is the 'no-lock' bound. Release outside = lock.")]
-    [Range(0.1f, 0.95f)] public float noLockRadiusRatio = 0.45f;
+    [Range(0.1f, 1.95f)] public float noLockRadiusRatio = 0.95f;
     [Range(0.05f, 0.35f)] public float springTime = 0.14f;
     public bool useUnscaledTime = true;
 
@@ -24,7 +24,7 @@ public class UIToolkitJoystick : MonoBehaviour
 
     // UI
     public UIDocument doc;
-    public VisualElement root, innerPad, knob, noLockRing, deadRing;
+    public VisualElement root, innerPad, knob, noLockRing;
 
     // Geometry (innerPad local space)
     public Vector2 center;
@@ -35,6 +35,7 @@ public class UIToolkitJoystick : MonoBehaviour
     // Pointer state
     public int activePointer = -1;
     public bool dragging;
+    public float gap = 30;
 
     // Spring
     public bool springing;
@@ -54,10 +55,9 @@ public class UIToolkitJoystick : MonoBehaviour
     {
         doc = GetComponent<UIDocument>();
         root = doc.rootVisualElement.Q<VisualElement>("joystick");
-        innerPad = root.Q<VisualElement>("inner-pad");
+        innerPad = root.Q<VisualElement>("pad");
         knob = root.Q<VisualElement>("knob");
         noLockRing = root.Q<VisualElement>("no-lock-ring");
-        deadRing = root.Q<VisualElement>("dead-zone");
 
         root.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
 
@@ -87,7 +87,7 @@ public class UIToolkitJoystick : MonoBehaviour
         knobRadius = Mathf.Max(1f, knob.resolvedStyle.width * 0.5f);
         float shortest = Mathf.Min(r.width, r.height);
         moveRadius = Mathf.Max(2f, shortest * 0.5f - knobRadius - 2f);
-        noLockRadius = Mathf.Clamp01(noLockRadiusRatio) * moveRadius;
+        noLockRadius = noLockRadiusRatio * moveRadius;
 
         SetKnobLocal(center);
         // UpdateRings();
@@ -127,8 +127,7 @@ public class UIToolkitJoystick : MonoBehaviour
         Vector2 local = innerPad.WorldToLocal(evt.position);
 
         // If locked and press happens inside the no-lock bound, unlock immediately
-        if (IsLocked && InsideNoLock(local))
-            SetLocked(false);
+        if (IsLocked && InsideNoLock(local)) SetLocked(false);
 
         MoveKnob(local);
         evt.StopPropagation();
@@ -224,10 +223,7 @@ public class UIToolkitJoystick : MonoBehaviour
     }
 
     // ---------- Helpers ----------
-    public bool InsideNoLock(Vector2 local)
-    {
-        return (local - center).sqrMagnitude <= noLockRadius * noLockRadius;
-    }
+    public bool InsideNoLock(Vector2 local) => (local - center).sqrMagnitude <= noLockRadius * noLockRadius;
 
     public Vector2 knobPositionLocal()
     {

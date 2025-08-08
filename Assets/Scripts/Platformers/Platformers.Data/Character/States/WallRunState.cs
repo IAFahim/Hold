@@ -49,8 +49,10 @@ public struct WallRunState : IPlatformerCharacterState
                     characterBody.GroundingUp)) * math.length(characterControl.MoveVector);
             var acceleration = moveVectorOnPlane * character.WallRunAcceleration;
             acceleration = math.projectsafe(acceleration, constrainedMoveDirection);
+            var speedMultiplier = aspect.Carrying.ValueRO.ComputeSpeedMultiplier();
+            var wallMax = character.WallRunMaxSpeed * speedMultiplier;
             CharacterControlUtilities.StandardAirMove(ref characterBody.RelativeVelocity, acceleration,
-                character.WallRunMaxSpeed, characterBody.GroundingUp, deltaTime, false);
+                wallMax, characterBody.GroundingUp, deltaTime, false);
 
             // Jumping
             if (character.HasDetectedMoveAgainstWall && characterControl.IsJumpPressed())

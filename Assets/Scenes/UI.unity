@@ -921,6 +921,19 @@ MonoBehaviour:
   onPressChanged:
     m_PersistentCalls:
       m_Calls: []
+  doc: {fileID: 983918037}
+  center: {x: 0, y: 0}
+  moveRadius: 0
+  knobRadius: 0
+  noLockRadius: 0
+  activePointer: -1
+  dragging: 0
+  gap: 3000
+  springing: 0
+  springStart: {x: 0, y: 0}
+  springTarget: {x: 0, y: 0}
+  springT: 0
+  lockLocalDir: {x: 1, y: 0}
 --- !u!114 &983918037
 MonoBehaviour:
   m_ObjectHideFlags: 0

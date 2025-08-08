@@ -47,8 +47,9 @@ public struct GroundMoveState : IPlatformerCharacterState
 
             // Move on ground
             {
-                var chosenMaxSpeed =
-                    character.IsSprinting ? character.GroundSprintMaxSpeed : character.GroundRunMaxSpeed;
+                var chosenMaxSpeed = character.IsSprinting ? character.GroundSprintMaxSpeed : character.GroundRunMaxSpeed;
+                var speedMultiplier = aspect.Carrying.ValueRO.ComputeSpeedMultiplier();
+                chosenMaxSpeed *= speedMultiplier;
 
                 var chosenSharpness = character.GroundedMovementSharpness;
                 if (context.CharacterFrictionModifierLookup.TryGetComponent(characterBody.GroundHit.Entity,

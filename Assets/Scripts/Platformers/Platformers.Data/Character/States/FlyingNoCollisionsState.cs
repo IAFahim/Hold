@@ -40,7 +40,8 @@ public struct FlyingNoCollisionsState : IPlatformerCharacterState
         aspect.CharacterAspect.Update_Initialize(in aspect, ref context, ref baseContext, ref characterBody, deltaTime);
 
         // Movement
-        var targetVelocity = characterControl.MoveVector * character.FlyingMaxSpeed;
+        var speedMultiplier = aspect.Carrying.ValueRO.ComputeSpeedMultiplier();
+        var targetVelocity = characterControl.MoveVector * (character.FlyingMaxSpeed * speedMultiplier);
         CharacterControlUtilities.InterpolateVelocityTowardsTarget(ref characterBody.RelativeVelocity, targetVelocity,
             deltaTime, character.FlyingMovementSharpness);
         characterPosition += characterBody.RelativeVelocity * deltaTime;

@@ -157,8 +157,10 @@ public struct SwimmingState : IPlatformerCharacterState
             }
 
             var acceleration = (characterControl.MoveVector + addedMoveVector) * character.SwimmingAcceleration;
+            var speedMultiplier = aspect.Carrying.ValueRO.ComputeSpeedMultiplier();
+            var swimMax = character.SwimmingMaxSpeed * speedMultiplier;
             CharacterControlUtilities.StandardAirMove(ref characterBody.RelativeVelocity, acceleration,
-                character.SwimmingMaxSpeed, -MathUtilities.GetForwardFromRotation(characterRotation), deltaTime, true);
+                swimMax, -MathUtilities.GetForwardFromRotation(characterRotation), deltaTime, true);
 
             // Water drag
             CharacterControlUtilities.ApplyDragToVelocity(ref characterBody.RelativeVelocity, deltaTime,
