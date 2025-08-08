@@ -6,6 +6,16 @@ using UnityEngine;
 
 namespace Missions.Missions.Authoring.Schemas
 {
+    [Flags]
+    public enum ItemFlags : byte
+    {
+        None = 0,
+        Fragile = 1 << 0,
+        Heavy = 1 << 1,
+        Lightweight = 1 << 2,
+        Banned = 1 << 3,
+    }
+
     [CreateAssetMenu(menuName = "Hold/Items/Create ItemSchema", fileName = nameof(ItemSchema))]
     [
         AutoRef(
@@ -17,10 +27,7 @@ namespace Missions.Missions.Authoring.Schemas
     {
         [Tooltip("Display name reference")] public NameSchema name;
         [Min(0)] public float weightKg;
-        public bool isFragile;
-        public bool isHeavy;
-        public bool isLightweight;
-        public bool banned;
+        [Tooltip("Bitmask flags describing item properties")] public ItemFlags flags;
 
         public override Item ToData()
         {
@@ -29,7 +36,7 @@ namespace Missions.Missions.Authoring.Schemas
                 id = (ushort)ID,
                 nameId = (ushort)(name ? name.ID : 0),
                 weightKg = weightKg,
-                flags = (byte)((isFragile ? 1 : 0) | (isHeavy ? 1 << 1 : 0) | (isLightweight ? 1 << 2 : 0) | (banned ? 1 << 3 : 0))
+                flags = (byte)flags
             };
         }
     }

@@ -10,6 +10,16 @@ namespace Missions.Missions.Authoring.Editor
     [CustomEditor(typeof(LocationSchema))]
     public class LocationSchemaEditor : BaseSchemaEditor
     {
+        private void OnEnable()
+        {
+            SceneView.duringSceneGui += OnSceneGUIHandler;
+        }
+
+        private void OnDisable()
+        {
+            SceneView.duringSceneGui -= OnSceneGUIHandler;
+        }
+
         public override VisualElement CreateInspectorGUI()
         {
             // Build base inspector with fields and connections
@@ -50,12 +60,21 @@ namespace Missions.Missions.Authoring.Editor
             base.OnInspectorGUI();
         }
 
-        private void OnSceneGUI()
+        private void OnSceneGUIHandler(SceneView view)
         {
-#if ALINE
+            if (Selection.activeObject != target) return;
             var stationSchema = (LocationSchema)target;
-            Drawing.Draw.WireSphere(stationSchema.position, stationSchema.range, Color.antiqueWhite);
+            if (stationSchema == null) return;
+
+#if ALINE
+            Drawing.Draw.WireSphere(stationSchema.position, stationSchema.range, Color.cyan);
             Drawing.Draw.Label2D(stationSchema.position, stationSchema.name);
+#else
+            Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
+            Handles.color = new Color(0f, 0.7f, 1f, 0.8f);
+            Handles.SphereHandleCap(0, stationSchema.position, Quaternion.identity, stationSchema.range * 2f, EventType.Repaint);
+            Handles.color = Color.white;
+            Handles.Label(stationSchema.position + Vector3.up * (stationSchema.range + 0.2f), stationSchema.name);
 #endif
         }
     }
