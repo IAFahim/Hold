@@ -1,0 +1,98 @@
+/* Shared styles for Missions Authoring Editors */
+
+:root {
+    --bg-panel: #2b2f36;
+    --bg-panel-alt: #23262c;
+    --bg-row-odd: rgba(255,255,255,0.03);
+    --bg-row-even: rgba(255,255,255,0.08);
+    --fg-muted: #b0b0b0;
+    --accent-cyan: #31c7d5;
+    --accent-yellow: #f2c744;
+    --accent-blue: #4aa3ff;
+    --accent-orange: #ff9f2b;
+    --accent-red: #ff6b6b;
+    --accent-green: #4cd964;
+}
+
+.toolbar {
+    -unity-font-style: bold;
+}
+
+.panel {
+    background-color: var(--bg-panel);
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-color: #3a3f47;
+    border-radius: 4px;
+}
+
+.panel__header {
+    -unity-font-style: bold;
+    margin-bottom: 4px;
+}
+
+.schema-row {
+    flex-direction: row;
+    height: 22px;
+    align-items: center;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.schema-row--odd { background-color: var(--bg-row-odd); }
+.schema-row--even { background-color: var(--bg-row-even); }
+
+.schema-row__stripe {
+    width: 3px;
+    height: 100%;
+    margin-right: 6px;
+}
+
+.schema-row__name {
+    flex-grow: 1;
+}
+
+.schema-row__metrics {
+    width: 100px;
+    -unity-text-align: middle-right;
+    color: var(--fg-muted);
+}
+
+.badge {
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 10px;
+    margin-left: 6px;
+    font-size: 10px;
+    color: #111;
+}
+
+.badge--hub { background-color: var(--accent-orange); }
+.badge--orphan { background-color: var(--accent-red); }
+.badge--endpoint { background-color: var(--accent-green); }
+
+.status-bar {
+    background-color: var(--bg-panel-alt);
+    padding: 4px;
+    margin-top: 6px;
+    color: var(--fg-muted);
+}
+
+.column-header {
+    -unity-font-style: bold;
+    margin-bottom: 2px;
+}
+
+.connection-header__bar {
+    width: 3px;
+    height: 100%;
+    margin-right: 6px;
+}

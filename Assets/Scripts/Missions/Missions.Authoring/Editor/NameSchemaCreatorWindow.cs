@@ -41,7 +41,6 @@ namespace Missions.Missions.Authoring.Editor
 
         private void LoadNameSettings()
         {
-            // Try to find existing NameSettings
             string[] guids = AssetDatabase.FindAssets("t:NameSettings");
             if (guids.Length > 0)
             {
@@ -49,7 +48,6 @@ namespace Missions.Missions.Authoring.Editor
                 _nameSettings = AssetDatabase.LoadAssetAtPath<NameSettings>(path);
             }
 
-            // Create NameSettings if it doesn't exist
             if (_nameSettings == null)
             {
                 _nameSettings = CreateInstance<NameSettings>();
@@ -64,7 +62,6 @@ namespace Missions.Missions.Authoring.Editor
                 AssetDatabase.Refresh();
             }
 
-            // Update UI if created
             if (_settingsField != null)
             {
                 _settingsField.value = _nameSettings;
@@ -75,123 +72,103 @@ namespace Missions.Missions.Authoring.Editor
 
         public void CreateGUI()
         {
-            rootVisualElement.style.paddingLeft = 8;
-            rootVisualElement.style.paddingRight = 8;
-            rootVisualElement.style.paddingTop = 6;
-            rootVisualElement.style.paddingBottom = 6;
+            // Load UXML/USS
+            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/NameSchemaCreatorWindow.uxml");
+            var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/MissionsEditor.uss");
 
-            // Title
-            var title = new Label("Name Schema Creator")
+            rootVisualElement.Clear();
+            if (uss != null) rootVisualElement.styleSheets.Add(uss);
+            if (uxml != null) uxml.CloneTree(rootVisualElement);
+
+            // Query controls
+            var refreshBtn = rootVisualElement.Q<ToolbarButton>("refreshButton");
+            _statsLabel = rootVisualElement.Q<Label>("statsLabel");
+            _settingsField = rootVisualElement.Q<ObjectField>("settingsField");
+            _pathField = rootVisualElement.Q<TextField>("pathField");
+            var browseBtn = rootVisualElement.Q<Button>("browseButton");
+            _namesField = rootVisualElement.Q<TextField>("namesField");
+            var createBtn = rootVisualElement.Q<Button>("createButton");
+            var clearBtn = rootVisualElement.Q<Button>("clearButton");
+            _existingFoldout = rootVisualElement.Q<Foldout>("existingFoldout");
+            _existingListView = rootVisualElement.Q<ListView>("existingList");
+
+            // Wire
+            if (refreshBtn != null) refreshBtn.clicked += LoadNameSettings;
+            if (_settingsField != null)
             {
-                style = { unityFontStyleAndWeight = FontStyle.Bold, fontSize = 13, marginBottom = 4 }
-            };
-            rootVisualElement.Add(title);
-
-            // Toolbar stats
-            var toolbar = new Toolbar();
-            var refreshBtn = new ToolbarButton(() => LoadNameSettings()) { text = "Refresh" };
-            _statsLabel = new Label();
-            toolbar.Add(refreshBtn);
-            toolbar.Add(new ToolbarSpacer());
-            toolbar.Add(_statsLabel);
-            rootVisualElement.Add(toolbar);
-
-            // Settings field
-            var settingsRow = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center, marginTop = 6 } };
-            settingsRow.Add(new Label("Name Settings:") { style = { width = 110 } });
-            _settingsField = new ObjectField { objectType = typeof(NameSettings), allowSceneObjects = false, value = _nameSettings };
-            _settingsField.style.flexGrow = 1;
-            _settingsField.RegisterValueChangedCallback(evt =>
-            {
-                _nameSettings = evt.newValue as NameSettings;
-                RebuildExistingList();
-                UpdateStats();
-            });
-            settingsRow.Add(_settingsField);
-            rootVisualElement.Add(settingsRow);
-
-            if (_nameSettings == null)
-            {
-                rootVisualElement.Add(new HelpBox("NameSettings not found. Please assign or create one.", HelpBoxMessageType.Warning));
-                return;
+                _settingsField.objectType = typeof(NameSettings);
+                _settingsField.allowSceneObjects = false;
+                _settingsField.value = _nameSettings;
+                _settingsField.RegisterValueChangedCallback(evt =>
+                {
+                    _nameSettings = evt.newValue as NameSettings;
+                    RebuildExistingList();
+                    UpdateStats();
+                });
             }
-
-            // Output path row
-            var pathRow = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center, marginTop = 6 } };
-            pathRow.Add(new Label("Output Path:") { style = { width = 110 } });
-            _pathField = new TextField { value = _outputPath };
-            _pathField.style.flexGrow = 1;
-            _pathField.RegisterValueChangedCallback(evt => { _outputPath = evt.newValue; });
-            var browseBtn = new Button(() =>
+            if (_pathField != null)
             {
-                string selectedPath = EditorUtility.OpenFolderPanel("Select Output Folder", Application.dataPath, "");
-                if (!string.IsNullOrEmpty(selectedPath) && selectedPath.StartsWith(Application.dataPath))
+                _pathField.value = _outputPath;
+                _pathField.RegisterValueChangedCallback(evt => { _outputPath = evt.newValue; });
+            }
+            if (browseBtn != null)
+            {
+                browseBtn.clicked += () =>
                 {
-                    _outputPath = "Assets" + selectedPath.Substring(Application.dataPath.Length);
-                    _pathField.value = _outputPath;
-                    EditorPrefs.SetString(CreatePath, _outputPath);
-                }
-            }) { text = "Browse" };
-            browseBtn.style.width = 70;
-            pathRow.Add(_pathField);
-            pathRow.Add(browseBtn);
-            rootVisualElement.Add(pathRow);
-
-            // Names input
-            rootVisualElement.Add(new Label("Enter Names (one per line):") { style = { marginTop = 8 } });
-            var namesContainer = new VisualElement();
-            namesContainer.style.height = 160;
-            namesContainer.style.flexGrow = 0;
-            var scroll = new ScrollView();
-            _namesField = new TextField { multiline = true, value = _nameInput };
-            _namesField.style.flexGrow = 1;
-            _namesField.RegisterValueChangedCallback(evt => { _nameInput = evt.newValue; });
-            scroll.Add(_namesField);
-            namesContainer.Add(scroll);
-            rootVisualElement.Add(namesContainer);
-
-            // Action buttons
-            var actions = new VisualElement { style = { flexDirection = FlexDirection.Row, marginTop = 6 } };
-            var createBtn = new Button(() => { CreateNameSchemas(); RebuildExistingList(); UpdateStats(); }) { text = "Create Name Schemas" };
-            var clearBtn = new Button(() => { _nameInput = ""; _namesField.value = ""; }) { text = "Clear Input" };
-            actions.Add(createBtn);
-            actions.Add(clearBtn);
-            rootVisualElement.Add(actions);
-
-            // Existing list
-            _existingFoldout = new Foldout { text = BuildExistingTitle(), value = _showExistingNames, style = { marginTop = 10 } };
-            _existingFoldout.RegisterValueChangedCallback(evt => _showExistingNames = evt.newValue);
-            _existingListView = new ListView
-            {
-                virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
-                selectionType = SelectionType.None,
-                style = { marginLeft = 6 }
-            };
-            _existingListView.makeItem = () =>
-            {
-                var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
-                var label = new Label { style = { flexGrow = 1 } };
-                var selectBtn = new Button { text = "Select" };
-                selectBtn.style.width = 60;
-                row.Add(label);
-                row.Add(selectBtn);
-                return row;
-            };
-            _existingListView.bindItem = (el, i) =>
-            {
-                if (_nameSettings == null || _nameSettings.schemas == null) return;
-                var data = _nameSettings.schemas.OrderBy(s => s.fixed32).ToList()[i];
-                el.Q<Label>().text = $"{data.ID}: {data.fixed32}";
-                var btn = el.Q<Button>();
-                btn.clicked -= null;
-                btn.clicked += () =>
-                {
-                    Selection.activeObject = data;
-                    EditorGUIUtility.PingObject(data);
+                    string selectedPath = EditorUtility.OpenFolderPanel("Select Output Folder", Application.dataPath, "");
+                    if (!string.IsNullOrEmpty(selectedPath) && selectedPath.StartsWith(Application.dataPath))
+                    {
+                        _outputPath = "Assets" + selectedPath.Substring(Application.dataPath.Length);
+                        if (_pathField != null) _pathField.value = _outputPath;
+                        EditorPrefs.SetString(CreatePath, _outputPath);
+                    }
                 };
-            };
-            _existingFoldout.Add(_existingListView);
-            rootVisualElement.Add(_existingFoldout);
+            }
+            if (_namesField != null)
+            {
+                _namesField.multiline = true;
+                _namesField.value = _nameInput;
+                _namesField.RegisterValueChangedCallback(evt => { _nameInput = evt.newValue; });
+            }
+            if (createBtn != null)
+            {
+                createBtn.clicked += () => { CreateNameSchemas(); RebuildExistingList(); UpdateStats(); };
+            }
+            if (clearBtn != null)
+            {
+                clearBtn.clicked += () => { _nameInput = ""; if (_namesField != null) _namesField.value = ""; };
+            }
+            if (_existingFoldout != null)
+            {
+                _existingFoldout.value = _showExistingNames;
+                _existingFoldout.RegisterValueChangedCallback(evt => _showExistingNames = evt.newValue);
+            }
+            if (_existingListView != null)
+            {
+                _existingListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+                _existingListView.selectionType = SelectionType.None;
+                _existingListView.makeItem = () =>
+                {
+                    var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
+                    var label = new Label { style = { flexGrow = 1 } };
+                    var selectBtn = new Button { text = "Select" };
+                    selectBtn.style.width = 60;
+                    row.Add(label);
+                    row.Add(selectBtn);
+                    return row;
+                };
+                _existingListView.bindItem = (el, i) =>
+                {
+                    if (_nameSettings == null || _nameSettings.schemas == null) return;
+                    var ordered = _nameSettings.schemas.OrderBy(s => s.fixed32).ToList();
+                    if (i < 0 || i >= ordered.Count) return;
+                    var data = ordered[i];
+                    el.Q<Label>().text = $"{data.ID}: {data.fixed32}";
+                    var btn = el.Q<Button>();
+                    btn.clicked -= null;
+                    btn.clicked += () => { Selection.activeObject = data; EditorGUIUtility.PingObject(data); };
+                };
+            }
 
             RebuildExistingList();
             UpdateStats();
@@ -212,7 +189,8 @@ namespace Missions.Missions.Authoring.Editor
             }
             else
             {
-                _existingListView.itemsSource = _nameSettings.schemas.OrderBy(s => s.fixed32).ToList();
+                var src = _nameSettings.schemas.OrderBy(s => s.fixed32).ToList();
+                _existingListView.itemsSource = src;
                 if (_existingFoldout != null) _existingFoldout.text = BuildExistingTitle();
             }
             _existingListView.Rebuild();

@@ -165,38 +165,50 @@ namespace Missions.Missions.Authoring.Editor
 
         public void CreateGUI()
         {
-            // Root styles
-            rootVisualElement.style.paddingLeft = 6;
-            rootVisualElement.style.paddingRight = 6;
-            rootVisualElement.style.paddingTop = 4;
-            rootVisualElement.style.paddingBottom = 6;
+            // Load UXML/USS
+            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/SchemaConnectionViewer.uxml");
+            var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/MissionsEditor.uss");
 
-            // Toolbar
-            var toolbar = new Toolbar();
-            var refreshBtn = new ToolbarButton(() => { RefreshData(force: true); RebuildUI(); }) { text = "Refresh" };
-            _filterField = new EnumField(_viewState.filterMode);
-            _filterField.RegisterValueChangedCallback(evt => { _viewState.filterMode = (FilterMode)evt.newValue; InvalidateFilterCache(); RebuildUI(); });
-            _sortField = new EnumField(_viewState.sortMode);
-            _sortField.RegisterValueChangedCallback(evt => { _viewState.sortMode = (SortMode)evt.newValue; InvalidateFilterCache(); RebuildUI(); });
-            _sortAscToggle = new ToolbarToggle { text = "Ascending", value = _viewState.sortAscending };
-            _sortAscToggle.RegisterValueChangedCallback(evt => { _viewState.sortAscending = evt.newValue; InvalidateFilterCache(); RebuildUI(); });
-            _searchField = new ToolbarSearchField();
-            _searchField.value = _viewState.searchQuery;
-            _searchField.RegisterValueChangedCallback(evt => { _viewState.searchQuery = evt.newValue; InvalidateFilterCache(); RebuildUI(); });
+            rootVisualElement.Clear();
+            if (uss != null) rootVisualElement.styleSheets.Add(uss);
+            if (uxml != null) uxml.CloneTree(rootVisualElement);
 
-            toolbar.Add(refreshBtn);
-            toolbar.Add(new ToolbarSpacer());
-            toolbar.Add(new Label("Filter:"));
-            toolbar.Add(_filterField);
-            toolbar.Add(new Label("Sort:"));
-            toolbar.Add(_sortField);
-            toolbar.Add(_sortAscToggle);
-            toolbar.Add(new ToolbarSpacer());
-            toolbar.Add(_searchField);
+            // Toolbar wiring
+            var refreshBtn = rootVisualElement.Q<ToolbarButton>("refreshButton");
+            _filterField = rootVisualElement.Q<EnumField>("filterField");
+            _sortField = rootVisualElement.Q<EnumField>("sortField");
+            _sortAscToggle = rootVisualElement.Q<ToolbarToggle>("ascToggle");
+            _searchField = rootVisualElement.Q<ToolbarSearchField>("searchField");
+            _statusLabel = rootVisualElement.Q<Label>("statusLabel");
 
-            rootVisualElement.Add(toolbar);
+            if (_filterField != null)
+            {
+                _filterField.Init(_viewState.filterMode);
+                _filterField.RegisterValueChangedCallback(evt => { _viewState.filterMode = (FilterMode)evt.newValue; InvalidateFilterCache(); RebuildUI(); });
+            }
+            if (_sortField != null)
+            {
+                _sortField.Init(_viewState.sortMode);
+                _sortField.RegisterValueChangedCallback(evt => { _viewState.sortMode = (SortMode)evt.newValue; InvalidateFilterCache(); RebuildUI(); });
+            }
+            if (_sortAscToggle != null)
+            {
+                _sortAscToggle.value = _viewState.sortAscending;
+                _sortAscToggle.RegisterValueChangedCallback(evt => { _viewState.sortAscending = evt.newValue; InvalidateFilterCache(); RebuildUI(); });
+            }
+            if (_searchField != null)
+            {
+                _searchField.value = _viewState.searchQuery;
+                _searchField.RegisterValueChangedCallback(evt => { _viewState.searchQuery = evt.newValue; InvalidateFilterCache(); RebuildUI(); });
+            }
+            if (refreshBtn != null)
+            {
+                refreshBtn.clicked += () => { RefreshData(force: true); RebuildUI(); };
+            }
 
-            // Split view
+            // Split root
+            var splitRoot = rootVisualElement.Q<VisualElement>("splitRoot");
+            splitRoot.Clear();
             _splitView = new TwoPaneSplitView(0, position.width * LIST_PANEL_WIDTH_RATIO, TwoPaneSplitViewOrientation.Horizontal);
             _leftPanel = new VisualElement();
             _rightPanel = new VisualElement();
@@ -206,13 +218,7 @@ namespace Missions.Missions.Authoring.Editor
             _rightPanel.Add(_rightScroll);
             _splitView.Add(_leftPanel);
             _splitView.Add(_rightPanel);
-            rootVisualElement.Add(_splitView);
-
-            // Status bar
-            var statusBar = new VisualElement { style = { flexDirection = FlexDirection.Row, marginTop = 4 } };
-            _statusLabel = new Label();
-            statusBar.Add(_statusLabel);
-            rootVisualElement.Add(statusBar);
+            splitRoot.Add(_splitView);
 
             RebuildUI();
         }
@@ -429,23 +435,62 @@ namespace Missions.Missions.Authoring.Editor
                 };
                 list.makeItem = () =>
                 {
-                    var row = new VisualElement { style = { flexDirection = FlexDirection.Row, height = ROW_HEIGHT } };
-                    var nameLabel = new Label { style = { flexGrow = 1 } };
-                    var info = new Label { style = { width = 90, unityTextAlign = TextAnchor.MiddleRight, color = new Color(0.7f,0.7f,0.7f) } };
+                    var row = new VisualElement();
+                    row.AddToClassList("schema-row");
+                    var stripe = new VisualElement();
+                    stripe.AddToClassList("schema-row__stripe");
+                    var nameLabel = new Label();
+                    nameLabel.AddToClassList("schema-row__name");
+                    var info = new Label();
+                    info.AddToClassList("schema-row__metrics");
+                    var hubBadge = new Label("H"); hubBadge.AddToClassList("badge"); hubBadge.AddToClassList("badge--hub");
+                    var orphanBadge = new Label("O"); orphanBadge.AddToClassList("badge"); orphanBadge.AddToClassList("badge--orphan");
+                    var endpointBadge = new Label("E"); endpointBadge.AddToClassList("badge"); endpointBadge.AddToClassList("badge--endpoint");
+                    row.Add(stripe);
                     row.Add(nameLabel);
                     row.Add(info);
+                    row.Add(hubBadge);
+                    row.Add(orphanBadge);
+                    row.Add(endpointBadge);
                     return row;
                 };
                 list.bindItem = (el, i) =>
                 {
                     var schema = schemas[i];
                     var metrics = _schemaMetrics.GetValueOrDefault(schema);
-                    el.Q<Label>(className: null).text = schema.name; // first label
                     var labels = el.Query<Label>().ToList();
-                    if (labels.Count > 1)
+                    // name label is first Label after stripe
+                    var nameLabel = labels.FirstOrDefault();
+                    var infoLabel = labels.Skip(1).FirstOrDefault();
+                    var hubBadge = labels.Skip(2).FirstOrDefault();
+                    var orphanBadge = labels.Skip(3).FirstOrDefault();
+                    var endpointBadge = labels.Skip(4).FirstOrDefault();
+                    if (nameLabel != null) nameLabel.text = schema.name;
+                    if (infoLabel != null) infoLabel.text = metrics != null ? $"{metrics.outgoingCount}→ ←{metrics.incomingCount}" : "";
+
+                    // Stripe color
+                    var stripe = el.Q<VisualElement>(className: null);
+                    if (stripe != null)
                     {
-                        labels[1].text = metrics != null ? $"{metrics.outgoingCount}→ ←{metrics.incomingCount}" : "";
+                        // first child is stripe
+                        var stripeEl = el.hierarchy[0];
+                        if (metrics != null)
+                        {
+                            if (metrics.isHub) stripeEl.style.backgroundColor = new Color(1f, 0.6f, 0f);
+                            else if (metrics.isOrphan) stripeEl.style.backgroundColor = new Color(0.8f, 0.4f, 0.4f);
+                            else if (metrics.isEndpoint) stripeEl.style.backgroundColor = new Color(0.4f, 0.8f, 0.4f);
+                            else stripeEl.style.backgroundColor = new Color(0.3f, 0.3f, 0.3f);
+                        }
                     }
+
+                    // Badges visibility
+                    if (hubBadge != null) hubBadge.style.display = (metrics != null && metrics.isHub) ? DisplayStyle.Flex : DisplayStyle.None;
+                    if (orphanBadge != null) orphanBadge.style.display = (metrics != null && metrics.isOrphan) ? DisplayStyle.Flex : DisplayStyle.None;
+                    if (endpointBadge != null) endpointBadge.style.display = (metrics != null && metrics.isEndpoint) ? DisplayStyle.Flex : DisplayStyle.None;
+
+                    // Alternate row style
+                    el.EnableInClassList("schema-row--odd", i % 2 == 1);
+                    el.EnableInClassList("schema-row--even", i % 2 == 0);
                 };
                 list.onItemsChosen += objs =>
                 {

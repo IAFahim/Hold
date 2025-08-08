@@ -68,25 +68,33 @@ namespace Missions.Missions.Authoring.Editor
 
         public void CreateGUI()
         {
-            rootVisualElement.style.paddingLeft = 6;
-            rootVisualElement.style.paddingRight = 6;
-            rootVisualElement.style.paddingTop = 4;
-            rootVisualElement.style.paddingBottom = 6;
+            // Load UXML/USS
+            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/SpreadsheetEditor.uxml");
+            var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/MissionsEditor.uss");
 
-            // Toolbar
-            var toolbar = new Toolbar();
-            _searchField = new ToolbarSearchField();
-            _searchField.RegisterValueChangedCallback(evt => { _searchQuery = evt.newValue; RebuildUISections(); });
-            var refreshBtn = new ToolbarButton(() => LoadSchemas()) { text = "Refresh" };
-            var saveBtn = new ToolbarButton(() => AssetDatabase.SaveAssets()) { text = "Save Changes" };
-            toolbar.Add(_searchField);
-            toolbar.Add(refreshBtn);
-            toolbar.Add(saveBtn);
-            rootVisualElement.Add(toolbar);
+            rootVisualElement.Clear();
+            if (uss != null) rootVisualElement.styleSheets.Add(uss);
+            if (uxml != null) uxml.CloneTree(rootVisualElement);
 
-            // Main scroll area
-            _mainScroll = new ScrollView();
-            rootVisualElement.Add(_mainScroll);
+            // Wire toolbar
+            _searchField = rootVisualElement.Q<ToolbarSearchField>("searchField");
+            _mainScroll = rootVisualElement.Q<ScrollView>("mainScroll");
+            var refreshBtn = rootVisualElement.Q<ToolbarButton>("refreshButton");
+            var saveBtn = rootVisualElement.Q<ToolbarButton>("saveButton");
+
+            if (_searchField != null)
+            {
+                _searchField.value = _searchQuery;
+                _searchField.RegisterValueChangedCallback(evt => { _searchQuery = evt.newValue; RebuildUISections(); });
+            }
+            if (refreshBtn != null)
+            {
+                refreshBtn.clicked += () => LoadSchemas();
+            }
+            if (saveBtn != null)
+            {
+                saveBtn.clicked += () => AssetDatabase.SaveAssets();
+            }
 
             RebuildUISections();
         }
@@ -114,7 +122,7 @@ namespace Missions.Missions.Authoring.Editor
 
         private VisualElement BuildTypeSection(Type type, List<BaseSchema> schemaList)
         {
-            var container = new VisualElement();
+            var container = new VisualElement { style = { marginBottom = 6 } };
             var props = _properties[type];
 
             // Calculate widths similar to IMGUI version
@@ -123,24 +131,18 @@ namespace Missions.Missions.Authoring.Editor
             {
                 var (_, propType) = props[j];
                 float width = j == 0 ? 50 : 150;
-                if (propType == SerializedPropertyType.ObjectReference)
-                {
-                    width = 250;
-                }
+                if (propType == SerializedPropertyType.ObjectReference) width = 250;
                 else if (propType == SerializedPropertyType.Generic)
                 {
                     var sampleSo = new SerializedObject(schemaList[0]);
                     var sampleProp = sampleSo.FindProperty(props[j].path);
-                    if (sampleProp != null && sampleProp.isArray)
-                    {
-                        width = 350;
-                    }
+                    if (sampleProp != null && sampleProp.isArray) width = 350;
                 }
                 widths.Add(width);
             }
 
             // Header row
-            var header = new VisualElement { style = { flexDirection = FlexDirection.Row, backgroundColor = new Color(0.18f, 0.18f, 0.18f), marginBottom = 2, paddingLeft = 4, paddingRight = 4 } };
+            var header = new VisualElement { style = { flexDirection = FlexDirection.Row, marginBottom = 2 } };
             var assetHeader = new Label("Asset") { style = { width = 200, unityFontStyleAndWeight = FontStyle.Bold } };
             header.Add(assetHeader);
             for (var j = 0; j < props.Count; j++)
@@ -153,8 +155,7 @@ namespace Missions.Missions.Authoring.Editor
                 };
                 header.Add(label);
             }
-            var spacer = new Label("") { style = { width = 100 } }; // space for button column
-            header.Add(spacer);
+            header.Add(new Label("") { style = { width = 100 } });
             container.Add(header);
 
             // Rows
@@ -184,6 +185,8 @@ namespace Missions.Missions.Authoring.Editor
                 newBtn.style.marginLeft = 6;
                 row.Add(newBtn);
 
+                // Bind once per-row to ensure all PropertyFields connect
+                row.Bind(so);
                 container.Add(row);
             }
 
@@ -195,16 +198,11 @@ namespace Missions.Missions.Authoring.Editor
             string originalPath = AssetDatabase.GetAssetPath(originalSchema);
             string folder = System.IO.Path.GetDirectoryName(originalPath);
 
-            // Generate a unique asset path
             var assetName = $"/{IncrementLastNumber(originalSchema.name)}.asset";
             string newPath = AssetDatabase.GenerateUniqueAssetPath(folder + assetName);
 
-            // Copy the asset
             AssetDatabase.CopyAsset(originalPath, newPath);
-
-            // Save assets
             AssetDatabase.SaveAssets();
-
             LoadSchemas();
         }
 
@@ -258,9 +256,7 @@ namespace Missions.Missions.Authoring.Editor
 
         static string IncrementLastNumber(string input)
         {
-            // Use a regular expression to find the last number in the string
             Match match = Regex.Match(input, @"\d+", RegexOptions.RightToLeft);
-
             if (match.Success)
             {
                 int number = int.Parse(match.Value);

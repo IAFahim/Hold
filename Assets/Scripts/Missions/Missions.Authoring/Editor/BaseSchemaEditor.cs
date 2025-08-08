@@ -24,6 +24,7 @@ namespace Missions.Missions.Authoring.Editor
         private ListView outgoingListView;
         private ListView incomingListView;
         private Button refreshButton;
+        private Label statsLabel;
 
         void OnEnable()
         {
@@ -32,123 +33,68 @@ namespace Missions.Missions.Authoring.Editor
 
         public override VisualElement CreateInspectorGUI()
         {
-            // Root
-            root = new VisualElement
+            // Load UXML/USS
+            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/BaseSchemaInspector.uxml");
+            var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/MissionsEditor.uss");
+
+            root = new VisualElement();
+            if (uss != null) root.styleSheets.Add(uss);
+            if (uxml != null)
             {
-                style =
+                uxml.CloneTree(root);
+            }
+
+            // Default inspector
+            var defaultContainer = root.Q<VisualElement>("defaultInspector");
+            if (defaultContainer != null)
+            {
+                var defaultInspector = BuildDefaultInspector(serializedObject);
+                defaultContainer.Add(defaultInspector);
+            }
+
+            // Hook up UI elements
+            refreshButton = root.Q<Button>("refreshButton");
+            statsLabel = root.Q<Label>("statsLabel");
+            outgoingFoldout = root.Q<Foldout>("outgoingFoldout");
+            incomingFoldout = root.Q<Foldout>("incomingFoldout");
+            outgoingListView = root.Q<ListView>("outgoingList");
+            incomingListView = root.Q<ListView>("incomingList");
+
+            if (refreshButton != null)
+            {
+                refreshButton.clicked += () =>
                 {
-                    marginLeft = 4,
-                    marginRight = 4,
-                    marginTop = 4,
-                    marginBottom = 6
-                }
-            };
+                    FindConnections();
+                    RefreshUILists();
+                };
+            }
 
-            // Default inspector (auto-generates from SerializedObject)
-            var defaultInspector = BuildDefaultInspector(serializedObject);
-            root.Add(defaultInspector);
-
-            // Spacer
-            root.Add(new VisualElement { style = { height = 8 } });
-
-            // Header and toolbar
-            var header = new Label("Schema Connections")
+            if (outgoingFoldout != null)
             {
-                style =
-                {
-                    unityFontStyleAndWeight = FontStyle.Bold,
-                    marginTop = 4,
-                    marginBottom = 2
-                }
-            };
-            root.Add(header);
-
-            var toolbar = new Toolbar();
-            refreshButton = new ToolbarButton(() =>
+                outgoingFoldout.value = showOutgoing;
+                outgoingFoldout.RegisterValueChangedCallback(evt => showOutgoing = evt.newValue);
+            }
+            if (incomingFoldout != null)
             {
-                FindConnections();
-                RefreshUILists();
-            }) { text = "Refresh Connections" };
-            toolbar.Add(refreshButton);
-            toolbar.Add(new ToolbarSpacer());
-            var stats = new Label();
-            stats.AddToClassList("mini-label");
-            toolbar.Add(stats);
-            root.Add(toolbar);
+                incomingFoldout.value = showIncoming;
+                incomingFoldout.RegisterValueChangedCallback(evt => showIncoming = evt.newValue);
+            }
 
-            // Container box
-            var box = new HelpBox(string.Empty, HelpBoxMessageType.None);
-            box.style.marginTop = 4;
-            box.style.marginBottom = 4;
-            box.style.paddingLeft = 6;
-            box.style.paddingRight = 6;
-            root.Add(box);
+            // Create list views
+            SetupConnectionsListView(outgoingListView, outgoingConnections);
+            SetupConnectionsListView(incomingListView, incomingConnections);
 
-            // Outgoing foldout
-            outgoingFoldout = new Foldout { text = $"Uses ({outgoingConnections.Count})", value = showOutgoing };
-            outgoingFoldout.RegisterValueChangedCallback(evt => { showOutgoing = evt.newValue; });
-            box.Add(outgoingFoldout);
-
-            // Outgoing list
-            outgoingListView = CreateConnectionsListView(outgoingConnections);
-            outgoingFoldout.Add(outgoingListView);
-
-            // Incoming foldout
-            incomingFoldout = new Foldout { text = $"Referenced By ({incomingConnections.Count})", value = showIncoming };
-            incomingFoldout.RegisterValueChangedCallback(evt => { showIncoming = evt.newValue; });
-            box.Add(incomingFoldout);
-
-            // Incoming list
-            incomingListView = CreateConnectionsListView(incomingConnections);
-            incomingFoldout.Add(incomingListView);
-
-            // Initial stats
-            UpdateStatsLabel(stats);
+            UpdateStatsLabel(statsLabel);
 
             return root;
         }
 
-        private VisualElement BuildDefaultInspector(SerializedObject so)
+        private void SetupConnectionsListView(ListView listView, List<BaseSchema> source)
         {
-            var container = new VisualElement();
-
-            // Iterate over all visible properties and add PropertyFields
-            var iterator = so.GetIterator();
-            bool enterChildren = true;
-            while (iterator.NextVisible(enterChildren))
-            {
-                if (iterator.name == "m_Script")
-                {
-                    // Show script field but disabled
-                    var scriptField = new PropertyField(iterator.Copy()) { name = iterator.propertyPath };
-                    scriptField.SetEnabled(false);
-                    container.Add(scriptField);
-                }
-                else
-                {
-                    var field = new PropertyField(iterator.Copy()) { name = iterator.propertyPath };
-                    container.Add(field);
-                }
-
-                enterChildren = false;
-            }
-
-            // Bind at the end so all children use the same SerializedObject
-            container.Bind(so);
-            return container;
-        }
-
-        private ListView CreateConnectionsListView(List<BaseSchema> source)
-        {
-            var listView = new ListView
-            {
-                virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
-                showFoldoutHeader = false,
-                reorderable = false,
-                selectionType = SelectionType.Single,
-                itemsSource = source,
-                style = { marginLeft = 12, marginTop = 2 }
-            };
+            if (listView == null) return;
+            listView.itemsSource = source;
+            listView.selectionType = SelectionType.Single;
+            listView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
 
             listView.makeItem = () =>
             {
@@ -160,11 +106,9 @@ namespace Missions.Missions.Authoring.Editor
                 };
                 objField.SetEnabled(false);
                 objField.style.flexGrow = 1;
-
                 var pingButton = new Button { text = "Ping" };
                 pingButton.style.marginLeft = 6;
                 pingButton.style.width = 50;
-
                 row.Add(objField);
                 row.Add(pingButton);
                 return row;
@@ -175,7 +119,6 @@ namespace Missions.Missions.Authoring.Editor
                 var schema = source.ElementAtOrDefault(i);
                 var objField = element.Q<ObjectField>();
                 var pingButton = element.Q<Button>();
-
                 objField.value = schema;
                 pingButton.clicked -= null;
                 pingButton.clicked += () =>
@@ -186,7 +129,6 @@ namespace Missions.Missions.Authoring.Editor
                         Selection.activeObject = schema;
                     }
                 };
-
                 element.RegisterCallback<MouseUpEvent>(_ =>
                 {
                     if (schema != null)
@@ -195,36 +137,30 @@ namespace Missions.Missions.Authoring.Editor
                     }
                 });
             };
-
-            // Empty state
-            listView.itemsAdded += _ => { UpdateFoldoutEmptyState(listView); };
-            listView.itemsRemoved += _ => { UpdateFoldoutEmptyState(listView); };
-            UpdateFoldoutEmptyState(listView);
-
-            return listView;
         }
 
-        private void UpdateFoldoutEmptyState(ListView listView)
+        private VisualElement BuildDefaultInspector(SerializedObject so)
         {
-            if (listView.itemsSource is List<BaseSchema> src && (src == null || src.Count == 0))
+            var container = new VisualElement();
+            var iterator = so.GetIterator();
+            bool enterChildren = true;
+            while (iterator.NextVisible(enterChildren))
             {
-                if (listView.parent is Foldout foldout)
+                if (iterator.name == "m_Script")
                 {
-                    // Show small help box when empty
-                    var empty = new HelpBox((foldout == outgoingFoldout)
-                            ? "This schema does not reference any other schemas."
-                            : "This schema is not referenced by any other schemas.",
-                        HelpBoxMessageType.None)
-                    {
-                        style = { marginLeft = 12 }
-                    };
-                    // Ensure only once
-                    if (!foldout.Contains(empty))
-                    {
-                        foldout.Add(empty);
-                    }
+                    var scriptField = new PropertyField(iterator.Copy()) { name = iterator.propertyPath };
+                    scriptField.SetEnabled(false);
+                    container.Add(scriptField);
                 }
+                else
+                {
+                    var field = new PropertyField(iterator.Copy()) { name = iterator.propertyPath };
+                    container.Add(field);
+                }
+                enterChildren = false;
             }
+            container.Bind(so);
+            return container;
         }
 
         public override void OnInspectorGUI()
@@ -339,6 +275,8 @@ namespace Missions.Missions.Authoring.Editor
                 incomingListView.itemsSource = incomingConnections;
                 incomingListView.RefreshItems();
             }
+
+            UpdateStatsLabel(statsLabel);
         }
 
         private void UpdateStatsLabel(Label stats)
