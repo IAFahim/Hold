@@ -14,13 +14,13 @@
 
     <ui:VisualElement name="pathRow" style="flex-direction: row; align-items: center; margin-top: 6px;">
       <ui:Label text="Output Path:" style="width: 110px;" />
-      <uie:TextField name="pathField" />
+      <ui:TextField name="pathField" />
       <ui:Button name="browseButton" text="Browse" style="width: 70px;" />
     </ui:VisualElement>
 
     <ui:Label text="Enter Names (one per line):" style="margin-top: 8px;" />
     <ui:ScrollView name="namesScroll" style="height: 160px;">
-      <uie:TextField name="namesField" multiline="true" />
+      <ui:TextField name="namesField" multiline="true" />
     </ui:ScrollView>
 
     <ui:VisualElement name="actions" style="flex-direction: row; margin-top: 6px;">
@@ -28,7 +28,7 @@
       <ui:Button name="clearButton" text="Clear Input" />
     </ui:VisualElement>
 
-    <uie:Foldout name="existingFoldout" text="Existing Names (0)" style="margin-top: 10px;">
+    <ui:Foldout name="existingFoldout" text="Existing Names (0)" style="margin-top: 10px;">
       <ui:ListView name="existingList" />
     </uie:Foldout>
   </ui:VisualElement>
