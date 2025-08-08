@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+  <ui:VisualElement class="root" style="padding-left:6px; padding-right:6px; padding-top:4px; padding-bottom:6px;">
+    <uie:Toolbar class="toolbar">
+      <uie:ToolbarSearchField name="searchField" />
+      <uie:ToolbarButton name="refreshButton" text="Refresh" />
+      <uie:ToolbarButton name="saveButton" text="Save Changes" />
+    </uie:Toolbar>
+    <ui:ScrollView name="mainScroll" />
+  </ui:VisualElement>
+</ui:UXML>
