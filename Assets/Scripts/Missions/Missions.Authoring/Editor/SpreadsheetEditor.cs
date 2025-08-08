@@ -1,0 +1,275 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Missions.Missions.Authoring.Scriptable;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UIElements;
+using UnityEditor.UIElements;
+
+namespace Missions.Missions.Authoring.Editor
+{
+    public class SpreadsheetEditor : EditorWindow
+    {
+        private Dictionary<Type, List<BaseSchema>> _schemas = new();
+        private Dictionary<Type, List<(string path, SerializedPropertyType type)>> _properties = new();
+        private Dictionary<Type, bool> _foldouts = new();
+        private string _searchQuery = "";
+
+        // UI Toolkit
+        private TextField _searchField;
+        private ScrollView _mainScroll;
+
+        [MenuItem("Tools/Schema/Spreadsheet Editor")]
+        public static void ShowWindow()
+        {
+            GetWindow<SpreadsheetEditor>("Spreadsheet Editor");
+        }
+
+        private void OnEnable()
+        {
+            LoadSchemas();
+        }
+
+        private void LoadSchemas()
+        {
+            _schemas.Clear();
+            _properties.Clear();
+
+            var guids = AssetDatabase.FindAssets("t:BaseSchema");
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var schema = AssetDatabase.LoadAssetAtPath<BaseSchema>(path);
+                if (schema == null) continue;
+                var type = schema.GetType();
+
+                if (!_schemas.ContainsKey(type))
+                {
+                    _schemas[type] = new List<BaseSchema>();
+                    _properties[type] = new List<(string path, SerializedPropertyType type)>();
+                    _foldouts[type] = true;
+
+                    var so = new SerializedObject(schema);
+                    var iterator = so.GetIterator();
+                    iterator.NextVisible(true);
+                    while (iterator.NextVisible(false))
+                    {
+                        _properties[type].Add((iterator.propertyPath, iterator.propertyType));
+                    }
+                }
+
+                _schemas[type].Add(schema);
+            }
+
+            RebuildUISections();
+        }
+
+        public void CreateGUI()
+        {
+            rootVisualElement.style.paddingLeft = 6;
+            rootVisualElement.style.paddingRight = 6;
+            rootVisualElement.style.paddingTop = 4;
+            rootVisualElement.style.paddingBottom = 6;
+
+            // Toolbar
+            var toolbar = new Toolbar();
+            _searchField = new ToolbarSearchField();
+            _searchField.RegisterValueChangedCallback(evt => { _searchQuery = evt.newValue; RebuildUISections(); });
+            var refreshBtn = new ToolbarButton(() => LoadSchemas()) { text = "Refresh" };
+            var saveBtn = new ToolbarButton(() => AssetDatabase.SaveAssets()) { text = "Save Changes" };
+            toolbar.Add(_searchField);
+            toolbar.Add(refreshBtn);
+            toolbar.Add(saveBtn);
+            rootVisualElement.Add(toolbar);
+
+            // Main scroll area
+            _mainScroll = new ScrollView();
+            rootVisualElement.Add(_mainScroll);
+
+            RebuildUISections();
+        }
+
+        private void RebuildUISections()
+        {
+            if (_mainScroll == null) return;
+            _mainScroll.Clear();
+
+            var schemasList = _schemas.ToList();
+            for (int i = schemasList.Count - 1; i >= 0; i--)
+            {
+                var (type, schemaList) = schemasList[i];
+                var filteredList = schemaList.Where(s => string.IsNullOrEmpty(_searchQuery) || s.name.ToLower().Contains(_searchQuery.ToLower())).ToList();
+                if (filteredList.Count == 0) continue;
+
+                var foldout = new Foldout { text = $"{type.Name} ({filteredList.Count})", value = _foldouts.GetValueOrDefault(type, true) };
+                foldout.RegisterValueChangedCallback(evt => _foldouts[type] = evt.newValue);
+
+                var section = BuildTypeSection(type, filteredList);
+                foldout.Add(section);
+                _mainScroll.Add(foldout);
+            }
+        }
+
+        private VisualElement BuildTypeSection(Type type, List<BaseSchema> schemaList)
+        {
+            var container = new VisualElement();
+            var props = _properties[type];
+
+            // Calculate widths similar to IMGUI version
+            var widths = new List<float>();
+            for (var j = 0; j < props.Count; j++)
+            {
+                var (_, propType) = props[j];
+                float width = j == 0 ? 50 : 150;
+                if (propType == SerializedPropertyType.ObjectReference)
+                {
+                    width = 250;
+                }
+                else if (propType == SerializedPropertyType.Generic)
+                {
+                    var sampleSo = new SerializedObject(schemaList[0]);
+                    var sampleProp = sampleSo.FindProperty(props[j].path);
+                    if (sampleProp != null && sampleProp.isArray)
+                    {
+                        width = 350;
+                    }
+                }
+                widths.Add(width);
+            }
+
+            // Header row
+            var header = new VisualElement { style = { flexDirection = FlexDirection.Row, backgroundColor = new Color(0.18f, 0.18f, 0.18f), marginBottom = 2, paddingLeft = 4, paddingRight = 4 } };
+            var assetHeader = new Label("Asset") { style = { width = 200, unityFontStyleAndWeight = FontStyle.Bold } };
+            header.Add(assetHeader);
+            for (var j = 0; j < props.Count; j++)
+            {
+                var sampleSo = new SerializedObject(schemaList[0]);
+                var sampleProp = sampleSo.FindProperty(props[j].path);
+                var label = new Label(sampleProp != null ? sampleProp.displayName : props[j].path)
+                {
+                    style = { width = widths[j], unityFontStyleAndWeight = FontStyle.Bold }
+                };
+                header.Add(label);
+            }
+            var spacer = new Label("") { style = { width = 100 } }; // space for button column
+            header.Add(spacer);
+            container.Add(header);
+
+            // Rows
+            for (int i = 0; i < schemaList.Count; i++)
+            {
+                var schema = schemaList[i];
+                var so = new SerializedObject(schema);
+
+                var row = new VisualElement { style = { flexDirection = FlexDirection.Row, paddingLeft = 4, paddingRight = 4, backgroundColor = (i % 2 == 0 ? new Color(1f, 1f, 1f, 0.03f) : new Color(1f, 1f, 1f, 0.09f)) } };
+
+                var objField = new ObjectField { objectType = typeof(BaseSchema), value = schema, allowSceneObjects = false };
+                objField.SetEnabled(false);
+                objField.style.width = 200;
+                row.Add(objField);
+
+                for (var j = 0; j < props.Count; j++)
+                {
+                    var propPath = props[j].path;
+                    var serializedProperty = so.FindProperty(propPath);
+                    var field = serializedProperty != null ? new PropertyField(serializedProperty, "") : new PropertyField();
+                    field.style.width = widths[j];
+                    row.Add(field);
+                }
+
+                var newBtn = new Button(() => { CreateNewSchema(schema, i); }) { text = "New" };
+                newBtn.style.width = 100;
+                newBtn.style.marginLeft = 6;
+                row.Add(newBtn);
+
+                container.Add(row);
+            }
+
+            return container;
+        }
+
+        private void CreateNewSchema(BaseSchema originalSchema, int i)
+        {
+            string originalPath = AssetDatabase.GetAssetPath(originalSchema);
+            string folder = System.IO.Path.GetDirectoryName(originalPath);
+
+            // Generate a unique asset path
+            var assetName = $"/{IncrementLastNumber(originalSchema.name)}.asset";
+            string newPath = AssetDatabase.GenerateUniqueAssetPath(folder + assetName);
+
+            // Copy the asset
+            AssetDatabase.CopyAsset(originalPath, newPath);
+
+            // Save assets
+            AssetDatabase.SaveAssets();
+
+            LoadSchemas();
+        }
+
+        private void OnGUI()
+        {
+            // Fallback to IMGUI if UI Toolkit not initialized
+            if (rootVisualElement != null && rootVisualElement.childCount > 0) return;
+
+            DrawToolbar();
+            DrawSpreadsheet();
+        }
+
+        private void DrawToolbar()
+        {
+            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+            _searchQuery = EditorGUILayout.TextField(_searchQuery, EditorStyles.toolbarSearchField);
+            if (GUILayout.Button("Refresh", EditorStyles.toolbarButton))
+            {
+                LoadSchemas();
+            }
+            if (GUILayout.Button("Save Changes", EditorStyles.toolbarButton))
+            {
+                AssetDatabase.SaveAssets();
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawSpreadsheet()
+        {
+            var _scrollPosition = Vector2.zero;
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+
+            var schemasList = _schemas.ToList();
+            for (int i = schemasList.Count - 1; i >= 0; i--)
+            {
+                var (type, schemaList) = schemasList[i];
+                var filteredList = schemaList.Where(s => string.IsNullOrEmpty(_searchQuery) || s.name.ToLower().Contains(_searchQuery.ToLower())).ToList();
+                if (filteredList.Count == 0) continue;
+
+                _foldouts[type] = EditorGUILayout.Foldout(_foldouts[type], $"{type.Name} ({filteredList.Count})", true);
+                if (!_foldouts[type]) continue;
+
+                // Fallback minimal: just list assets
+                foreach (var s in filteredList)
+                {
+                    EditorGUILayout.ObjectField(s, typeof(BaseSchema), false);
+                }
+            }
+            EditorGUILayout.EndScrollView();
+        }
+
+        static string IncrementLastNumber(string input)
+        {
+            // Use a regular expression to find the last number in the string
+            Match match = Regex.Match(input, @"\d+", RegexOptions.RightToLeft);
+
+            if (match.Success)
+            {
+                int number = int.Parse(match.Value);
+                int index = match.Index;
+                int incrementedNumber = number + 1;
+                string result = input.Remove(index, match.Length).Insert(index, incrementedNumber.ToString());
+                return result;
+            }
+            return input;
+        }
+    }
+}

@@ -1,15 +1,14 @@
 using Unity.Entities;
 using Unity.CharacterController;
 using Unity.Mathematics;
-using Unity.Physics;
 
 public struct WallRunState : IPlatformerCharacterState
 {
     public void OnStateEnter(CharacterState previousState, ref PlatformerCharacterUpdateContext context,
         ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
     {
-        ref var character = ref aspect.Character.ValueRW;
-        aspect.SetCapsuleGeometry(character.StandingGeometry.ToCapsuleGeometry());
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
+        aspect.SetCapsuleGeometry(capsuleGeometry.standing.ToCapsuleGeometry());
     }
 
     public void OnStateExit(CharacterState nextState, ref PlatformerCharacterUpdateContext context,

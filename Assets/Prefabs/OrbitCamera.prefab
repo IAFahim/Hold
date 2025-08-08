@@ -48,8 +48,8 @@ MonoBehaviour:
   MaxVAngle: 89
   MinVAngle: -89
   RotateWithCharacterParent: 1
-  StartDistance: 2.5
-  MinDistance: 1
+  StartDistance: 3
+  MinDistance: 2
   MaxDistance: 10
   DistanceMovementSpeed: 2
   DistanceMovementSharpness: 20
@@ -59,8 +59,12 @@ MonoBehaviour:
   PreventFixedUpdateJitter: 1
   CameraTargetTransitionTime: 0.4
   IgnoredEntities: []
-  pitchAngle: 32
+  pitchAngle: 25
   planarForward:
     x: 0
-    y: 0
-    z: 1
+    y: 0.90548384
+    z: 0.4243808
+  smartModeEnabled: 1
+  smartModeActivationDelay: 1
+  smartModeRotationSpeed: 90
+  smartModeAngleThreshold: 2.5

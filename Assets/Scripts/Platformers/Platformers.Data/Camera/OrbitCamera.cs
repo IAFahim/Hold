@@ -37,6 +37,33 @@ public struct OrbitCamera : IComponentData
     public RigidTransform CameraTargetTransform;
     public RigidTransform CameraTargetTransitionFromTransform;
     public bool PreviousCalculateUpFromGravity;
+    
+    [Header("Smart Mode Settings")]
+    /// <summary>
+    /// Enable/disable smart mode that automatically positions camera behind player
+    /// </summary>
+    public bool SmartModeEnabled;
+    
+    /// <summary>
+    /// How long to wait (in seconds) after player stops providing input before smart mode activates
+    /// </summary>
+    public float SmartModeActivationDelay;
+    
+    /// <summary>
+    /// Speed at which smart mode rotates the camera (degrees per second)
+    /// </summary>
+    public float SmartModeRotationSpeed;
+    
+    /// <summary>
+    /// Minimum angle difference (in degrees) before smart mode kicks in
+    /// </summary>
+    public float SmartModeAngleThreshold;
+    
+    // Internal tracking variables
+    /// <summary>
+    /// Internal timer tracking how long since last player input
+    /// </summary>
+    public float SmartModeIdleTimer;
 }
 
 [Serializable]

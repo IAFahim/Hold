@@ -10,23 +10,23 @@ using Unity.CharacterController;
 [Serializable]
 public struct PlatformerCharacterAnimation : IComponentData
 {
-    [HideInInspector] public int IdleClip;
-    [HideInInspector] public int RunClip;
-    [HideInInspector] public int SprintClip;
-    [HideInInspector] public int InAirClip;
-    [HideInInspector] public int LedgeGrabMoveClip;
-    [HideInInspector] public int LedgeStandUpClip;
-    [HideInInspector] public int WallRunLeftClip;
-    [HideInInspector] public int WallRunRightClip;
-    [HideInInspector] public int CrouchIdleClip;
-    [HideInInspector] public int CrouchMoveClip;
-    [HideInInspector] public int ClimbingMoveClip;
-    [HideInInspector] public int SwimmingIdleClip;
-    [HideInInspector] public int SwimmingMoveClip;
-    [HideInInspector] public int DashClip;
-    [HideInInspector] public int RopeHangClip;
-    [HideInInspector] public int SlidingClip;
-    [HideInInspector] public int HitClip;
+    public const int IdleClip = 0;
+    public const int RunClip = 1;
+    public const int SprintClip = 2;
+    public const int InAirClip = 3;
+    public const int LedgeGrabMoveClip = 4;
+    public const int LedgeStandUpClip =5;
+    public const int WallRunLeftClip=6;
+    public const int WallRunRightClip=7;
+    public const int CrouchIdleClip=8;
+    public const int CrouchMoveClip=9;
+    public const int ClimbingMoveClip=10;
+    public const int SwimmingIdleClip=11;
+    public const int SwimmingMoveClip=12;
+    public const int DashClip=13;
+    public const int RopeHangClip=14;
+    public const int SlidingClip=15;
+    public const int HitClip = 14;
 
     [HideInInspector] public CharacterState LastAnimationCharacterState;
 }
@@ -50,7 +50,7 @@ public static class PlatformerCharacterAnimationHandler
         var clipId = 0;
         if (followEnableComponent.Reached)
         {
-            clipId = characterAnimation.HitClip;
+            clipId = PlatformerCharacterAnimation.HitClip;
             speed = 1;
             SetAnimationToGameobject(animator, clipId, speed, ref characterAnimation, characterStateMachine);
             return;
@@ -64,7 +64,7 @@ public static class PlatformerCharacterAnimationHandler
                 if (math.length(characterControl.MoveVector) < 0.01f)
                 {
                     speed = 1f;
-                    clipId = characterAnimation.IdleClip;
+                    clipId = PlatformerCharacterAnimation.IdleClip;
                 }
                 else
                 {
@@ -72,13 +72,13 @@ public static class PlatformerCharacterAnimationHandler
                     {
                         var velocityRatio = velocityMagnitude / characterComponent.GroundSprintMaxSpeed;
                         speed = velocityRatio;
-                        clipId = characterAnimation.SprintClip;
+                        clipId = PlatformerCharacterAnimation.SprintClip;
                     }
                     else
                     {
                         var velocityRatio = velocityMagnitude / characterComponent.GroundRunMaxSpeed;
                         speed = velocityRatio;
-                        clipId = characterAnimation.RunClip;
+                        clipId = PlatformerCharacterAnimation.RunClip;
                     }
                 }
             }
@@ -88,26 +88,26 @@ public static class PlatformerCharacterAnimationHandler
                 if (math.length(characterControl.MoveVector) < 0.01f)
                 {
                     speed = 1f;
-                    clipId = characterAnimation.CrouchIdleClip;
+                    clipId = PlatformerCharacterAnimation.CrouchIdleClip;
                 }
                 else
                 {
                     var velocityRatio = velocityMagnitude / characterComponent.CrouchedMaxSpeed;
                     speed = velocityRatio;
-                    clipId = characterAnimation.CrouchMoveClip;
+                    clipId = PlatformerCharacterAnimation.CrouchMoveClip;
                 }
             }
                 break;
             case CharacterState.AirMove:
             {
                 speed = 1f;
-                clipId = characterAnimation.InAirClip;
+                clipId = PlatformerCharacterAnimation.InAirClip;
             }
                 break;
             case CharacterState.Dashing:
             {
                 speed = 1f;
-                clipId = characterAnimation.DashClip;
+                clipId = PlatformerCharacterAnimation.DashClip;
             }
                 break;
             case CharacterState.WallRun:
@@ -116,33 +116,33 @@ public static class PlatformerCharacterAnimationHandler
                     characterComponent.LastKnownWallNormal) > 0f;
                 speed = 1f;
                 clipId =
-                    wallIsOnTheLeft ? characterAnimation.WallRunLeftClip : characterAnimation.WallRunRightClip;
+                    wallIsOnTheLeft ? PlatformerCharacterAnimation.WallRunLeftClip : PlatformerCharacterAnimation.WallRunRightClip;
             }
                 break;
             case CharacterState.RopeSwing:
             {
                 speed = 1f;
-                clipId = characterAnimation.RopeHangClip;
+                clipId = PlatformerCharacterAnimation.RopeHangClip;
             }
                 break;
             case CharacterState.Climbing:
             {
                 var velocityRatio = velocityMagnitude / characterComponent.ClimbingSpeed;
                 speed = velocityRatio;
-                clipId = characterAnimation.ClimbingMoveClip;
+                clipId = PlatformerCharacterAnimation.ClimbingMoveClip;
             }
                 break;
             case CharacterState.LedgeGrab:
             {
                 var velocityRatio = velocityMagnitude / characterComponent.LedgeMoveSpeed;
                 speed = velocityRatio;
-                clipId = characterAnimation.LedgeGrabMoveClip;
+                clipId = PlatformerCharacterAnimation.LedgeGrabMoveClip;
             }
                 break;
             case CharacterState.LedgeStandingUp:
             {
                 speed = 1f;
-                // clipId = characterAnimation.LedgeStandUpClip;
+                clipId = PlatformerCharacterAnimation.LedgeStandUpClip;
             }
                 break;
             case CharacterState.Swimming:
@@ -151,26 +151,26 @@ public static class PlatformerCharacterAnimationHandler
                 if (velocityRatio < 0.1f)
                 {
                     speed = 1f;
-                    clipId = characterAnimation.SwimmingIdleClip;
+                    clipId = PlatformerCharacterAnimation.SwimmingIdleClip;
                 }
                 else
                 {
                     speed = velocityRatio;
-                    clipId = characterAnimation.SwimmingMoveClip;
+                    clipId = PlatformerCharacterAnimation.SwimmingMoveClip;
                 }
             }
                 break;
             case CharacterState.Sliding:
             {
                 speed = 1f;
-                clipId = characterAnimation.SlidingClip;
+                clipId = PlatformerCharacterAnimation.SlidingClip;
             }
                 break;
             case CharacterState.Rolling:
             case CharacterState.FlyingNoCollisions:
             {
                 speed = 1f;
-                clipId = characterAnimation.IdleClip;
+                clipId = PlatformerCharacterAnimation.IdleClip;
             }
                 break;
         }
@@ -184,7 +184,6 @@ public static class PlatformerCharacterAnimationHandler
         PlatformerCharacterStateMachine characterStateMachine
     )
     {
-        
         // var stateUnChanged = characterStateMachine.CurrentState == characterAnimation.LastAnimationCharacterState;
         // if (stateUnChanged)
         // {

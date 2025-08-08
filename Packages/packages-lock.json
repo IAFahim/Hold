@@ -73,6 +73,13 @@
       },
       "hash": "c6e72a182ae22047e5708d4c940150cce4fddae8"
     },
+    "com.tcs.physicsdropper": {
+      "version": "https://github.com/Ddemon26/TCS-PhysicsDropper.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "e5b7a35ae7d0cdd663dc6d97bff249424da33ad7"
+    },
     "com.unity.addressables": {
       "version": "2.6.0",
       "depth": 1,
@@ -186,6 +193,15 @@
       "depth": 1,
       "source": "builtin",
       "dependencies": {}
+    },
+    "com.unity.graphtoolkit": {
+      "version": "0.2.0-exp.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.uielements": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
       "version": "3.0.36",

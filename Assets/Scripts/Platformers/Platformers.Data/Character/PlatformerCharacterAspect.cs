@@ -1,21 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
-using Unity.Physics.Authoring;
-using Unity.Physics.Extensions;
-using Unity.Physics.Systems;
-using Unity.Transforms;
 using Unity.CharacterController;
-using UnityEngine;
-using UnityEngine.SocialPlatforms;
 using CapsuleCollider = Unity.Physics.CapsuleCollider;
-using Material = Unity.Physics.Material;
 
 public struct PlatformerCharacterUpdateContext
 {
@@ -51,6 +39,7 @@ public readonly partial struct PlatformerCharacterAspect : IAspect,
     public readonly RefRW<PlatformerCharacterControl> CharacterControl;
     public readonly RefRW<PlatformerCharacterStateMachine> StateMachine;
     public readonly RefRW<CustomGravity> CustomGravity;
+    public readonly RefRO<CapsuleGeometryBlobComponent> CapsuleGeometry;
 
     public void PhysicsUpdate(ref PlatformerCharacterUpdateContext context,
         ref KinematicCharacterUpdateContext baseContext)
@@ -219,25 +208,24 @@ public readonly partial struct PlatformerCharacterAspect : IAspect,
         ref var characterRotation = ref CharacterAspect.LocalTransform.ValueRW.Rotation;
         var characterScale = CharacterAspect.LocalTransform.ValueRO.Scale;
         ref var characterProperties = ref CharacterAspect.CharacterProperties.ValueRW;
+        ref var capsuleGeometry = ref CapsuleGeometry.ValueRO.BlobAssetRef.Value;
 
         // Overlap test with standing geometry to see if we have space to stand
         var capsuleCollider = (CapsuleCollider*)physicsCollider.ColliderPtr;
 
         var initialGeometry = capsuleCollider->Geometry;
-        capsuleCollider->Geometry = character.StandingGeometry.ToCapsuleGeometry();
+        capsuleCollider->Geometry = capsuleGeometry.standing.ToCapsuleGeometry();
 
-        var isObstructed = false;
-        if (CharacterAspect.CalculateDistanceClosestCollisions(
-                in this,
-                ref context,
-                ref baseContext,
-                characterPosition,
-                characterRotation,
-                characterScale,
-                0f,
-                characterProperties.ShouldIgnoreDynamicBodies(),
-                out var hit))
-            isObstructed = true;
+        bool isObstructed = CharacterAspect.CalculateDistanceClosestCollisions(
+            in this,
+            ref context,
+            ref baseContext,
+            characterPosition,
+            characterRotation,
+            characterScale,
+            0f,
+            characterProperties.ShouldIgnoreDynamicBodies(),
+            out _);
 
         capsuleCollider->Geometry = initialGeometry;
 
@@ -253,19 +241,6 @@ public readonly partial struct PlatformerCharacterAspect : IAspect,
             return true;
 
         return false;
-    }
-
-    public static CapsuleGeometry CreateCharacterCapsuleGeometry(float radius, float height, bool centered)
-    {
-        height = math.max(height, radius * 2f);
-        var halfHeight = height * 0.5f;
-
-        return new CapsuleGeometry
-        {
-            Radius = radius,
-            Vertex0 = centered ? -math.up() * (halfHeight - radius) : math.up() * radius,
-            Vertex1 = centered ? math.up() * (halfHeight - radius) : math.up() * (height - radius)
-        };
     }
 
     public static void GetCommonMoveVectorFromPlayerInput(in PlatformerPlayerInputs inputs, quaternion cameraRotation,
