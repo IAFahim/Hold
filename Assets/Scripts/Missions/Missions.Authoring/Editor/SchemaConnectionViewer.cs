@@ -127,6 +127,23 @@ namespace Missions.Missions.Authoring.Editor
             window.titleContent = new GUIContent("Schema Connections", EditorGUIUtility.IconContent("d_ScriptableObject Icon").image);
         }
 
+        [MenuItem("Tools/Schema/Connections Viewer (No Focus)")]
+        public static void ShowWindowNoFocus()
+        {
+            var window = GetWindow<SchemaConnectionViewer>("Schema Connections", false);
+            window.minSize = new Vector2(900, 500);
+            window.titleContent = new GUIContent("Schema Connections", EditorGUIUtility.IconContent("d_ScriptableObject Icon").image);
+        }
+
+        [MenuItem("Tools/Schema/Connections Viewer (Utility)")]
+        public static void ShowWindowUtility()
+        {
+            var window = CreateInstance<SchemaConnectionViewer>();
+            window.titleContent = new GUIContent("Schema Connections", EditorGUIUtility.IconContent("d_ScriptableObject Icon").image);
+            window.minSize = new Vector2(900, 500);
+            window.ShowUtility();
+        }
+
         private void OnEnable()
         {
             EditorApplication.projectChanged += OnProjectChanged;

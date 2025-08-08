@@ -19,7 +19,26 @@ namespace Missions.Missions.Authoring.Editor
         [MenuItem("Tools/Schema/Name Schema Creator")]
         public static void ShowWindow()
         {
-            GetWindow<NameSchemaCreatorWindow>("Name Schema Creator");
+            var wnd = GetWindow<NameSchemaCreatorWindow>("Name Schema Creator");
+            wnd.minSize = new Vector2(600, 420);
+            wnd.titleContent = new GUIContent("Name Schema Creator", EditorGUIUtility.IconContent("d_TextAsset Icon").image);
+        }
+
+        [MenuItem("Tools/Schema/Name Schema Creator (No Focus)")]
+        public static void ShowWindowNoFocus()
+        {
+            var wnd = GetWindow<NameSchemaCreatorWindow>("Name Schema Creator", false);
+            wnd.minSize = new Vector2(600, 420);
+            wnd.titleContent = new GUIContent("Name Schema Creator", EditorGUIUtility.IconContent("d_TextAsset Icon").image);
+        }
+
+        [MenuItem("Tools/Schema/Name Schema Creator (Utility)")]
+        public static void ShowWindowUtility()
+        {
+            var wnd = CreateInstance<NameSchemaCreatorWindow>();
+            wnd.titleContent = new GUIContent("Name Schema Creator", EditorGUIUtility.IconContent("d_TextAsset Icon").image);
+            wnd.minSize = new Vector2(600, 420);
+            wnd.ShowUtility();
         }
 
         private void OnEnable()
@@ -286,21 +305,8 @@ namespace Missions.Missions.Authoring.Editor
 
         private int GetNextAvailableId()
         {
-            if (_nameSettings.schemas.Length == 0) return 1;
-
-            HashSet<int> usedIds = new HashSet<int>();
-            foreach (var schema in _nameSettings.schemas)
-            {
-                usedIds.Add(schema.ID);
-            }
-
-            int nextId = 1;
-            while (usedIds.Contains(nextId))
-            {
-                nextId++;
-            }
-
-            return nextId;
+            int maxId = _nameSettings.schemas.Length > 0 ? _nameSettings.schemas.Max(s => s.ID) : 0;
+            return maxId + 1;
         }
 
         private string SanitizeFileName(string fileName)
