@@ -63,6 +63,40 @@ namespace Missions.Missions.Authoring.Editor
             outgoingListView = root.Q<ListView>("outgoingList");
             incomingListView = root.Q<ListView>("incomingList");
 
+            // If UXML was not found or did not include expected elements, build UI programmatically
+            if (defaultContainer == null)
+            {
+                var defaultInspector = BuildDefaultInspector(serializedObject);
+                root.Add(defaultInspector);
+            }
+            if (outgoingFoldout == null || incomingFoldout == null || outgoingListView == null || incomingListView == null)
+            {
+                // Header
+                root.Add(new Label("Schema Connections") { style = { unityFontStyleAndWeight = FontStyle.Bold, marginTop = 4, marginBottom = 2 } });
+                // Toolbar
+                var toolbar = new Toolbar();
+                refreshButton = new ToolbarButton(() => { FindConnections(); RefreshUILists(); }) { text = "Refresh Connections" };
+                statsLabel = new Label();
+                toolbar.Add(refreshButton);
+                toolbar.Add(new ToolbarSpacer());
+                toolbar.Add(statsLabel);
+                root.Add(toolbar);
+                // Panel
+                var panel = new VisualElement();
+                panel.AddToClassList("panel");
+                outgoingFoldout = new Foldout { text = $"Uses ({outgoingConnections.Count})", value = showOutgoing };
+                incomingFoldout = new Foldout { text = $"Referenced By ({incomingConnections.Count})", value = showIncoming };
+                outgoingListView = new ListView();
+                incomingListView = new ListView();
+                SetupConnectionsListView(outgoingListView, outgoingConnections);
+                SetupConnectionsListView(incomingListView, incomingConnections);
+                outgoingFoldout.Add(outgoingListView);
+                incomingFoldout.Add(incomingListView);
+                panel.Add(outgoingFoldout);
+                panel.Add(incomingFoldout);
+                root.Add(panel);
+            }
+
             if (refreshButton != null)
             {
                 refreshButton.clicked += () =>
@@ -88,6 +122,7 @@ namespace Missions.Missions.Authoring.Editor
             SetupConnectionsListView(incomingListView, incomingConnections);
 
             UpdateStatsLabel(statsLabel);
+            RefreshUILists();
 
             return root;
         }
