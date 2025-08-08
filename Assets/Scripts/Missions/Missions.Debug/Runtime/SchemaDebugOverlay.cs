@@ -148,7 +148,7 @@ namespace Missions.Missions.Debug.Runtime
                     break;
                 case ItemSchema isch:
                     _detailsLabel.text =
-                        $"Item\nID: {isch.ID}\nName: {SafeName(isch.name)}\nWeight: {isch.weightKg} kg\nFlags: Fragile={isch.isFragile}, Heavy={isch.isHeavy}, Light={isch.isLightweight}, Banned={isch.banned}";
+                        $"Item\nID: {isch.ID}\nName: {SafeName(isch.name)}\nWeight: {isch.weightKg} kg\nFlags: {isch.flags}";
                     break;
                 case NameSchema n:
                     _detailsLabel.text = $"Name\nID: {n.ID}\nText: {n.fixed32}";
@@ -217,7 +217,7 @@ namespace Missions.Missions.Debug.Runtime
                     goals = s.goals?.Where(g => g).Select(g => g.name).ToArray() ?? Array.Empty<string>()
                 }).ToArray() ?? Array.Empty<object>(),
                 times = timeSettings?.schemas?.Where(s => s).Select(s => new { s.ID, cross = SafeName(s.crossLink) }).ToArray() ?? Array.Empty<object>(),
-                items = itemSettings?.schemas?.Where(s => s).Select(s => new { s.ID, name = SafeName(s.name), s.weightKg, s.isFragile, s.isHeavy, s.isLightweight, s.banned }).ToArray() ?? Array.Empty<object>()
+                items = itemSettings?.schemas?.Where(s => s).Select(s => new { s.ID, name = SafeName(s.name), s.weightKg, flags = s.flags.ToString() }).ToArray() ?? Array.Empty<object>()
             };
             var json = JsonUtility.ToJson(new Wrapper(payload), true);
 #if UNITY_EDITOR
