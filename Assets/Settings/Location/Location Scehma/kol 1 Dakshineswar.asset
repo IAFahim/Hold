@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 0
   nameSchema: {fileID: 11400000, guid: 796897c01c6e09537a88f551e2b0f1ee, type: 2}
   position:
-    x: 0
-    y: 0
+    x: 10.98
+    y: 3.54
     z: 0
   range: 10
