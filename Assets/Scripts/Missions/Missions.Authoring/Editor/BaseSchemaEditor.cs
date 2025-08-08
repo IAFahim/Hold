@@ -44,6 +44,9 @@ namespace Missions.Missions.Authoring.Editor
                 uxml.CloneTree(root);
             }
 
+            // Theme
+            ApplyThemeClass(root);
+
             // Default inspector
             var defaultContainer = root.Q<VisualElement>("defaultInspector");
             if (defaultContainer != null)
@@ -89,6 +92,14 @@ namespace Missions.Missions.Authoring.Editor
             return root;
         }
 
+        private void ApplyThemeClass(VisualElement rootElement)
+        {
+            bool dark = EditorGUIUtility.isProSkin;
+            rootElement.RemoveFromClassList("theme--dark");
+            rootElement.RemoveFromClassList("theme--light");
+            rootElement.AddToClassList(dark ? "theme--dark" : "theme--light");
+        }
+
         private void SetupConnectionsListView(ListView listView, List<BaseSchema> source)
         {
             if (listView == null) return;
@@ -106,10 +117,13 @@ namespace Missions.Missions.Authoring.Editor
                 };
                 objField.SetEnabled(false);
                 objField.style.flexGrow = 1;
+                var openButton = new Button { text = "Open" };
+                openButton.style.width = 50;
                 var pingButton = new Button { text = "Ping" };
                 pingButton.style.marginLeft = 6;
                 pingButton.style.width = 50;
                 row.Add(objField);
+                row.Add(openButton);
                 row.Add(pingButton);
                 return row;
             };
@@ -118,17 +132,38 @@ namespace Missions.Missions.Authoring.Editor
             {
                 var schema = source.ElementAtOrDefault(i);
                 var objField = element.Q<ObjectField>();
-                var pingButton = element.Q<Button>();
+                var buttons = element.Query<Button>().ToList();
+                var openButton = buttons.ElementAtOrDefault(0);
+                var pingButton = buttons.ElementAtOrDefault(1);
                 objField.value = schema;
-                pingButton.clicked -= null;
-                pingButton.clicked += () =>
+
+                if (openButton != null)
                 {
-                    if (schema != null)
+                    openButton.clicked -= null;
+                    openButton.clicked += () =>
                     {
-                        EditorGUIUtility.PingObject(schema);
-                        Selection.activeObject = schema;
-                    }
-                };
+                        if (schema != null)
+                        {
+                            SchemaConnectionViewer.ShowWindow();
+                            // Select in viewer by pinging; advanced selection could be added via static API
+                            EditorGUIUtility.PingObject(schema);
+                        }
+                    };
+                }
+
+                if (pingButton != null)
+                {
+                    pingButton.clicked -= null;
+                    pingButton.clicked += () =>
+                    {
+                        if (schema != null)
+                        {
+                            EditorGUIUtility.PingObject(schema);
+                            Selection.activeObject = schema;
+                        }
+                    };
+                }
+
                 element.RegisterCallback<MouseUpEvent>(_ =>
                 {
                     if (schema != null)

@@ -76,6 +76,9 @@ namespace Missions.Missions.Authoring.Editor
             if (uss != null) rootVisualElement.styleSheets.Add(uss);
             if (uxml != null) uxml.CloneTree(rootVisualElement);
 
+            // Theme class
+            ApplyThemeClass(rootVisualElement);
+
             // Wire toolbar
             _searchField = rootVisualElement.Q<ToolbarSearchField>("searchField");
             _mainScroll = rootVisualElement.Q<ScrollView>("mainScroll");
@@ -87,16 +90,18 @@ namespace Missions.Missions.Authoring.Editor
                 _searchField.value = _searchQuery;
                 _searchField.RegisterValueChangedCallback(evt => { _searchQuery = evt.newValue; RebuildUISections(); });
             }
-            if (refreshBtn != null)
-            {
-                refreshBtn.clicked += () => LoadSchemas();
-            }
-            if (saveBtn != null)
-            {
-                saveBtn.clicked += () => AssetDatabase.SaveAssets();
-            }
+            if (refreshBtn != null) refreshBtn.clicked += () => LoadSchemas();
+            if (saveBtn != null) saveBtn.clicked += () => AssetDatabase.SaveAssets();
 
             RebuildUISections();
+        }
+
+        private void ApplyThemeClass(VisualElement root)
+        {
+            bool dark = EditorGUIUtility.isProSkin;
+            root.RemoveFromClassList("theme--dark");
+            root.RemoveFromClassList("theme--light");
+            root.AddToClassList(dark ? "theme--dark" : "theme--light");
         }
 
         private void RebuildUISections()
@@ -164,7 +169,9 @@ namespace Missions.Missions.Authoring.Editor
                 var schema = schemaList[i];
                 var so = new SerializedObject(schema);
 
-                var row = new VisualElement { style = { flexDirection = FlexDirection.Row, paddingLeft = 4, paddingRight = 4, backgroundColor = (i % 2 == 0 ? new Color(1f, 1f, 1f, 0.03f) : new Color(1f, 1f, 1f, 0.09f)) } };
+                var row = new VisualElement { style = { flexDirection = FlexDirection.Row, paddingLeft = 4, paddingRight = 4 } };
+                row.EnableInClassList("schema-row--odd", i % 2 == 1);
+                row.EnableInClassList("schema-row--even", i % 2 == 0);
 
                 var objField = new ObjectField { objectType = typeof(BaseSchema), value = schema, allowSceneObjects = false };
                 objField.SetEnabled(false);
