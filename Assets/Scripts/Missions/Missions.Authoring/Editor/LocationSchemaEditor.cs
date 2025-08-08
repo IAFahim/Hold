@@ -12,14 +12,12 @@ namespace Missions.Missions.Authoring.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {
+            // Build base inspector with fields and connections
             var root = base.CreateInspectorGUI();
 
-            var separator = new VisualElement { style = { height = 8 } };
-            root.Add(separator);
-
+            // Append Location Tools
             var box = new HelpBox("", HelpBoxMessageType.None);
-            box.style.marginTop = 4;
-            box.style.marginBottom = 4;
+            box.style.marginTop = 6;
 
             var header = new Label("Location Tools")
             {
@@ -49,7 +47,6 @@ namespace Missions.Missions.Authoring.Editor
 
         public override void OnInspectorGUI()
         {
-            // IMGUI fallback to base
             base.OnInspectorGUI();
         }
 
