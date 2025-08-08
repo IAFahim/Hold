@@ -24,9 +24,9 @@ public class UIToolkitJoystick : MonoBehaviour
 
     // UI
     public UIDocument doc;
-    public VisualElement root, innerPad, knob, noLockRing;
+    public VisualElement root, knob, noLockRing;
 
-    // Geometry (innerPad local space)
+    // Geometry (root local space)
     public Vector2 center;
     public float moveRadius;   // clamp radius (px)
     public float knobRadius;
@@ -55,16 +55,15 @@ public class UIToolkitJoystick : MonoBehaviour
     {
         doc = GetComponent<UIDocument>();
         root = doc.rootVisualElement.Q<VisualElement>("joystick");
-        innerPad = root.Q<VisualElement>("pad");
         knob = root.Q<VisualElement>("knob");
         noLockRing = root.Q<VisualElement>("no-lock-ring");
 
         root.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
 
-        innerPad.RegisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
-        innerPad.RegisterCallback<PointerMoveEvent>(OnPointerMove, TrickleDown.TrickleDown);
-        innerPad.RegisterCallback<PointerUpEvent>(OnPointerUp, TrickleDown.TrickleDown);
-        innerPad.RegisterCallback<PointerCancelEvent>(OnPointerCancel, TrickleDown.TrickleDown);
+        root.RegisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
+        root.RegisterCallback<PointerMoveEvent>(OnPointerMove, TrickleDown.TrickleDown);
+        root.RegisterCallback<PointerUpEvent>(OnPointerUp, TrickleDown.TrickleDown);
+        root.RegisterCallback<PointerCancelEvent>(OnPointerCancel, TrickleDown.TrickleDown);
 
         // Ensure no leftover translate on knob
         knob.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0), 0));
@@ -73,16 +72,16 @@ public class UIToolkitJoystick : MonoBehaviour
     public void OnDisable()
     {
         root?.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
-        innerPad?.UnregisterCallback<PointerDownEvent>(OnPointerDown);
-        innerPad?.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
-        innerPad?.UnregisterCallback<PointerUpEvent>(OnPointerUp);
-        innerPad?.UnregisterCallback<PointerCancelEvent>(OnPointerCancel);
+        root?.UnregisterCallback<PointerDownEvent>(OnPointerDown);
+        root?.UnregisterCallback<PointerMoveEvent>(OnPointerMove);
+        root?.UnregisterCallback<PointerUpEvent>(OnPointerUp);
+        root?.UnregisterCallback<PointerCancelEvent>(OnPointerCancel);
     }
 
     public void OnGeometryChanged(GeometryChangedEvent e)
     {
-        var r = innerPad.contentRect; // local (0,0)
-        center = new Vector2(r.width * 0.5f, r.height * 0.5f);
+        var r = root.contentRect; // local (0,0)
+        center = new Vector2(r.x + r.width * 0.5f, r.y + r.height * 0.5f);
 
         knobRadius = Mathf.Max(1f, knob.resolvedStyle.width * 0.5f);
         float shortest = Mathf.Min(r.width, r.height);
@@ -118,13 +117,13 @@ public class UIToolkitJoystick : MonoBehaviour
         if (activePointer != -1) return;
 
         activePointer = evt.pointerId;
-        innerPad.CapturePointer(activePointer);
+        root.CapturePointer(activePointer);
         IsPressed = true;
         dragging = true;
         springing = false;
         onPressChanged?.Invoke(true);
 
-        Vector2 local = innerPad.WorldToLocal(evt.position);
+        Vector2 local = root.WorldToLocal(evt.position);
 
         // If locked and press happens inside the no-lock bound, unlock immediately
         if (IsLocked && InsideNoLock(local)) SetLocked(false);
@@ -136,14 +135,14 @@ public class UIToolkitJoystick : MonoBehaviour
     public void OnPointerMove(PointerMoveEvent evt)
     {
         if (!dragging || evt.pointerId != activePointer) return;
-        MoveKnob(innerPad.WorldToLocal(evt.position));
+        MoveKnob(root.WorldToLocal(evt.position));
         evt.StopPropagation();
     }
 
     public void OnPointerUp(PointerUpEvent evt)
     {
         if (evt.pointerId != activePointer) return;
-        EndPointer(innerPad.WorldToLocal(evt.position));
+        EndPointer(root.WorldToLocal(evt.position));
         evt.StopPropagation();
     }
 
@@ -161,7 +160,7 @@ public class UIToolkitJoystick : MonoBehaviour
         IsPressed = false;
         onPressChanged?.Invoke(false);
 
-        innerPad.ReleasePointer(activePointer);
+        root.ReleasePointer(activePointer);
         activePointer = -1;
 
         if (InsideNoLock(localRelease))
