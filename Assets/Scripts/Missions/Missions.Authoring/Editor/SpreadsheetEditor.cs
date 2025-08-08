@@ -24,7 +24,28 @@ namespace Missions.Missions.Authoring.Editor
         [MenuItem("Tools/Schema/Spreadsheet Editor")]
         public static void ShowWindow()
         {
-            GetWindow<SpreadsheetEditor>("Spreadsheet Editor");
+            var window = GetWindow<SpreadsheetEditor>("Spreadsheet Editor");
+            window.minSize = new Vector2(800, 400);
+            window.titleContent = new GUIContent("Spreadsheet Editor", EditorGUIUtility.IconContent("d_UnityEditor.HierarchyWindow").image);
+        }
+
+        // Open without stealing focus (if window already exists)
+        [MenuItem("Tools/Schema/Spreadsheet Editor (No Focus)")]
+        public static void ShowWindowNoFocus()
+        {
+            var window = GetWindow<SpreadsheetEditor>("Spreadsheet Editor", false);
+            window.minSize = new Vector2(800, 400);
+            window.titleContent = new GUIContent("Spreadsheet Editor", EditorGUIUtility.IconContent("d_UnityEditor.HierarchyWindow").image);
+        }
+
+        // Open as floating utility window (always on top within Unity)
+        [MenuItem("Tools/Schema/Spreadsheet Editor (Utility)")]
+        public static void ShowWindowUtility()
+        {
+            var window = CreateInstance<SpreadsheetEditor>();
+            window.titleContent = new GUIContent("Spreadsheet Editor", EditorGUIUtility.IconContent("d_UnityEditor.HierarchyWindow").image);
+            window.minSize = new Vector2(800, 400);
+            window.ShowUtility();
         }
 
         private void OnEnable()
