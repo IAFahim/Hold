@@ -108,11 +108,8 @@
     margin-right: 6px;
 }
 
-.cards {
-    flex-direction: row;
-    margin-top: 6px;
-    margin-bottom: 6px;
-}
+.cards { flex-wrap: wrap; gap: 6px; }
+.card { margin-right: 0; }
 
 .card {
     background-color: var(--bg-panel);
