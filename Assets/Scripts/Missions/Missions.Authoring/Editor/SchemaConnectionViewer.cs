@@ -132,6 +132,12 @@ namespace Missions.Missions.Authoring.Editor
         private VisualElement _breadcrumbs;
         private ListView _outgoingListView;
         private ListView _incomingListView;
+        private Label _cardSchemas;
+        private Label _cardConnections;
+        private Label _cardHubs;
+        private Label _cardOrphans;
+        private Label _cardEndpoints;
+        private Label _chipAll, _chipHubs, _chipOrphans, _chipEndpoints, _chipHas, _chipNone;
         #endregion
 
         #region Unity Lifecycle
@@ -180,6 +186,24 @@ namespace Missions.Missions.Authoring.Editor
             _sortAscToggle = rootVisualElement.Q<ToolbarToggle>("ascToggle");
             _searchField = rootVisualElement.Q<ToolbarSearchField>("searchField");
             _statusLabel = rootVisualElement.Q<Label>("statusLabel");
+            _cardSchemas = rootVisualElement.Q<Label>("cardSchemas");
+            _cardConnections = rootVisualElement.Q<Label>("cardConnections");
+            _cardHubs = rootVisualElement.Q<Label>("cardHubs");
+            _cardOrphans = rootVisualElement.Q<Label>("cardOrphans");
+            _cardEndpoints = rootVisualElement.Q<Label>("cardEndpoints");
+            _chipAll = rootVisualElement.Q<Label>("chipAll");
+            _chipHubs = rootVisualElement.Q<Label>("chipHubs");
+            _chipOrphans = rootVisualElement.Q<Label>("chipOrphans");
+            _chipEndpoints = rootVisualElement.Q<Label>("chipEndpoints");
+            _chipHas = rootVisualElement.Q<Label>("chipHas");
+            _chipNone = rootVisualElement.Q<Label>("chipNone");
+
+            SetupChip(_chipAll, FilterMode.All);
+            SetupChip(_chipHubs, FilterMode.Hubs);
+            SetupChip(_chipOrphans, FilterMode.Orphans);
+            SetupChip(_chipEndpoints, FilterMode.Endpoints);
+            SetupChip(_chipHas, FilterMode.HasConnections);
+            SetupChip(_chipNone, FilterMode.NoConnections);
 
             if (_filterField != null)
             {
@@ -627,6 +651,43 @@ namespace Missions.Missions.Authoring.Editor
         {
             if (_statusLabel == null) return;
             _statusLabel.text = $"Schemas: {_totalSchemas}    Categories: {_categorizedSchemas.Count}    Connections: {_totalConnections}    Hubs: {_hubCount}    Orphans: {_orphanCount}    Endpoints: {_endpointCount}";
+
+            if (_cardSchemas != null) _cardSchemas.text = _totalSchemas.ToString();
+            if (_cardConnections != null) _cardConnections.text = _totalConnections.ToString();
+            if (_cardHubs != null) _cardHubs.text = _hubCount.ToString();
+            if (_cardOrphans != null) _cardOrphans.text = _orphanCount.ToString();
+            if (_cardEndpoints != null) _cardEndpoints.text = _endpointCount.ToString();
+
+            UpdateActiveChip();
+        }
+
+        private void SetupChip(Label chip, FilterMode mode)
+        {
+            if (chip == null) return;
+            chip.AddToClassList("chip");
+            chip.AddToClassList("hoverable");
+            chip.RegisterCallback<MouseUpEvent>(_ => { _viewState.filterMode = mode; InvalidateFilterCache(); RebuildUI(); });
+        }
+
+        private void UpdateActiveChip()
+        {
+            var chips = new[] { _chipAll, _chipHubs, _chipOrphans, _chipEndpoints, _chipHas, _chipNone };
+            foreach (var c in chips)
+            {
+                if (c == null) continue;
+                c.RemoveFromClassList("chip--active");
+            }
+            Label active = _viewState.filterMode switch
+            {
+                FilterMode.All => _chipAll,
+                FilterMode.Hubs => _chipHubs,
+                FilterMode.Orphans => _chipOrphans,
+                FilterMode.Endpoints => _chipEndpoints,
+                FilterMode.HasConnections => _chipHas,
+                FilterMode.NoConnections => _chipNone,
+                _ => _chipAll
+            };
+            active?.AddToClassList("chip--active");
         }
         #endregion
 

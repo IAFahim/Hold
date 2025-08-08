@@ -12,8 +12,39 @@
       <uie:ToolbarSearchField name="searchField" />
     </uie:Toolbar>
 
+    <ui:VisualElement class="cards">
+      <ui:VisualElement class="card">
+        <ui:Label class="card__title" text="Schemas" />
+        <ui:Label class="card__value" name="cardSchemas" text="0" />
+      </ui:VisualElement>
+      <ui:VisualElement class="card">
+        <ui:Label class="card__title" text="Connections" />
+        <ui:Label class="card__value" name="cardConnections" text="0" />
+      </ui:VisualElement>
+      <ui:VisualElement class="card">
+        <ui:Label class="card__title" text="Hubs" />
+        <ui:Label class="card__value" name="cardHubs" text="0" />
+      </ui:VisualElement>
+      <ui:VisualElement class="card">
+        <ui:Label class="card__title" text="Orphans" />
+        <ui:Label class="card__value" name="cardOrphans" text="0" />
+      </ui:VisualElement>
+      <ui:VisualElement class="card">
+        <ui:Label class="card__title" text="Endpoints" />
+        <ui:Label class="card__value" name="cardEndpoints" text="0" />
+      </ui:VisualElement>
+    </ui:VisualElement>
+
+    <ui:VisualElement class="chips">
+      <ui:Label class="chip" name="chipAll" text="All" />
+      <ui:Label class="chip" name="chipHubs" text="Hubs" />
+      <ui:Label class="chip" name="chipOrphans" text="Orphans" />
+      <ui:Label class="chip" name="chipEndpoints" text="Endpoints" />
+      <ui:Label class="chip" name="chipHas" text="Has Connections" />
+      <ui:Label class="chip" name="chipNone" text="No Connections" />
+    </ui:VisualElement>
+
     <ui:VisualElement name="splitRoot">
-      <!-- Split will be instantiated in code due to TwoPaneSplitView not being available in UXML -->
     </ui:VisualElement>
 
     <ui:VisualElement class="status-bar">
