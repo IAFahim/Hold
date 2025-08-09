@@ -29,11 +29,8 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: a4ca8af50e9efac722c5da929acd1cc3
         m_Name: 
-        m_GraphNodeModels:
-        - rid: 2906519619728310523
-        - rid: 2906519619728310526
-        m_GraphWireModels:
-        - rid: 2906519619728310532
+        m_GraphNodeModels: []
+        m_GraphWireModels: []
         m_GraphStickyNoteModels: []
         m_GraphPlacematModels: []
         m_GraphVariableModels: []
@@ -47,33 +44,9 @@ MonoBehaviour:
           y: 654
           width: 516
           height: 184
-        m_GraphElementMetaData:
-        - m_Guid:
-            m_Value0: 14357426678033567781
-            m_Value1: 15635504339007318973
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: 2550e8a87ed33fc7bd2b9c1a5b78fcd8
-          m_Category: 0
-          m_Index: 0
-        - m_Guid:
-            m_Value0: 8337211882369838632
-            m_Value1: 11766972186060624294
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: 28eed1d908bab373a6910bf0dbae4ca3
-          m_Category: 0
-          m_Index: 1
-        - m_Guid:
-            m_Value0: 11871201040366818716
-            m_Value1: 12072128169248340112
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: 9cd54f2c73fabea490b808eb9bd088a7
-          m_Category: 2
-          m_Index: 0
+        m_GraphElementMetaData: []
         m_EntryPoint:
-          rid: 2906519619728310523
+          rid: -2
         m_Graph:
           rid: 2906519619559751916
     - rid: 2906519619559751915
@@ -91,140 +64,3 @@ MonoBehaviour:
     - rid: 2906519619559751916
       type: {class: MissionGraph, ns: Missions.Missions.Authoring.Editor.Graph, asm: Missions.Authoring}
       data: 
-    - rid: 2906519619728310523
-      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
-      data:
-        m_Guid:
-          m_Value0: 14357426678033567781
-          m_Value1: 15635504339007318973
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: 2550e8a87ed33fc7bd2b9c1a5b78fcd8
-        m_Version: 2
-        m_Position: {x: 1985.2174, y: 733.9131}
-        m_Title: 
-        m_Tooltip: 
-        m_NodePreviewModel:
-          rid: -2
-        m_State: 0
-        m_InputConstantsById:
-          m_KeyList:
-          - Asset
-          m_ValueList:
-          - rid: 2906519619728310524
-        m_InputPortInfos:
-          expandedPortsById:
-            m_KeyList: []
-            m_ValueList: 
-        m_OutputPortInfos:
-          expandedPortsById:
-            m_KeyList: []
-            m_ValueList: 
-        m_Collapsed: 0
-        m_CurrentModeIndex: 0
-        m_ElementColor:
-          m_Color: {r: 0, g: 0, b: 0, a: 0}
-          m_HasUserColor: 0
-        m_Node:
-          rid: 2906519619728310525
-    - rid: 2906519619728310524
-      type: {class: 'Constant`1[[Missions.Missions.Authoring.Schemas.NameSchema, Missions.Authoring]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: {fileID: 0}
-    - rid: 2906519619728310525
-      type: {class: NameSchemaNode, ns: Missions.Missions.Authoring.Editor.Graph, asm: Missions.Authoring}
-      data: 
-    - rid: 2906519619728310526
-      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
-      data:
-        m_Guid:
-          m_Value0: 8337211882369838632
-          m_Value1: 11766972186060624294
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: 28eed1d908bab373a6910bf0dbae4ca3
-        m_Version: 2
-        m_Position: {x: 1648.6957, y: 653.9131}
-        m_Title: 
-        m_Tooltip: 
-        m_NodePreviewModel:
-          rid: -2
-        m_State: 0
-        m_InputConstantsById:
-          m_KeyList:
-          - Folder
-          - File Name
-          - ID
-          - Text
-          m_ValueList:
-          - rid: 2906519619728310527
-          - rid: 2906519619728310528
-          - rid: 2906519619728310529
-          - rid: 2906519619728310530
-        m_InputPortInfos:
-          expandedPortsById:
-            m_KeyList: []
-            m_ValueList: 
-        m_OutputPortInfos:
-          expandedPortsById:
-            m_KeyList: []
-            m_ValueList: 
-        m_Collapsed: 0
-        m_CurrentModeIndex: 0
-        m_ElementColor:
-          m_Color: {r: 0, g: 0, b: 0, a: 0}
-          m_HasUserColor: 0
-        m_Node:
-          rid: 2906519619728310531
-    - rid: 2906519619728310527
-      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: Assets/Settings/Names
-    - rid: 2906519619728310528
-      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: NameSchema
-    - rid: 2906519619728310529
-      type: {class: 'Constant`1[[System.Int32, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: 0
-    - rid: 2906519619728310530
-      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: Wow
-    - rid: 2906519619728310531
-      type: {class: NameSchemaCreateNode, ns: Missions.Missions.Authoring.Editor.Graph, asm: Missions.Authoring}
-      data:
-        createdAsset: {fileID: 0}
-    - rid: 2906519619728310532
-      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Guid:
-          m_Value0: 11871201040366818716
-          m_Value1: 12072128169248340112
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: 9cd54f2c73fabea490b808eb9bd088a7
-        m_Version: 2
-        m_FromPortReference:
-          m_NodeModelGuid:
-            m_Value0: 8337211882369838632
-            m_Value1: 11766972186060624294
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 28eed1d908bab373a6910bf0dbae4ca3
-          m_UniqueId: Out
-          m_PortDirection: 2
-          m_PortOrientation: 0
-          m_Title: Out
-        m_ToPortReference:
-          m_NodeModelGuid:
-            m_Value0: 14357426678033567781
-            m_Value1: 15635504339007318973
-          m_NodeModelHashGuid:
-            serializedVersion: 2
-            Hash: 2550e8a87ed33fc7bd2b9c1a5b78fcd8
-          m_UniqueId: Asset
-          m_PortDirection: 1
-          m_PortOrientation: 0
-          m_Title: Asset
