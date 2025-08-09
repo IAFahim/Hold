@@ -34,14 +34,13 @@ namespace Missions.Missions.Authoring.Editor.Graph
 
         protected override void OnDefineOptions(INodeOptionDefinition ctx)
         {
-            ctx.AddNodeOption(OptFolder, typeof(string), OptFolder, defaultValue: DefaultFolder);
             ctx.AddNodeOption(OptFileName, typeof(string), OptFileName, defaultValue: DefaultFileName);
-            ctx.AddNodeOption<int>(OptId, OptId, defaultValue: 0);
             DefineCustomOptions(ctx);
         }
 
         protected override void OnDefinePorts(IPortDefinitionContext ctx)
         {
+            ctx.AddInputPort<string>(OptFolder).WithDisplayName(OptFolder).WithDefaultValue(DefaultFolder).Build();
             // Output port to feed downstream connections
             ctx.AddOutputPort<TSchema>("Out").Build();
             DefineCustomPorts(ctx);
@@ -52,18 +51,15 @@ namespace Missions.Missions.Authoring.Editor.Graph
         public void CreateOrUpdateAsset()
         {
             // Read basic options
-            var folderOpt = GetNodeOptionByName(OptFolder);
+            var folderPort = GetInputPortByName(OptFolder);
             var nameOpt = GetNodeOptionByName(OptFileName);
-            var idOpt = GetNodeOptionByName(OptId);
 
             string folder = DefaultFolder;
-            if (folderOpt != null && folderOpt.TryGetValue(out string f)) folder = string.IsNullOrWhiteSpace(f) ? DefaultFolder : f.Trim();
+            var f = MissionGraph.ResolvePortValue<string>(folderPort);
+            if (!string.IsNullOrWhiteSpace(f)) folder = f.Trim();
 
             string fileName = DefaultFileName;
             if (nameOpt != null && nameOpt.TryGetValue(out string fn)) fileName = string.IsNullOrWhiteSpace(fn) ? DefaultFileName : Sanitize(fn);
-
-            int id = 0;
-            if (idOpt != null && idOpt.TryGetValue(out int i)) id = i;
 
             EnsureFolder(folder);
 
@@ -75,9 +71,11 @@ namespace Missions.Missions.Authoring.Editor.Graph
             }
 
             // Apply BaseSchema ID when present
-            if (createdAsset is BaseSchema baseSchema)
+            if (createdAsset is BaseSchema baseSchema && baseSchema.ID == 0)
             {
-                baseSchema.ID = id;
+                var assetPath = AssetDatabase.GetAssetPath(createdAsset);
+                var guid = AssetDatabase.AssetPathToGUID(assetPath);
+                baseSchema.ID = (ushort)guid.GetHashCode();
             }
 
             // Apply type-specific fields
