@@ -28,7 +28,7 @@ namespace Missions.Missions.Authoring.Schemas
     public class ItemSchema : BakingSchema<Item>
     {
         [Tooltip("Display name reference")] [SearchContext("item")]
-        public NameSchema name;
+        public NameSchema nameSchema;
 
         [Min(0)] public float weightKg;
 
@@ -40,9 +40,9 @@ namespace Missions.Missions.Authoring.Schemas
             return new Item
             {
                 id = (ushort)ID,
-                nameId = (ushort)(name ? name.ID : 0),
+                nameId = (ushort)(nameSchema ? nameSchema.ID : 0),
                 weightKg = weightKg,
-                flags = (byte)flags
+                flags = flags
             };
         }
     }
@@ -53,6 +53,6 @@ namespace Missions.Missions.Authoring.Schemas
         public ushort id;
         public ushort nameId;
         public float weightKg;
-        public byte flags;
+        public ItemFlags flags;
     }
 }

@@ -1,9 +1,8 @@
 fileFormatVersion: 2
-guid: e03153679e003e0c29ab7f4440ffab13
-labels:
-- Graph
-DefaultImporter:
+guid: 750d3f41d6bec594c81799adbf27e72d
+NativeFormatImporter:
   externalObjects: {}
+  mainObjectFileID: 11400000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
