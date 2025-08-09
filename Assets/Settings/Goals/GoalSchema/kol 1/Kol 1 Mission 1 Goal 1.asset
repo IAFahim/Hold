@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Missions.Authoring::Missions.Missions.Authoring.Schemas.GoalSchema
   id: 1
   targetType: 0
-  rangeSchema: {fileID: 11400000, guid: e1eb3b5597e30666ebcebc9fcb093383, type: 2}
+  rangeSchema: {fileID: 11400000, guid: cac9d53d281aac68bafaca12bfdf4291, type: 2}

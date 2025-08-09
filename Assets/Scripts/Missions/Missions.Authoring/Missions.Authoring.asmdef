@@ -19,7 +19,8 @@
         "Unity.Transforms",
         "SchemaSettings.Authoring",
         "Unity.GraphToolkit.Editor",
-        "ALINE"
+        "ALINE",
+        "Unity.GraphToolkit.Common.Editor"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -30,12 +31,12 @@
     "defineConstraints": [
         "UNITY_EDITOR"
     ],
-  "versionDefines": [
-    {
-      "name": "com.arongranberg.aline",
-      "expression": "1.0.0",
-      "define": "ALINE"
-    }
-  ],
+    "versionDefines": [
+        {
+            "name": "com.arongranberg.aline",
+            "expression": "1.0.0",
+            "define": "ALINE"
+        }
+    ],
     "noEngineReferences": false
 }
