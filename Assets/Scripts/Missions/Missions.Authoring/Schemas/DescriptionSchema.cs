@@ -18,7 +18,8 @@ namespace Missions.Missions.Authoring.Schemas
         private const string FieldName = nameof(DescriptionSchema);
         private const string TypeString = "Description";
 
-        public string fixed128;
+        [TextArea]
+        public string fixed128 = "";
 
         private void OnValidate()
         {

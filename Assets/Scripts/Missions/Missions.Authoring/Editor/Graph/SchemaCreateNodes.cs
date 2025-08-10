@@ -19,8 +19,8 @@ namespace Missions.Missions.Authoring.Editor.Graph
         where TSchema : ScriptableObject
     {
         // Common node option names
-        protected const string OptFolder = "Folder";
-        protected const string OptFileName = "File Name";
+        protected const string OptFolder = "Assets/Settings/";
+        protected const string OptFileName = "Schema";
         protected const string OptId = "ID";
 
         [SerializeField] protected TSchema createdAsset;
@@ -70,6 +70,15 @@ namespace Missions.Missions.Authoring.Editor.Graph
                 AssetDatabase.CreateAsset(createdAsset, path);
             }
 
+
+            // Apply type-specific fields
+            ApplyCustomFields(createdAsset);
+
+            EditorUtility.SetDirty(createdAsset);
+        }
+
+        private void SetIDFromGuid()
+        {
             // Apply BaseSchema ID when present
             if (createdAsset is BaseSchema baseSchema && baseSchema.ID == 0)
             {
@@ -77,11 +86,6 @@ namespace Missions.Missions.Authoring.Editor.Graph
                 var guid = AssetDatabase.AssetPathToGUID(assetPath);
                 baseSchema.ID = (ushort)guid.GetHashCode();
             }
-
-            // Apply type-specific fields
-            ApplyCustomFields(createdAsset);
-
-            EditorUtility.SetDirty(createdAsset);
         }
 
         protected static string Sanitize(string s)
@@ -110,7 +114,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
     [Serializable]
     internal class NameSchemaCreateNode : SchemaCreateNodeBase<NameSchema>
     {
-        protected override string DefaultFolder => "Assets/Settings/Name";
+        protected override string DefaultFolder => "Assets/Settings/Name/NameSchemaSchema";
         const string OptFixed32 = "Text";
 
         protected override void DefineCustomOptions(INodeOptionDefinition ctx)
@@ -128,7 +132,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
     [Serializable]
     internal class RangeFloatSchemaCreateNode : SchemaCreateNodeBase<RangeFloatSchema>
     {
-        protected override string DefaultFolder => "Assets/Settings/RangeFloat";
+        protected override string DefaultFolder => "Assets/Settings/RangeFloat/RangeFloatSchema";
         const string OptCheck = "Check"; const string OptMin = "Min"; const string OptMax = "Max";
         protected override void DefineCustomOptions(INodeOptionDefinition ctx)
         {
@@ -150,7 +154,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
     [Serializable]
     internal class RangeIntSchemaCreateNode : SchemaCreateNodeBase<RangeIntSchema>
     {
-        protected override string DefaultFolder => "Assets/Settings/RangeInt";
+        protected override string DefaultFolder => "Assets/Settings/RangeInt/RangeIntSchema";
         const string OptCheck = "Check"; const string OptMin = "Min"; const string OptMax = "Max";
         protected override void DefineCustomOptions(INodeOptionDefinition ctx)
         {
@@ -172,7 +176,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
     [Serializable]
     internal class LocationSchemaCreateNode : SchemaCreateNodeBase<LocationSchema>
     {
-        protected override string DefaultFolder => "Assets/Settings/Location";
+        protected override string DefaultFolder => "Assets/Settings/Location/LocationSchema";
         const string OptPosX = "PosX"; const string OptPosY = "PosY"; const string OptPosZ = "PosZ"; const string OptRange = "Range";
 
         protected override void DefineCustomOptions(INodeOptionDefinition ctx)
@@ -205,7 +209,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
     [Serializable]
     internal class GoalSchemaCreateNode : SchemaCreateNodeBase<GoalSchema>
     {
-        protected override string DefaultFolder => "Assets/Settings/Goal";
+        protected override string DefaultFolder => "Assets/Settings/Goal/GoalSchema";
         const string OptTarget = "TargetType";
         protected override void DefineCustomOptions(INodeOptionDefinition ctx)
         {
@@ -231,7 +235,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
     [Serializable]
     internal class TimeSchemaCreateNode : SchemaCreateNodeBase<TimeSchema>
     {
-        protected override string DefaultFolder => "Assets/Settings/Time";
+        protected override string DefaultFolder => "Assets/Settings/Time/TimeSchema";
         protected override void DefineCustomPorts(IPortDefinitionContext ctx)
         {
             ctx.AddInputPort<BaseSchema>("CrossLink").Build();
@@ -249,7 +253,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
     [Serializable]
     internal class RewardSchemaCreateNode : SchemaCreateNodeBase<RewardSchema>
     {
-        protected override string DefaultFolder => "Assets/Settings/Reward";
+        protected override string DefaultFolder => "Assets/Settings/Reward/RewardSchema";
         protected override void DefineCustomPorts(IPortDefinitionContext ctx)
         {
             ctx.AddInputPort<BaseSchema>("CrossLink").Build();
@@ -265,7 +269,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
     [Serializable]
     internal class DataContainerSchemaCreateNode : SchemaCreateNodeBase<DataContainerSchema>
     {
-        protected override string DefaultFolder => "Assets/Settings/DataContainer";
+        protected override string DefaultFolder => "Assets/Settings/DataContainer/DataContainerSchema";
         const string OptTarget = "TargetType"; const string OptNum = "NumType"; const string OptVf = "ValueF"; const string OptVi = "ValueI";
         protected override void DefineCustomOptions(INodeOptionDefinition ctx)
         {
@@ -288,7 +292,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
     [Serializable]
     internal class DescriptionSchemaCreateNode : SchemaCreateNodeBase<DescriptionSchema>
     {
-        protected override string DefaultFolder => "Assets/Settings/Description";
+        protected override string DefaultFolder => "Assets/Settings/Description/DescriptionSchema";
         const string OptText = "Text";
         protected override void DefineCustomOptions(INodeOptionDefinition ctx)
         {
@@ -305,7 +309,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
     [Serializable]
     internal class ItemSchemaCreateNode : SchemaCreateNodeBase<ItemSchema>
     {
-        protected override string DefaultFolder => "Assets/Settings/Item";
+        protected override string DefaultFolder => "Assets/Settings/Item/ItemSchema";
         const string OptWeight = "WeightKg"; const string OptFlags = "Flags";
         protected override void DefineCustomOptions(INodeOptionDefinition ctx)
         {
@@ -330,7 +334,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
     [Serializable]
     internal class MissionSchemaCreateNode : SchemaCreateNodeBase<MissionSchema>
     {
-        protected override string DefaultFolder => "Assets/Settings/Mission";
+        protected override string DefaultFolder => "Assets/Settings/Mission/MissionSchema";
         protected override void DefineCustomPorts(IPortDefinitionContext ctx)
         {
             ctx.AddInputPort<NameSchema>("Name").Build();

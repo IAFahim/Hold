@@ -30,33 +30,30 @@ MonoBehaviour:
           Hash: a4ca8af50e9efac722c5da929acd1cc3
         m_Name: 
         m_GraphNodeModels:
-        - rid: 2906519625445146624
         - rid: 2906519625445146635
         - rid: 2906519625445146643
+        - rid: 2906519625597190406
+        - rid: 2906519625597190412
         m_GraphWireModels:
         - rid: 2906519625445146644
+        - rid: 2906519625597190407
+        - rid: 2906519625597190413
         m_GraphStickyNoteModels: []
         m_GraphPlacematModels: []
-        m_GraphVariableModels: []
+        m_GraphVariableModels:
+        - rid: 2906519625597190162
+        - rid: 2906519625597190414
         m_GraphPortalModels: []
         m_SectionModels:
         - rid: 2906519619559751915
         m_LocalSubgraphs: []
         m_LastKnownBounds:
           serializedVersion: 2
-          x: 1665
-          y: 544
-          width: 1049
-          height: 216
+          x: 1263
+          y: 512
+          width: 942
+          height: 217
         m_GraphElementMetaData:
-        - m_Guid:
-            m_Value0: 608321981132405914
-            m_Value1: 1912169333179398838
-          m_HashGuid:
-            serializedVersion: 2
-            Hash: 9a7c756a9e317108b6ba8d9ee063891a
-          m_Category: 0
-          m_Index: 0
         - m_Guid:
             m_Value0: 14847788239576126133
             m_Value1: 7585420070420957075
@@ -64,7 +61,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: b55228a8bcf00dce93478f615dd34469
           m_Category: 0
-          m_Index: 1
+          m_Index: 0
         - m_Guid:
             m_Value0: 6857763333807574714
             m_Value1: 7423648242656633666
@@ -72,7 +69,7 @@ MonoBehaviour:
             serializedVersion: 2
             Hash: ba8e4c096bab2b5f42630099be180667
           m_Category: 0
-          m_Index: 2
+          m_Index: 1
         - m_Guid:
             m_Value0: 6837845343990854291
             m_Value1: 10026898756730320363
@@ -81,8 +78,56 @@ MonoBehaviour:
             Hash: 9332a2a51ce8e45eeb75b7614bb3268b
           m_Category: 2
           m_Index: 0
+        - m_Guid:
+            m_Value0: 16427126245685526564
+            m_Value1: 11579784693204254858
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 2400952a49e0f8e38a00f27dd3a8b3a0
+          m_Category: 1
+          m_Index: 0
+        - m_Guid:
+            m_Value0: 6280899215727928490
+            m_Value1: 4999944450515887248
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: aa247e1f8f3c2a579064afa5fc5e6345
+          m_Category: 0
+          m_Index: 2
+        - m_Guid:
+            m_Value0: 10939475274323279143
+            m_Value1: 2726960057907748686
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 273d355bcdd2d0974e1f4580b91bd825
+          m_Category: 2
+          m_Index: 1
+        - m_Guid:
+            m_Value0: 10888376941854635019
+            m_Value1: 5404947681275513111
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 0bb4ccb723491b971789ff8b473b024b
+          m_Category: 1
+          m_Index: 1
+        - m_Guid:
+            m_Value0: 17841501085804723618
+            m_Value1: 4231647937180272656
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: a2fd228fb5be99f7100825ee60d5b93a
+          m_Category: 0
+          m_Index: 3
+        - m_Guid:
+            m_Value0: 8735896444497239852
+            m_Value1: 351877484801907601
+          m_HashGuid:
+            serializedVersion: 2
+            Hash: 2c1fdb1088233c79915b1346b51ee204
+          m_Category: 2
+          m_Index: 2
         m_EntryPoint:
-          rid: 2906519625445146624
+          rid: 2906519625445146635
         m_Graph:
           rid: 2906519619559751916
     - rid: 2906519619559751915
@@ -95,53 +140,11 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: 3e20394c2e32bc1c6c6c7e386755ed89
         m_Version: 2
-        m_Items: []
+        m_Items:
+        - rid: 2906519625597190164
         m_Title: 
     - rid: 2906519619559751916
       type: {class: MissionGraph, ns: Missions.Missions.Authoring.Editor.Graph, asm: Missions.Authoring}
-      data: 
-    - rid: 2906519625445146624
-      type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
-      data:
-        m_Guid:
-          m_Value0: 608321981132405914
-          m_Value1: 1912169333179398838
-        m_HashGuid:
-          serializedVersion: 2
-          Hash: 9a7c756a9e317108b6ba8d9ee063891a
-        m_Version: 2
-        m_Position: {x: 2333.658, y: 543.97437}
-        m_Title: 
-        m_Tooltip: 
-        m_NodePreviewModel:
-          rid: -2
-        m_State: 0
-        m_InputConstantsById:
-          m_KeyList:
-          - Asset
-          m_ValueList:
-          - rid: 2906519625445146625
-        m_InputPortInfos:
-          expandedPortsById:
-            m_KeyList: []
-            m_ValueList: 
-        m_OutputPortInfos:
-          expandedPortsById:
-            m_KeyList: []
-            m_ValueList: 
-        m_Collapsed: 0
-        m_CurrentModeIndex: 0
-        m_ElementColor:
-          m_Color: {r: 0, g: 0, b: 0, a: 0}
-          m_HasUserColor: 0
-        m_Node:
-          rid: 2906519625445146626
-    - rid: 2906519625445146625
-      type: {class: 'Constant`1[[Missions.Missions.Authoring.Schemas.MissionSchema, Missions.Authoring]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: {fileID: 11400000, guid: 462a2e14be0119c1887636028fd2b664, type: 2}
-    - rid: 2906519625445146626
-      type: {class: MissionSchemaNode, ns: Missions.Missions.Authoring.Editor.Graph, asm: Missions.Authoring}
       data: 
     - rid: 2906519625445146635
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
@@ -153,7 +156,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: b55228a8bcf00dce93478f615dd34469
         m_Version: 2
-        m_Position: {x: 1931.3826, y: 566.6075}
+        m_Position: {x: 1819.8325, y: 535.55743}
         m_Title: 
         m_Tooltip: 
         m_NodePreviewModel:
@@ -161,17 +164,17 @@ MonoBehaviour:
         m_State: 0
         m_InputConstantsById:
           m_KeyList:
-          - Folder
-          - File Name
           - Name
           - Location
           - Goal
+          - Schema
+          - Assets/Settings/
           m_ValueList:
-          - rid: 2906519625445146636
-          - rid: 2906519625445146637
           - rid: 2906519625445146639
           - rid: 2906519625445146640
           - rid: 2906519625445146641
+          - rid: 2906519625597190401
+          - rid: 2906519625597190402
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -187,14 +190,6 @@ MonoBehaviour:
           m_HasUserColor: 0
         m_Node:
           rid: 2906519625445146642
-    - rid: 2906519625445146636
-      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: Assets/Settings/Mission
-    - rid: 2906519625445146637
-      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: MissionSchema
     - rid: 2906519625445146639
       type: {class: 'Constant`1[[Missions.Missions.Authoring.Schemas.NameSchema, Missions.Authoring]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -210,7 +205,7 @@ MonoBehaviour:
     - rid: 2906519625445146642
       type: {class: MissionSchemaCreateNode, ns: Missions.Missions.Authoring.Editor.Graph, asm: Missions.Authoring}
       data:
-        createdAsset: {fileID: 0}
+        createdAsset: {fileID: 11400000, guid: eb5b0a17920f4bdd4af6117809b36f51, type: 2}
     - rid: 2906519625445146643
       type: {class: UserNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
       data:
@@ -221,7 +216,7 @@ MonoBehaviour:
           serializedVersion: 2
           Hash: ba8e4c096bab2b5f42630099be180667
         m_Version: 2
-        m_Position: {x: 1665, y: 545.97626}
+        m_Position: {x: 1492.4999, y: 557.4762}
         m_Title: 
         m_Tooltip: 
         m_NodePreviewModel:
@@ -229,13 +224,13 @@ MonoBehaviour:
         m_State: 0
         m_InputConstantsById:
           m_KeyList:
-          - Folder
-          - File Name
           - Text
+          - Schema
+          - Assets/Settings/
           m_ValueList:
-          - rid: 2906519625445146645
-          - rid: 2906519625445146646
           - rid: 2906519625445146648
+          - rid: 2906519625597190403
+          - rid: 2906519625597190404
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -283,19 +278,246 @@ MonoBehaviour:
           m_PortDirection: 1
           m_PortOrientation: 0
           m_Title: Name
-    - rid: 2906519625445146645
-      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: Assets/Settings/Name
-    - rid: 2906519625445146646
-      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: NameSchema
     - rid: 2906519625445146648
       type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
-        m_Value: 
+        m_Value: Wifi Jam
     - rid: 2906519625445146649
       type: {class: NameSchemaCreateNode, ns: Missions.Missions.Authoring.Editor.Graph, asm: Missions.Authoring}
       data:
-        createdAsset: {fileID: 0}
+        createdAsset: {fileID: 11400000, guid: 093ce168b6fff017295f5afbcc30bf4c, type: 2}
+    - rid: 2906519625597190162
+      type: {class: VariableDeclarationModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 16427126245685526564
+          m_Value1: 11579784693204254858
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 2400952a49e0f8e38a00f27dd3a8b3a0
+        m_Version: 2
+        m_Name: 'P: Name Kol 1 Mission'
+        m_UniqueId: 
+        m_DataType:
+          m_Identification: System.String, System.Private.CoreLib, Version=4.0.0.0,
+            Culture=neutral, PublicKeyToken=b77a5c561934e089
+        m_IsExposed: 0
+        m_Scope: 0
+        m_ShowOnInspectorOnly: 0
+        m_Tooltip: Mission
+        m_InitializationValue:
+          rid: 2906519625597190163
+        m_Modifiers: 0
+        m_VariableFlags: 0
+    - rid: 2906519625597190163
+      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: Assets/Settings/Name/NameSchema/1 Kol/2 Mission
+    - rid: 2906519625597190164
+      type: {class: GroupModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 16083745099409567083
+          m_Value1: 2914256823014135863
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 6bad3cdcf3f034df371804e023857128
+        m_Version: 2
+        m_Items:
+        - rid: 2906519625597190166
+        m_Title: Path
+    - rid: 2906519625597190166
+      type: {class: GroupModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 2719879363493169584
+          m_Value1: 3515359063295153279
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: b009eddcdef3be257f54a8617110c930
+        m_Version: 2
+        m_Items:
+        - rid: 2906519625597190162
+        - rid: 2906519625597190414
+        m_Title: Kol 1
+    - rid: 2906519625597190401
+      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: Mission 21
+    - rid: 2906519625597190402
+      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: Assets/Settings/Mission/MissionSchema/kol 1
+    - rid: 2906519625597190403
+      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: Wifi Jam
+    - rid: 2906519625597190404
+      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: Assets/Settings/Name/NameSchemaSchema
+    - rid: 2906519625597190406
+      type: {class: VariableNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 6280899215727928490
+          m_Value1: 4999944450515887248
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: aa247e1f8f3c2a579064afa5fc5e6345
+        m_Version: 2
+        m_Position: {x: 1262.7001, y: 646.3002}
+        m_Title: Name Kol 1 Mission
+        m_Tooltip: 
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList: []
+          m_ValueList: []
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_DeclarationModel:
+          rid: 2906519625597190162
+        m_DeclarationModelHashGuid:
+          serializedVersion: 2
+          Hash: 2400952a49e0f8e38a00f27dd3a8b3a0
+    - rid: 2906519625597190407
+      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 10939475274323279143
+          m_Value1: 2726960057907748686
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 273d355bcdd2d0974e1f4580b91bd825
+        m_Version: 2
+        m_FromPortReference:
+          m_NodeModelGuid:
+            m_Value0: 6280899215727928490
+            m_Value1: 4999944450515887248
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: aa247e1f8f3c2a579064afa5fc5e6345
+          m_UniqueId: MainPortName
+          m_PortDirection: 2
+          m_PortOrientation: 0
+          m_Title: MainPortName
+        m_ToPortReference:
+          m_NodeModelGuid:
+            m_Value0: 6857763333807574714
+            m_Value1: 7423648242656633666
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: ba8e4c096bab2b5f42630099be180667
+          m_UniqueId: Assets/Settings/
+          m_PortDirection: 1
+          m_PortOrientation: 0
+          m_Title: Assets/Settings/
+    - rid: 2906519625597190412
+      type: {class: VariableNodeModelImp, ns: Unity.GraphToolkit.Editor.Implementation, asm: Unity.GraphToolkit.Editor}
+      data:
+        m_Guid:
+          m_Value0: 17841501085804723618
+          m_Value1: 4231647937180272656
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: a2fd228fb5be99f7100825ee60d5b93a
+        m_Version: 2
+        m_Position: {x: 1536.0326, y: 512.15753}
+        m_Title: Assets/Settings/
+        m_Tooltip: 
+        m_NodePreviewModel:
+          rid: -2
+        m_State: 0
+        m_InputConstantsById:
+          m_KeyList: []
+          m_ValueList: []
+        m_InputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_OutputPortInfos:
+          expandedPortsById:
+            m_KeyList: []
+            m_ValueList: 
+        m_Collapsed: 0
+        m_CurrentModeIndex: 0
+        m_ElementColor:
+          m_Color: {r: 0, g: 0, b: 0, a: 0}
+          m_HasUserColor: 0
+        m_DeclarationModel:
+          rid: 2906519625597190414
+        m_DeclarationModelHashGuid:
+          serializedVersion: 2
+          Hash: 0bb4ccb723491b971789ff8b473b024b
+    - rid: 2906519625597190413
+      type: {class: WireModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 8735896444497239852
+          m_Value1: 351877484801907601
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 2c1fdb1088233c79915b1346b51ee204
+        m_Version: 2
+        m_FromPortReference:
+          m_NodeModelGuid:
+            m_Value0: 17841501085804723618
+            m_Value1: 4231647937180272656
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: a2fd228fb5be99f7100825ee60d5b93a
+          m_UniqueId: MainPortName
+          m_PortDirection: 2
+          m_PortOrientation: 0
+          m_Title: MainPortName
+        m_ToPortReference:
+          m_NodeModelGuid:
+            m_Value0: 14847788239576126133
+            m_Value1: 7585420070420957075
+          m_NodeModelHashGuid:
+            serializedVersion: 2
+            Hash: b55228a8bcf00dce93478f615dd34469
+          m_UniqueId: Assets/Settings/
+          m_PortDirection: 1
+          m_PortOrientation: 0
+          m_Title: Assets/Settings/
+    - rid: 2906519625597190414
+      type: {class: VariableDeclarationModel, ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Guid:
+          m_Value0: 10888376941854635019
+          m_Value1: 5404947681275513111
+        m_HashGuid:
+          serializedVersion: 2
+          Hash: 0bb4ccb723491b971789ff8b473b024b
+        m_Version: 2
+        m_Name: 'P: Mission Kol 1'
+        m_UniqueId: 
+        m_DataType:
+          m_Identification: System.String, System.Private.CoreLib, Version=4.0.0.0,
+            Culture=neutral, PublicKeyToken=b77a5c561934e089
+        m_IsExposed: 0
+        m_Scope: 0
+        m_ShowOnInspectorOnly: 0
+        m_Tooltip: Kol 1
+        m_InitializationValue:
+          rid: 2906519625597190415
+        m_Modifiers: 0
+        m_VariableFlags: 0
+    - rid: 2906519625597190415
+      type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: Assets/Settings/Mission/MissionSchema/kol 1

@@ -38,12 +38,9 @@ namespace Missions.Missions.Authoring.Editor
         public override VisualElement CreateInspectorGUI()
         {
             // Ensure connections lists are initialized
-            if (outgoingConnections == null) outgoingConnections = new List<BaseSchema>();
-            if (incomingConnections == null) incomingConnections = new List<BaseSchema>();
-            if (outgoingConnections.Count == 0 && incomingConnections.Count == 0)
-            {
-                FindConnections();
-            }
+            outgoingConnections ??= new List<BaseSchema>();
+            incomingConnections ??= new List<BaseSchema>();
+            if (outgoingConnections.Count == 0 && incomingConnections.Count == 0) FindConnections();
 
             // Load UXML/USS
             // var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/BaseSchemaInspector.uxml");

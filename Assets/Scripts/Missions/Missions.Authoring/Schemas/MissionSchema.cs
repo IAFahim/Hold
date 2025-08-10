@@ -48,8 +48,8 @@ namespace Missions.Missions.Authoring.Schemas
                 missions[i] = new Mission
                 {
                     id = (ushort)schemas[i].ID,
-                    station = (ushort)schemas[i].locationSchema.ID,
-                    name = (ushort)schemas[i].nameSchema.ID
+                    stationId = (ushort)schemas[i].locationSchema.ID,
+                    nameId = (ushort)schemas[i].nameSchema.ID
                 };
 
                 // Handle the goals array efficiently

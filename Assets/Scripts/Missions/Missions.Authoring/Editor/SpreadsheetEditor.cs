@@ -21,7 +21,7 @@ namespace Missions.Missions.Authoring.Editor
         private ToolbarSearchField _searchField;
         private ScrollView _mainScroll;
 
-        [MenuItem("Tools/Schema/Spreadsheet Editor")]
+        [MenuItem("Tools/Schema Spreadsheet Editor", false, 30000)]
         public static void ShowWindow()
         {
             var window = GetWindow<SpreadsheetEditor>("Spreadsheet Editor");
