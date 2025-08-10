@@ -27,8 +27,8 @@ namespace Missions.Missions.Authoring.Schemas
             {
                 id = (ushort)ID,
                 crossLinkType = crossLink.ToCrossLinkType(),
-                crossLinkID = (ushort)crossLink.ID,
-                dataContainerID = (ushort)dataContainer.ID
+                crossLinkId = (ushort)crossLink.ID,
+                dataContainerId = (ushort)dataContainer.ID
             };
         }
     }

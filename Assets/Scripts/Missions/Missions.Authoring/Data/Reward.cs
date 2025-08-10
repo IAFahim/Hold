@@ -7,8 +7,8 @@ namespace Missions.Missions.Authoring
     {
         public ushort id;
         public ECrossLinkType crossLinkType;
-        public ushort crossLinkID;
-        public ushort dataContainerID;
+        public ushort crossLinkId;
+        public ushort dataContainerId;
 
         public int ID
         {
