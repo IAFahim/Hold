@@ -13,7 +13,7 @@ namespace Missions.Missions.Authoring
             public override void Bake(StationBlobAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                var blobAssetRef = LocationSchema.ToBlobAssetRef(authoring.stationSchemas);
+                var blobAssetRef = LocationSchema.ToAssetRef(authoring.stationSchemas);
                 AddComponent(entity, new StationBlob
                 {
                     BlobAssetRef = blobAssetRef
