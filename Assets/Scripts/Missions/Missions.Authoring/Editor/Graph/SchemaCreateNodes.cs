@@ -125,7 +125,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
         {
             string v = string.Empty;
             GetNodeOptionByName(OptFixed32)?.TryGetValue(out v);
-            a.fixed32 = v ?? string.Empty;
+            a.fixed32String = v ?? string.Empty;
         }
     }
 
@@ -327,7 +327,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
             GetNodeOptionByName(OptFlags)?.TryGetValue(out f);
             a.weightKg = w; a.flags = f;
             var name = MissionGraph.ResolvePortValue<NameSchema>(GetInputPortByName("Name"));
-            if (name != null) a.name = name.fixed32;
+            if (name != null) a.name = name.fixed32String.ToString();
         }
     }
 
@@ -337,7 +337,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
         protected override string DefaultFolder => "Assets/Settings/Mission/MissionSchema";
         protected override void DefineCustomPorts(IPortDefinitionContext ctx)
         {
-            ctx.AddInputPort<NameSchema>("Name").Build();
+            ctx.AddInputPort<NameSchema>("Fixed32String").Build();
             ctx.AddInputPort<LocationSchema>("Location").Build();
             ctx.AddInputPort<GoalSchema>("Goal").Build(); // multi-in allowed
         }

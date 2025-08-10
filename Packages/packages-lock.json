@@ -51,7 +51,7 @@
         "com.bovinelabs.core": "1.4.4",
         "com.bovinelabs.reaction": "0.5.0"
       },
-      "hash": "db20447fc4024b67ae71f6978bfe6578a4c1b330"
+      "hash": "1b60ab04b50a769ccb92296de25edaa81815b6f7"
     },
     "com.bovinelabs.reaction": {
       "version": "https://gitlab.com/tertle/com.bovinelabs.reaction.git",
@@ -60,7 +60,7 @@
       "dependencies": {
         "com.bovinelabs.core": "1.4.3"
       },
-      "hash": "69d08c1b647dcc2957558ccba8db6aabb44ec0ad"
+      "hash": "c856ca69ff8e44e676a52a23b816dc5505b92e54"
     },
     "com.bovinelabs.timeline": {
       "version": "https://gitlab.com/tertle/com.bovinelabs.timeline.git",

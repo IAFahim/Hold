@@ -1,7 +1,13 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:VisualElement style="flex-grow: 1;" />
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+            <ui:VisualElement style="flex-grow: 0; width: 64px; height: 64px; background-color: rgb(255, 255, 255);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:ProgressBar value="22" title="my-progress" />
     <ui:VisualElement name="joystick" style="padding: 14px; background-color: rgba(30, 30, 30, 0.55); border-radius: 20px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); flex-grow: 0.2;">
         <ui:VisualElement name="pad" style="flex-grow: 1; flex-shrink: 0;">
-            <ui:VisualElement name="edge-ring" style="position: absolute; left: 50%; top: 50%; width: 100%; height: 100%; translate: -50% -50%; border-radius: 22px; border-width: 2px; border-color: rgba(0, 0, 0, 0.05); background-color: transparent; picking-mode: Ignore;" />
             <ui:VisualElement name="no-lock-ring" style="position: absolute; left: 50%; top: 50%; width: 120px; height: 120px; translate: -50% -50%; border-radius: 9999px; border-width: 2px; border-color: rgba(255, 145, 0, 0.4); background-color: rgba(255, 145, 0, 0.1); picking-mode: Ignore;" />
             <ui:VisualElement name="knob" style="position: absolute; width: 42px; height: 42px; border-radius: 9999px; background-color: rgb(60, 60, 60); border-width: 3px; border-color: white; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);" />
         </ui:VisualElement>

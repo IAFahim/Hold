@@ -30,7 +30,8 @@ namespace Missions.Missions.Authoring.Editor
         {
             var wnd = GetWindow<NameSchemaCreatorWindow>("Name Schema Creator");
             wnd.minSize = new Vector2(600, 420);
-            wnd.titleContent = new GUIContent("Name Schema Creator", EditorGUIUtility.IconContent("d_TextAsset Icon").image);
+            wnd.titleContent = new GUIContent("Name Schema Creator",
+                EditorGUIUtility.IconContent("d_TextAsset Icon").image);
         }
 
         [MenuItem("Tools/Schema/Name Schema Creator (No Focus)")]
@@ -38,14 +39,16 @@ namespace Missions.Missions.Authoring.Editor
         {
             var wnd = GetWindow<NameSchemaCreatorWindow>("Name Schema Creator", false);
             wnd.minSize = new Vector2(600, 420);
-            wnd.titleContent = new GUIContent("Name Schema Creator", EditorGUIUtility.IconContent("d_TextAsset Icon").image);
+            wnd.titleContent = new GUIContent("Name Schema Creator",
+                EditorGUIUtility.IconContent("d_TextAsset Icon").image);
         }
 
         [MenuItem("Tools/Schema/Name Schema Creator (Utility)")]
         public static void ShowWindowUtility()
         {
             var wnd = CreateInstance<NameSchemaCreatorWindow>();
-            wnd.titleContent = new GUIContent("Name Schema Creator", EditorGUIUtility.IconContent("d_TextAsset Icon").image);
+            wnd.titleContent = new GUIContent("Name Schema Creator",
+                EditorGUIUtility.IconContent("d_TextAsset Icon").image);
             wnd.minSize = new Vector2(600, 420);
             wnd.ShowUtility();
         }
@@ -92,8 +95,10 @@ namespace Missions.Missions.Authoring.Editor
         public void CreateGUI()
         {
             // Load UXML/USS
-            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/NameSchemaCreatorWindow.uxml");
-            var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Missions/Missions.Authoring/Editor/UI/MissionsEditor.uss");
+            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
+                "Assets/Scripts/Missions/Missions.Authoring/Editor/UI/NameSchemaCreatorWindow.uxml");
+            var uss = AssetDatabase.LoadAssetAtPath<StyleSheet>(
+                "Assets/Scripts/Missions/Missions.Authoring/Editor/UI/MissionsEditor.uss");
 
             rootVisualElement.Clear();
             if (uss != null) rootVisualElement.styleSheets.Add(uss);
@@ -125,16 +130,19 @@ namespace Missions.Missions.Authoring.Editor
                     UpdateStats();
                 });
             }
+
             if (_pathField != null)
             {
                 _pathField.value = _outputPath;
                 _pathField.RegisterValueChangedCallback(evt => { _outputPath = evt.newValue; });
             }
+
             if (browseBtn != null)
             {
                 browseBtn.clicked += () =>
                 {
-                    string selectedPath = EditorUtility.OpenFolderPanel("Select Output Folder", Application.dataPath, "");
+                    string selectedPath =
+                        EditorUtility.OpenFolderPanel("Select Output Folder", Application.dataPath, "");
                     if (!string.IsNullOrEmpty(selectedPath) && selectedPath.StartsWith(Application.dataPath))
                     {
                         _outputPath = "Assets" + selectedPath.Substring(Application.dataPath.Length);
@@ -143,32 +151,47 @@ namespace Missions.Missions.Authoring.Editor
                     }
                 };
             }
+
             if (_namesField != null)
             {
                 _namesField.multiline = true;
                 _namesField.value = _nameInput;
                 _namesField.RegisterValueChangedCallback(evt => { _nameInput = evt.newValue; });
             }
+
             if (createBtn != null)
             {
-                createBtn.clicked += () => { CreateNameSchemas(); RebuildExistingList(); UpdateStats(); };
+                createBtn.clicked += () =>
+                {
+                    CreateNameSchemas();
+                    RebuildExistingList();
+                    UpdateStats();
+                };
             }
+
             if (clearBtn != null)
             {
-                clearBtn.clicked += () => { _nameInput = ""; if (_namesField != null) _namesField.value = ""; };
+                clearBtn.clicked += () =>
+                {
+                    _nameInput = "";
+                    if (_namesField != null) _namesField.value = "";
+                };
             }
+
             if (_existingFoldout != null)
             {
                 _existingFoldout.value = _showExistingNames;
                 _existingFoldout.RegisterValueChangedCallback(evt => _showExistingNames = evt.newValue);
             }
+
             if (_existingListView != null)
             {
                 _existingListView.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
                 _existingListView.selectionType = SelectionType.None;
                 _existingListView.makeItem = () =>
                 {
-                    var row = new VisualElement { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
+                    var row = new VisualElement
+                        { style = { flexDirection = FlexDirection.Row, alignItems = Align.Center } };
                     var label = new Label { style = { flexGrow = 1 } };
                     var selectBtn = new Button { text = "Select" };
                     selectBtn.style.width = 60;
@@ -179,13 +202,17 @@ namespace Missions.Missions.Authoring.Editor
                 _existingListView.bindItem = (el, i) =>
                 {
                     if (_nameSettings == null || _nameSettings.schemas == null) return;
-                    var ordered = _nameSettings.schemas.OrderBy(s => s.fixed32).ToList();
+                    var ordered = _nameSettings.schemas.OrderBy(s => s.fixed32String).ToList();
                     if (i < 0 || i >= ordered.Count) return;
                     var data = ordered[i];
-                    el.Q<Label>().text = $"{data.ID}: {data.fixed32}";
+                    el.Q<Label>().text = $"{data.ID}: {data.fixed32String}";
                     var btn = el.Q<Button>();
                     btn.clicked -= null;
-                    btn.clicked += () => { Selection.activeObject = data; EditorGUIUtility.PingObject(data); };
+                    btn.clicked += () =>
+                    {
+                        Selection.activeObject = data;
+                        EditorGUIUtility.PingObject(data);
+                    };
                 };
             }
 
@@ -208,10 +235,11 @@ namespace Missions.Missions.Authoring.Editor
             }
             else
             {
-                var src = _nameSettings.schemas.OrderBy(s => s.fixed32).ToList();
+                var src = _nameSettings.schemas.OrderBy(s => s.fixed32String).ToList();
                 _existingListView.itemsSource = src;
                 if (_existingFoldout != null) _existingFoldout.text = BuildExistingTitle();
             }
+
             _existingListView.Rebuild();
         }
 
@@ -238,6 +266,7 @@ namespace Missions.Missions.Authoring.Editor
             {
                 LoadNameSettings();
             }
+
             EditorGUILayout.EndHorizontal();
 
             if (_nameSettings == null)
@@ -260,6 +289,7 @@ namespace Missions.Missions.Authoring.Editor
                     _outputPath = "Assets" + selectedPath.Substring(Application.dataPath.Length);
                 }
             }
+
             EditorGUILayout.EndHorizontal();
 
             GUILayout.Space(10);
@@ -276,11 +306,13 @@ namespace Missions.Missions.Authoring.Editor
             {
                 CreateNameSchemas();
             }
+
             if (GUILayout.Button("Clear Input"))
             {
                 _nameInput = "";
                 GUI.FocusControl(null);
             }
+
             EditorGUILayout.EndHorizontal();
 
             GUILayout.Space(20);
@@ -297,19 +329,22 @@ namespace Missions.Missions.Authoring.Editor
                 else
                 {
                     EditorGUILayout.BeginVertical("box");
-                    foreach (var schema in _nameSettings.schemas.OrderBy(s => s.fixed32))
+                    foreach (var schema in _nameSettings.schemas.OrderBy(s => s.fixed32String))
                     {
                         EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.LabelField($"{schema.ID}: {schema.fixed32}", GUILayout.ExpandWidth(true));
+                        EditorGUILayout.LabelField($"{schema.ID}: {schema.fixed32String}", GUILayout.ExpandWidth(true));
                         if (GUILayout.Button("Select", GUILayout.Width(60)))
                         {
                             Selection.activeObject = schema;
                             EditorGUIUtility.PingObject(schema);
                         }
+
                         EditorGUILayout.EndHorizontal();
                     }
+
                     EditorGUILayout.EndVertical();
                 }
+
                 EditorGUI.indentLevel--;
             }
         }
@@ -335,6 +370,7 @@ namespace Missions.Missions.Authoring.Editor
                     {
                         AssetDatabase.CreateFolder(currentPath, pathParts[i]);
                     }
+
                     currentPath = newPath;
                 }
             }
@@ -348,10 +384,7 @@ namespace Missions.Missions.Authoring.Editor
             // Build set of existing names for quick lookup
             foreach (var schema in _nameSettings.schemas)
             {
-                if (!string.IsNullOrEmpty(schema.fixed32))
-                {
-                    existingNameSet.Add(schema.fixed32.Trim());
-                }
+                if (!string.IsNullOrEmpty(schema.fixed32String.ToString())) existingNameSet.Add(schema.fixed32String.ToString().Trim());
             }
 
             // Process input names
@@ -397,7 +430,7 @@ namespace Missions.Missions.Authoring.Editor
             foreach (string name in namesToCreate)
             {
                 NameSchema newSchema = CreateInstance<NameSchema>();
-                newSchema.fixed32 = name;
+                newSchema.fixed32String = name;
                 newSchema.ID = nextId++;
 
                 string fileName = SanitizeFileName(name);
@@ -431,7 +464,8 @@ namespace Missions.Missions.Authoring.Editor
             string resultMessage = $"Successfully created {createdCount} name schema(s).";
             if (existingNames.Count > 0)
             {
-                resultMessage += $"\n\nSkipped {existingNames.Count} existing name(s):\n{string.Join(", ", existingNames)}";
+                resultMessage +=
+                    $"\n\nSkipped {existingNames.Count} existing name(s):\n{string.Join(", ", existingNames)}";
             }
 
             EditorUtility.DisplayDialog("Success", resultMessage, "OK");

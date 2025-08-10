@@ -164,17 +164,17 @@ MonoBehaviour:
         m_State: 0
         m_InputConstantsById:
           m_KeyList:
-          - Name
           - Location
           - Goal
           - Schema
           - Assets/Settings/
+          - Fixed32String
           m_ValueList:
-          - rid: 2906519625445146639
           - rid: 2906519625445146640
           - rid: 2906519625445146641
           - rid: 2906519625597190401
           - rid: 2906519625597190402
+          - rid: 2906519637471789376
         m_InputPortInfos:
           expandedPortsById:
             m_KeyList: []
@@ -190,10 +190,6 @@ MonoBehaviour:
           m_HasUserColor: 0
         m_Node:
           rid: 2906519625445146642
-    - rid: 2906519625445146639
-      type: {class: 'Constant`1[[Missions.Missions.Authoring.Schemas.NameSchema, Missions.Authoring]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
-      data:
-        m_Value: {fileID: 0}
     - rid: 2906519625445146640
       type: {class: 'Constant`1[[Missions.Missions.Authoring.Schemas.LocationSchema, Missions.Authoring]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
@@ -521,3 +517,7 @@ MonoBehaviour:
       type: {class: 'Constant`1[[System.String, mscorlib]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
       data:
         m_Value: Assets/Settings/Mission/MissionSchema/kol 1
+    - rid: 2906519637471789376
+      type: {class: 'Constant`1[[Missions.Missions.Authoring.Schemas.NameSchema, Missions.Authoring]]', ns: Unity.GraphToolkit.Editor, asm: Unity.GraphToolkit.Internal.Editor}
+      data:
+        m_Value: {fileID: 0}
