@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -25,6 +26,18 @@ public class OrbitCameraAuthoring : MonoBehaviour
 
     [Header("Misc")] public float CameraTargetTransitionTime = 0.4f;
     public List<GameObject> IgnoredEntities = new();
+    public float pitchAngle = 25f;
+    public float3 planarForward = math.forward();
+
+    public bool smartModeEnabled = true;
+    public float smartModeActivationDelay = 2.0f;
+    public float smartModeRotationSpeed = 90.0f;
+    public float smartModeAngleThreshold = 5.0f;
+
+    private void OnValidate()
+    {
+        planarForward = math.normalize(planarForward);
+    }
 
     public class Baker : Baker<OrbitCameraAuthoring>
     {
@@ -55,18 +68,24 @@ public class OrbitCameraAuthoring : MonoBehaviour
                 SmoothedTargetDistance = authoring.StartDistance,
                 ObstructedDistance = authoring.StartDistance,
 
-                PitchAngle = 0f,
-                PlanarForward = -math.forward()
+                PitchAngle = authoring.pitchAngle,
+                PlanarForward = math.normalize(authoring.planarForward),
+                SmartModeEnabled = authoring.smartModeEnabled,
+                SmartModeActivationDelay = authoring.smartModeActivationDelay,
+                SmartModeRotationSpeed = authoring.smartModeRotationSpeed,
+                SmartModeAngleThreshold = authoring.smartModeAngleThreshold,
             });
 
             AddComponent(entity, new OrbitCameraControl());
 
             var ignoredEntitiesBuffer = AddBuffer<OrbitCameraIgnoredEntityBufferElement>(entity);
-            for (var i = 0; i < authoring.IgnoredEntities.Count; i++)
+            foreach (var obj in authoring.IgnoredEntities)
+            {
                 ignoredEntitiesBuffer.Add(new OrbitCameraIgnoredEntityBufferElement
                 {
-                    Entity = GetEntity(authoring.IgnoredEntities[i], TransformUsageFlags.None)
+                    Entity = GetEntity(obj, TransformUsageFlags.None)
                 });
+            }
         }
     }
 }

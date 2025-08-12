@@ -16,9 +16,12 @@
         "Unity.Mathematics",
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
-        "Unity.Transforms"
+        "Unity.Transforms",
+        "SchemaSettings.Authoring",
+        "Unity.GraphToolkit.Editor",
+        "ALINE",
+        "Unity.GraphToolkit.Common.Editor"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
@@ -28,6 +31,12 @@
     "defineConstraints": [
         "UNITY_EDITOR"
     ],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.arongranberg.aline",
+            "expression": "1.0.0",
+            "define": "ALINE"
+        }
+    ],
     "noEngineReferences": false
 }

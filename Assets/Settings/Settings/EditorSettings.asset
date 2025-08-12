@@ -47,6 +47,44 @@ MonoBehaviour:
     Path: Assets/Settings/Schemas/Intrinsics/
   - Key: bl.ar.conditioneventobject
     Path: Assets/Settings/Schemas/Events/
+  - Key: bl.ar.goalfloatschema
+    Path: Assets/Settings/Goal/GoalFloatSchema
+  - Key: bl.ar.goaltimeschema
+    Path: Assets/Settings/Goal/GoalTimeSchema
+  - Key: bl.ar.missionschema
+    Path: Assets/Settings/Goal/MissionSchema
+  - Key: bl.ar.t
+    Path: Assets/Settings/Goal/T
+  - Key: bl.ar.goalintschema
+    Path: Assets/Settings/Goal/GoalIntSchema
+  - Key: bl.ar.goalrangeintschema
+    Path: Assets/Settings/Goal/GoalRangeIntSchema
+  - Key: bl.ar.goalrangefloatschema
+    Path: Assets/Settings/Goal/GoalRangeFloatSchema
+  - Key: bl.ar.rewardgoalintschema
+    Path: Assets/Settings/Reward/RewardGoalIntSchema
+  - Key: bl.ar.rewardgoalfloatschema
+    Path: Assets/Settings/Reward/RewardGoalFloatSchema
+  - Key: bl.ar.nameschema
+    Path: Assets/Settings/Name/NameSchema
+  - Key: bl.ar.stationschema
+    Path: Assets/Settings/Name/StationSchema
+  - Key: bl.ar.datacontainerschema
+    Path: Assets/Settings/DataContainer/DataContainerSchema
+  - Key: bl.ar.rangeintschema
+    Path: Assets/Settings/RangeInt/RangeIntSchema
+  - Key: bl.ar.rangefloatschema
+    Path: Assets/Settings/RangeFloat/RangeFloatSchema
+  - Key: bl.ar.timeschema
+    Path: Assets/Settings/Time/TimeSchema
+  - Key: bl.ar.rewardschema
+    Path: Assets/Settings/Reward/RewardSchema
+  - Key: bl.ar.goalschema
+    Path: Assets/Settings/Goals/GoalSchema
+  - Key: bl.ar.descriptionschema
+    Path: Assets/Settings/Name/DescriptionSchema
+  - Key: bl.ar.itemschema
+    Path: Assets/Settings/Items/ItemSchema
   prebakeScenes:
   - {fileID: 102900000, guid: 434fb67dd45f9d041bf501ddf6d84e87, type: 3}
   - {fileID: 102900000, guid: 12c3ac3f712fa6447934e2c76cb143b3, type: 3}

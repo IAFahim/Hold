@@ -18,7 +18,8 @@
         "Unity.Physics.Custom",
         "Unity.Physics.Hybrid",
         "Move.Data",
-        "ProcessInput.Data"
+        "ProcessInput.Data",
+        "Follows.Data"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

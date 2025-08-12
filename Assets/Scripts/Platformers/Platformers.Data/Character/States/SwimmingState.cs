@@ -18,9 +18,8 @@ public struct SwimmingState : IPlatformerCharacterState
     {
         ref var characterBody = ref aspect.CharacterAspect.CharacterBody.ValueRW;
         ref var characterProperties = ref aspect.CharacterAspect.CharacterProperties.ValueRW;
-        ref var character = ref aspect.Character.ValueRW;
-
-        aspect.SetCapsuleGeometry(character.SwimmingGeometry.ToCapsuleGeometry());
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
+        aspect.SetCapsuleGeometry(capsuleGeometry.swimming.ToCapsuleGeometry());
 
         characterProperties.SnapToGround = false;
         characterBody.IsGrounded = false;
@@ -62,6 +61,7 @@ public struct SwimmingState : IPlatformerCharacterState
         ref var characterPosition = ref aspect.CharacterAspect.LocalTransform.ValueRW.Position;
         ref var characterRotation = ref aspect.CharacterAspect.LocalTransform.ValueRW.Rotation;
         var customGravity = aspect.CustomGravity.ValueRO;
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
 
         if (!ShouldExitSwimming)
         {
@@ -88,7 +88,7 @@ public struct SwimmingState : IPlatformerCharacterState
                 targetRotation = math.slerp(characterRotation, targetRotation,
                     MathUtilities.GetSharpnessInterpolant(character.SwimmingRotationSharpness, deltaTime));
                 MathUtilities.SetRotationAroundPoint(ref characterRotation, ref characterPosition,
-                    aspect.GetGeometryCenter(character.SwimmingGeometry), targetRotation);
+                    aspect.GetGeometryCenter(capsuleGeometry.swimming), targetRotation);
             }
             else
             {
@@ -100,7 +100,7 @@ public struct SwimmingState : IPlatformerCharacterState
                     targetRotation = math.slerp(characterRotation, targetRotation,
                         MathUtilities.GetSharpnessInterpolant(character.SwimmingRotationSharpness, deltaTime));
                     MathUtilities.SetRotationAroundPoint(ref characterRotation, ref characterPosition,
-                        aspect.GetGeometryCenter(character.SwimmingGeometry), targetRotation);
+                        aspect.GetGeometryCenter(capsuleGeometry.swimming), targetRotation);
                 }
             }
         }
@@ -157,8 +157,10 @@ public struct SwimmingState : IPlatformerCharacterState
             }
 
             var acceleration = (characterControl.MoveVector + addedMoveVector) * character.SwimmingAcceleration;
+            var speedMultiplier = aspect.Carrying.ValueRO.ComputeSpeedMultiplier();
+            var swimMax = character.SwimmingMaxSpeed * speedMultiplier;
             CharacterControlUtilities.StandardAirMove(ref characterBody.RelativeVelocity, acceleration,
-                character.SwimmingMaxSpeed, -MathUtilities.GetForwardFromRotation(characterRotation), deltaTime, true);
+                swimMax, -MathUtilities.GetForwardFromRotation(characterRotation), deltaTime, true);
 
             // Water drag
             CharacterControlUtilities.ApplyDragToVelocity(ref characterBody.RelativeVelocity, deltaTime,

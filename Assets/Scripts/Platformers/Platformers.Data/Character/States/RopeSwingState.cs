@@ -14,8 +14,8 @@ public struct RopeSwingState : IPlatformerCharacterState
         var entity = aspect.CharacterAspect.Entity;
         ref var characterProperties = ref aspect.CharacterAspect.CharacterProperties.ValueRW;
         ref var character = ref aspect.Character.ValueRW;
-
-        aspect.SetCapsuleGeometry(character.StandingGeometry.ToCapsuleGeometry());
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
+        aspect.SetCapsuleGeometry(capsuleGeometry.standing.ToCapsuleGeometry());
 
         characterProperties.EvaluateGrounding = false;
 
@@ -52,8 +52,10 @@ public struct RopeSwingState : IPlatformerCharacterState
             math.normalizesafe(MathUtilities.ProjectOnPlane(characterControl.MoveVector, characterBody.GroundingUp)) *
             math.length(characterControl.MoveVector);
         var acceleration = moveVectorOnPlane * character.RopeSwingAcceleration;
+        var speedMultiplier = aspect.Carrying.ValueRO.ComputeSpeedMultiplier();
+        var ropeMax = character.RopeSwingMaxSpeed * speedMultiplier;
         CharacterControlUtilities.StandardAirMove(ref characterBody.RelativeVelocity, acceleration,
-            character.RopeSwingMaxSpeed, characterBody.GroundingUp, deltaTime, false);
+            ropeMax, characterBody.GroundingUp, deltaTime, false);
 
         // Gravity
         CharacterControlUtilities.AccelerateVelocity(ref characterBody.RelativeVelocity, customGravity.Gravity,

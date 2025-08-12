@@ -74,9 +74,14 @@ GameObject:
   - component: {fileID: 1692896102597148393}
   - component: {fileID: 6689285571920954877}
   - component: {fileID: 4070104326975267335}
-  - component: {fileID: -1191803628544701202}
   - component: {fileID: -8306520697180238540}
   - component: {fileID: -8944153960414828713}
+  - component: {fileID: 7878928124258816284}
+  - component: {fileID: 7595669063680691565}
+  - component: {fileID: 4054680451272068333}
+  - component: {fileID: 5745564584817229127}
+  - component: {fileID: 423493731091036209}
+  - component: {fileID: 9214350057118364362}
   m_Layer: 0
   m_Name: PlatformerCharacter
   m_TagString: Untagged
@@ -287,7 +292,7 @@ MonoBehaviour:
     KillVelocityWhenExceedMaxIterations: 1
     DetectObstructionsForParentBodyMovement: 0
     SimulateDynamicBody: 1
-    Mass: 1
+    Mass: 45
   Character:
     GroundRunMaxSpeed: 5
     GroundSprintMaxSpeed: 10
@@ -314,7 +319,7 @@ MonoBehaviour:
     WallRunJumpSpeed: 12
     JumpHeldAcceleration: 75
     MaxHeldJumpTime: 0.1
-    MaxUngroundedJumps: 1
+    MaxUngroundedJumps: 2
     JumpAfterUngroundedGraceTime: 0.1
     JumpBeforeGroundedGraceTime: 0.1
     LedgeMoveSpeed: 3
@@ -340,7 +345,6 @@ MonoBehaviour:
       x: 0
       y: 1.1
       z: 0
-    SlideStartMinSpeed: 4
     SlideFriction: 0.3
     SlideSteeringSharpness: 5
     SlideSpeedToExit: 2
@@ -442,41 +446,6 @@ MonoBehaviour:
       Category30: 0
       Category31: 0
     UpOrientationAdaptationSharpness: 8
-    StandingGeometry:
-      Radius: 0.3
-      Height: 1.4
-      Center:
-        x: 0
-        y: 0.7
-        z: 0
-    CrouchingGeometry:
-      Radius: 0.3
-      Height: 0.9
-      Center:
-        x: 0
-        y: 0.45
-        z: 0
-    RollingGeometry:
-      Radius: 0.3
-      Height: 0.6
-      Center:
-        x: 0
-        y: 0.3
-        z: 0
-    ClimbingGeometry:
-      Radius: 1
-      Height: 2
-      Center:
-        x: 0
-        y: 0.7
-        z: 0
-    SwimmingGeometry:
-      Radius: 0.3
-      Height: 1.4
-      Center:
-        x: 0
-        y: 0.7
-        z: 0
     LocalLedgeDetectionPoint:
       x: 0
       y: 1.084
@@ -505,6 +474,42 @@ MonoBehaviour:
       z: 0
     IsSprinting: 0
     IsOnStickySurface: 0
+  characterCapsuleGeometry:
+    standing:
+      Radius: 0.3
+      Height: 1.4
+      Center:
+        x: 0
+        y: 0.7
+        z: 0
+    crouching:
+      Radius: 0.3
+      Height: 0.9
+      Center:
+        x: 0
+        y: 0.45
+        z: 0
+    rolling:
+      Radius: 0.3
+      Height: 0.6
+      Center:
+        x: 0
+        y: 0.3
+        z: 0
+    climbing:
+      Radius: 1
+      Height: 2
+      Center:
+        x: 0
+        y: 0.7
+        z: 0
+    swimming:
+      Radius: 0.3
+      Height: 1.4
+      Center:
+        x: 0
+        y: 0.7
+        z: 0
   MeshPrefab: {fileID: 4260105767809303429, guid: e57eaae6195aaa243b4339327f1f99a5, type: 3}
   DefaultCameraTarget: {fileID: 6247949772695845543}
   SwimmingCameraTarget: {fileID: 4059659098717927741}
@@ -532,18 +537,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f410dd0089c6aa945948ddb7779c15d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-1191803628544701202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1692896102597148395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec1d002f95a780948b1ce03964ee964d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-8306520697180238540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -569,6 +562,83 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GravityMultiplier: 3
+--- !u!114 &7878928124258816284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692896102597148395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51227ba7ec2b44608e25d70de46847d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Focuses.Authoring::Focuses.Focuses.Authoring.FocusComponentAuthoring
+  priority: 100
+--- !u!114 &7595669063680691565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692896102597148395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c2d41a58f04f13a012522a17057262, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Follows.Authoring::Follows.Follows.Data.FollowEnableAuthoring
+  enable: 0
+  stoppingDistance: 1
+--- !u!114 &4054680451272068333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692896102597148395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 374892803943bc04cb79933b2eeba006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BovineLabs.Core.Extensions.Authoring::BovineLabs.Core.Authoring.PhysicsStates.StatefulTriggerEventAuthoring
+--- !u!114 &5745564584817229127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692896102597148395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b59bd671ee5346a2877733b2b7f4dc58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Hacks.Authoring::Hacks.Hacks.Data.HackActiveAuthoring
+  Enable: 0
+--- !u!114 &423493731091036209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692896102597148395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d1839be73e81ae4c97132df4493e93f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BovineLabs.Core.Extensions.Authoring::BovineLabs.Core.Authoring.LifeCycle.LifeCycleAuthoring
+--- !u!114 &9214350057118364362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692896102597148395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9741827b9d1c4e3da5cd60880e31ec59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BovineLabs.Reaction.Authoring::BovineLabs.Reaction.Authoring.Conditions.EventWriterAuthoring
+  subscriptionOnly: 0
 --- !u!1 &3057386589211996020
 GameObject:
   m_ObjectHideFlags: 0

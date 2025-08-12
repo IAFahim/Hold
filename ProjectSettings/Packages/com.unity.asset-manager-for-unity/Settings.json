@@ -1,0 +1,11 @@
+{
+    "m_Dictionary": {
+        "m_DictionaryValues": [
+            {
+                "type": "Unity.AssetManager.Core.Editor.SavedAssetSearchFilterSettings, Unity.AssetManager.Core.Editor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+                "key": "AM4U.savedAssetSearchFilterSettings",
+                "value": "{\"m_Value\":{\"m_SavedAssetSearchFilters\":[{\"m_FilterId\":\"adde53d9-c643-4a43-9660-04d88d7d8367\",\"m_OrganizationId\":\"18968269109852\",\"m_FilterName\":\"New saved view\",\"m_AssetSearchFilter\":{\"Searches\":[],\"AssetIds\":[],\"AssetVersions\":[],\"CreatedBy\":[],\"UpdatedBy\":[],\"Status\":[],\"Collection\":[\"Character (Alex)\"],\"AssetTypeStrings\":[],\"AssetTypes\":[],\"Tags\":[],\"Labels\":[],\"IsExactMatchSearch\":false,\"m_SerializableSearchFilterMetadata\":{\"textMedatatas\":[],\"booleanMedatatas\":[],\"numberMedatatas\":[],\"urlMedatatas\":[],\"timestampMedatatas\":[],\"userMedatatas\":[],\"singleSelectionMedatatas\":[],\"multiSelectionMedatatas\":[]}},\"m_SortingOptions\":{\"SortField\":0,\"SortingOrder\":0}}]}}"
+            }
+        ]
+    }
+}

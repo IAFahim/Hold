@@ -1,3 +1,4 @@
+using Follows.Follows.Data;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -10,21 +11,10 @@ using UnityEngine;
 [UpdateAfter(typeof(EndSimulationEntityCommandBufferSystem))]
 public partial class PlatformerCharacterHybridSystem : SystemBase
 {
-    private static readonly int ClipIndex = Animator.StringToHash("ClipIndex");
-    private readonly float _updateAfter = 1 / 12f;
-    private float _time;
+
 
     protected override void OnUpdate()
     {
-        _time += SystemAPI.Time.DeltaTime;
-        float stopMotionFactor = 0;
-
-        if (_time > _updateAfter)
-        {
-            _time -= _updateAfter;
-            stopMotionFactor = _updateAfter / Time.deltaTime;
-        }
-
         var ecb = SystemAPI.GetSingletonRW<EndSimulationEntityCommandBufferSystem.Singleton>().ValueRW
             .CreateCommandBuffer(World.Unmanaged);
 
@@ -44,36 +34,43 @@ public partial class PlatformerCharacterHybridSystem : SystemBase
             });
         }
 
-        
+
         // Update
-        foreach (var (characterAnimation, characterBody, characterTransform, characterComponent, characterStateMachine,
-                     characterControl, hybridLink, entity) in SystemAPI.Query<
-                         RefRW<PlatformerCharacterAnimation>,
-                         KinematicCharacterBody,
-                         LocalTransform,
-                         PlatformerCharacterComponent,
-                         PlatformerCharacterStateMachine,
-                         PlatformerCharacterControl,
-                         PlatformerCharacterHybridLink>()
-                     .WithEntityAccess())
+        foreach ((
+                     RefRW<PlatformerCharacterAnimation> characterAnimation, KinematicCharacterBody characterBody,
+                     LocalTransform characterTransform, PlatformerCharacterComponent characterComponent,
+                     PlatformerCharacterStateMachine characterStateMachine, PlatformerCharacterControl characterControl,
+                     PlatformerCharacterHybridLink hybridLink,
+                     Entity entity
+                 )
+                 in SystemAPI.Query<
+                     RefRW<PlatformerCharacterAnimation>,
+                     KinematicCharacterBody,
+                     LocalTransform,
+                     PlatformerCharacterComponent,
+                     PlatformerCharacterStateMachine,
+                     PlatformerCharacterControl,
+                     PlatformerCharacterHybridLink
+                 >().WithEntityAccess()
+                )
             if (hybridLink.Object)
             {
                 // Transform
                 var meshRootLTW = SystemAPI.GetComponent<LocalToWorld>(characterComponent.MeshRootEntity);
                 hybridLink.Object.transform.SetLocalPositionAndRotation(meshRootLTW.Position, meshRootLTW.Rotation);
-
+                var followEnableComponent = SystemAPI.GetComponentRO<FollowEnableComponent>(entity);
 
                 // Animation
                 PlatformerCharacterAnimationHandler.UpdateAnimation(
                     hybridLink.Animator,
-                    ClipIndex,
-                    stopMotionFactor,
                     ref characterAnimation.ValueRW,
                     in characterBody,
                     in characterComponent,
                     in characterStateMachine,
                     in characterControl,
-                    in characterTransform);
+                    in characterTransform,
+                    in followEnableComponent.ValueRO
+                    );
 
                 // Mesh enabling
                 if (characterStateMachine.CurrentState == CharacterState.Rolling)

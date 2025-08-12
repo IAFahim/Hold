@@ -1,0 +1,24 @@
+using System;
+
+namespace Missions.Missions.Authoring
+{
+    [Serializable]
+    public struct DataContainer : IHasID, IEquatable<ushort>
+    {
+        public ushort id;
+        public ENumType numType;
+        public ETargetType targetType;
+        public float valueFloat;
+        public int valueInt;
+
+        public int ID
+        {
+            get => id;
+            set => id = (ushort)value;
+        }
+
+        public bool Equals(DataContainer other) => id == other.id;
+        public override int GetHashCode() => id.GetHashCode();
+        public bool Equals(ushort other) => id == other;
+    }
+}

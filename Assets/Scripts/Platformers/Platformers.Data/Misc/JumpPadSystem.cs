@@ -1,15 +1,16 @@
+using BovineLabs.Core.PhysicsStates;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
-using Unity.Physics;
-using Unity.Physics.Stateful;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 using Unity.CharacterController;
+using StatefulEventState = BovineLabs.Core.PhysicsStates.StatefulEventState;
+using StatefulTriggerEvent = BovineLabs.Core.PhysicsStates.StatefulTriggerEvent;
 
-[UpdateInGroup(typeof(AfterPhysicsSystemGroup))]
+// [UpdateInGroup(typeof(AfterPhysicsSystemGroup))]
+
+[UpdateInGroup(typeof(PhysicsSystemGroup))]
 [UpdateBefore(typeof(KinematicCharacterPhysicsUpdateGroup))]
 [BurstCompile]
 public partial struct JumpPadSystem : ISystem
@@ -39,19 +40,19 @@ public partial struct JumpPadSystem : ISystem
     {
         public ComponentLookup<KinematicCharacterBody> KinematicCharacterBodyLookup;
 
-        private void Execute(Entity entity, in LocalTransform localTransform, in JumpPad jumpPad,
+        private void Execute(in LocalToWorld ltw, in JumpPad jumpPad,
             in DynamicBuffer<StatefulTriggerEvent> triggerEventsBuffer)
         {
             for (var i = 0; i < triggerEventsBuffer.Length; i++)
             {
                 var triggerEvent = triggerEventsBuffer[i];
-                var otherEntity = triggerEvent.GetOtherEntity(entity);
+                var otherEntity = triggerEvent.EntityB;
 
                 // If a character has entered the trigger, add jumppad power to it
                 if (triggerEvent.State == StatefulEventState.Enter &&
                     KinematicCharacterBodyLookup.TryGetComponent(otherEntity, out var characterBody))
                 {
-                    var jumpVelocity = MathUtilities.GetForwardFromRotation(localTransform.Rotation) *
+                    var jumpVelocity = ltw.Up *
                                        jumpPad.JumpPower;
                     characterBody.RelativeVelocity = jumpVelocity;
 

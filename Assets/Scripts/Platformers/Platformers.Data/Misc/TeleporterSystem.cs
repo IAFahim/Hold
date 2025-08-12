@@ -7,9 +7,11 @@ using Unity.Transforms;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.CharacterController;
-using Unity.Physics.Stateful;
 
-[UpdateInGroup(typeof(AfterPhysicsSystemGroup))]
+using StatefulEventState = BovineLabs.Core.PhysicsStates.StatefulEventState;
+using StatefulTriggerEvent = BovineLabs.Core.PhysicsStates.StatefulTriggerEvent;
+
+[UpdateInGroup(typeof(PhysicsSystemGroup))]
 [BurstCompile]
 public partial struct TeleporterSystem : ISystem
 {
@@ -50,7 +52,7 @@ public partial struct TeleporterSystem : ISystem
                 for (var i = 0; i < triggerEventsBuffer.Length; i++)
                 {
                     var triggerEvent = triggerEventsBuffer[i];
-                    var otherEntity = triggerEvent.GetOtherEntity(entity);
+                    var otherEntity = triggerEvent.EntityB;
 
                     // If a character has entered the trigger, move its translation to the destination
                     if (triggerEvent.State == StatefulEventState.Enter && CharacterBodyLookup.HasComponent(otherEntity))

@@ -94,7 +94,7 @@ public partial struct OrbitCameraSystem : ISystem
     public partial struct OrbitCameraJob : IJobEntity
     {
         public TimeData TimeData;
-        public PhysicsWorld PhysicsWorld;
+        [ReadOnly] public PhysicsWorld PhysicsWorld;
 
         public ComponentLookup<LocalToWorld> LocalToWorldLookup;
         [ReadOnly] public ComponentLookup<KinematicCharacterBody> KinematicCharacterBodyLookup;
@@ -175,7 +175,62 @@ public partial struct OrbitCameraSystem : ISystem
 
                 var cameraTargetUp = math.mul(orbitCamera.CameraTargetTransform.rot, math.up());
 
-                // Rotation
+                // Get character's forward direction for smart mode
+                var characterForward = math.mul(characterLTW.Rotation, math.forward());
+                var projectedCharacterForward = math.normalizesafe(MathUtilities.ProjectOnPlane(characterForward, cameraTargetUp));
+
+                // Smart mode logic - automatically align camera to match player rotation over time
+                var hasPlayerInput = math.lengthsq(cameraControl.LookDegreesDelta) > 0.001f;
+                
+                if (orbitCamera.SmartModeEnabled)
+                {
+                    // Reset the idle timer when player provides input
+                    if (hasPlayerInput)
+                    {
+                        orbitCamera.SmartModeIdleTimer = 0f;
+                    }
+                    else
+                    {
+                        orbitCamera.SmartModeIdleTimer += TimeData.DeltaTime;
+                    }
+
+                    // Determine if we should apply smart mode rotation
+                    var shouldApplySmartMode = orbitCamera.SmartModeIdleTimer > orbitCamera.SmartModeActivationDelay;
+                    
+                    if (shouldApplySmartMode)
+                    {
+                        // Target direction is the same as character's facing direction (not behind)
+                        var currentCameraForward = orbitCamera.PlanarForward;
+                        var targetDirection = projectedCharacterForward; // Same direction as character faces
+                        
+                        // Calculate signed angle using Unity Mathematics
+                        var cross = math.cross(currentCameraForward, targetDirection);
+                        var dot = math.dot(currentCameraForward, targetDirection);
+                        var angle = math.atan2(math.length(cross), dot);
+                        var sign = math.sign(math.dot(cross, cameraTargetUp));
+                        var angleDifference = angle * sign;
+                        
+                        // Only apply smart rotation if the angle difference is significant
+                        if (math.abs(angleDifference) > math.radians(orbitCamera.SmartModeAngleThreshold))
+                        {
+                            // Use exponential smoothing for smooth deceleration as we approach target
+                            var smoothedRotationSpeed = orbitCamera.SmartModeRotationSpeed;
+                            
+                            // Scale rotation speed based on angle difference for smooth deceleration
+                            var angleInDegrees = math.degrees(math.abs(angleDifference));
+                            var speedMultiplier = math.smoothstep(0f, 45f, angleInDegrees); // Slow down when within 45 degrees
+                            smoothedRotationSpeed *= math.max(0.1f, speedMultiplier); // Minimum 10% speed
+                            
+                            var maxRotationThisFrame = math.radians(smoothedRotationSpeed * TimeData.DeltaTime);
+                            var rotationThisFrame = math.sign(angleDifference) * math.min(maxRotationThisFrame, math.abs(angleDifference));
+                            
+                            var smartModeRotation = quaternion.Euler(cameraTargetUp * rotationThisFrame);
+                            orbitCamera.PlanarForward = math.rotate(smartModeRotation, orbitCamera.PlanarForward);
+                        }
+                    }
+                }
+
+                // Manual rotation input (always processed, but won't interfere with smart mode due to idle timer reset)
                 {
                     localTransform.Rotation = quaternion.LookRotationSafe(orbitCamera.PlanarForward, cameraTargetUp);
 
@@ -192,12 +247,12 @@ public partial struct OrbitCameraSystem : ISystem
                                 cameraTargetUp));
                     }
 
-                    // Yaw
+                    // Yaw (manual input)
                     var yawAngleChange = cameraControl.LookDegreesDelta.x * orbitCamera.RotationSpeed;
                     var yawRotation = quaternion.Euler(cameraTargetUp * math.radians(yawAngleChange));
                     orbitCamera.PlanarForward = math.rotate(yawRotation, orbitCamera.PlanarForward);
 
-                    // Pitch
+                    // Pitch (manual input)
                     orbitCamera.PitchAngle += -cameraControl.LookDegreesDelta.y * orbitCamera.RotationSpeed;
                     orbitCamera.PitchAngle =
                         math.clamp(orbitCamera.PitchAngle, orbitCamera.MinVAngle, orbitCamera.MaxVAngle);

@@ -8,9 +8,8 @@ public struct AirMoveState : IPlatformerCharacterState
     public void OnStateEnter(CharacterState previousState, ref PlatformerCharacterUpdateContext context,
         ref KinematicCharacterUpdateContext baseContext, in PlatformerCharacterAspect aspect)
     {
-        ref var character = ref aspect.Character.ValueRW;
-
-        aspect.SetCapsuleGeometry(character.StandingGeometry.ToCapsuleGeometry());
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
+        aspect.SetCapsuleGeometry(capsuleGeometry.standing.ToCapsuleGeometry());
     }
 
     public void OnStateExit(CharacterState nextState, ref PlatformerCharacterUpdateContext context,
@@ -35,8 +34,10 @@ public struct AirMoveState : IPlatformerCharacterState
         if (math.lengthsq(airAcceleration) > 0f)
         {
             var tmpVelocity = characterBody.RelativeVelocity;
+            var speedMultiplier = aspect.Carrying.ValueRO.ComputeSpeedMultiplier();
+            var airMax = character.AirMaxSpeed * speedMultiplier;
             CharacterControlUtilities.StandardAirMove(ref characterBody.RelativeVelocity, airAcceleration,
-                character.AirMaxSpeed, characterBody.GroundingUp, deltaTime, false);
+                airMax, characterBody.GroundingUp, deltaTime, false);
 
             // Cancel air acceleration from input if we would hit a non-grounded surface (prevents air-climbing slopes at high air accelerations)
             if (aspect.CharacterAspect.MovementWouldHitNonGroundedObstruction(in aspect, ref context, ref baseContext,
@@ -160,7 +161,8 @@ public struct AirMoveState : IPlatformerCharacterState
             return true;
         }
 
-        if (characterControl.IsSprintHeld() && character.HasDetectedMoveAgainstWall)
+        // if (characterControl.IsSprintHeld() && character.HasDetectedMoveAgainstWall)
+        if (character.HasDetectedMoveAgainstWall)
         {
             stateMachine.TransitionToState(CharacterState.WallRun, ref context, ref baseContext, in aspect);
             return true;

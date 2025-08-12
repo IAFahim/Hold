@@ -1,8 +1,6 @@
 using Unity.Entities;
 using Unity.CharacterController;
 using Unity.Mathematics;
-using Unity.Physics;
-using Unity.Transforms;
 
 public struct FlyingNoCollisionsState : IPlatformerCharacterState
 {
@@ -14,7 +12,8 @@ public struct FlyingNoCollisionsState : IPlatformerCharacterState
         ref var characterCollider = ref aspect.CharacterAspect.PhysicsCollider.ValueRW;
         ref var character = ref aspect.Character.ValueRW;
 
-        aspect.SetCapsuleGeometry(character.StandingGeometry.ToCapsuleGeometry());
+        ref var capsuleGeometry = ref aspect.CapsuleGeometry.ValueRO.BlobAssetRef.Value;
+        aspect.SetCapsuleGeometry(capsuleGeometry.standing.ToCapsuleGeometry());
 
         KinematicCharacterUtilities.SetCollisionDetectionActive(false, ref characterProperties, ref characterCollider);
         characterBody.IsGrounded = false;
@@ -41,7 +40,8 @@ public struct FlyingNoCollisionsState : IPlatformerCharacterState
         aspect.CharacterAspect.Update_Initialize(in aspect, ref context, ref baseContext, ref characterBody, deltaTime);
 
         // Movement
-        var targetVelocity = characterControl.MoveVector * character.FlyingMaxSpeed;
+        var speedMultiplier = aspect.Carrying.ValueRO.ComputeSpeedMultiplier();
+        var targetVelocity = characterControl.MoveVector * (character.FlyingMaxSpeed * speedMultiplier);
         CharacterControlUtilities.InterpolateVelocityTowardsTarget(ref characterBody.RelativeVelocity, targetVelocity,
             deltaTime, character.FlyingMovementSharpness);
         characterPosition += characterBody.RelativeVelocity * deltaTime;
