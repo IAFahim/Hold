@@ -29,7 +29,7 @@ public class PlatformerCharacterAuthoring : MonoBehaviour
     public GameObject SwimmingDetectionPoint;
     public GameObject LedgeDetectionPoint;
 
-    [Header("Carrying")] public bool UseCarrying;
+    [Header("Carrying")] public bool UseCarrying = true;
     public CarryingComponent carryingComponent = CarryingComponentExt.Default();
     public float CarryingCapacity = 1f;
     public float CurrentWeight = 0;

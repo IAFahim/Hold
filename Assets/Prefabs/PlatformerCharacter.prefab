@@ -520,6 +520,14 @@ MonoBehaviour:
   RopePrefab: {fileID: 8577660612943622382, guid: cf9b436b5c48fad47bee4dc1df7a7339, type: 3}
   SwimmingDetectionPoint: {fileID: 7714356233572860452}
   LedgeDetectionPoint: {fileID: 1424979793409293892}
+  UseCarrying: 1
+  carryingComponent:
+    currentWeight: 0
+    capacity: 1
+    minSpeedAtMaxLoad: 0.2
+  CarryingCapacity: 1
+  CurrentWeight: 0
+  CarryingMinSpeedAtMaxLoad: 0.2
   DebugStandingGeometry: 0
   DebugCrouchingGeometry: 0
   DebugRollingGeometry: 0
@@ -613,7 +621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b59bd671ee5346a2877733b2b7f4dc58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Hacks.Authoring::Hacks.Hacks.Data.HackActiveAuthoring
-  Enable: 0
+  enable: 0
 --- !u!114 &423493731091036209
 MonoBehaviour:
   m_ObjectHideFlags: 0
