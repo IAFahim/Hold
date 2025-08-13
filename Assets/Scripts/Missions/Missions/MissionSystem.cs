@@ -23,7 +23,7 @@ namespace Missions.Missions
         public void OnUpdate(ref SystemState state)
         {
             ref var binding = ref this.ui.Binding;
-            binding.Gold++;
+            binding.Gold = 10;
             Debug.Log(binding.Gold);
         }
 
