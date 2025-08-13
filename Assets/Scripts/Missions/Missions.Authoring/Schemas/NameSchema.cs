@@ -20,7 +20,7 @@ namespace Missions.Missions.Authoring.Schemas
         private const string FieldName = nameof(NameSchema);
         private const string TypeString = "Name";
 
-        [FormerlySerializedAs("fixed32")] public FixedString32Bytes fixed32String;
+        [FormerlySerializedAs("fixed32")] public string fixed32String;
 
         public override Name ToData()
         {

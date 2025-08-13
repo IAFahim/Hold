@@ -327,7 +327,7 @@ namespace Missions.Missions.Authoring.Editor.Graph
             GetNodeOptionByName(OptFlags)?.TryGetValue(out f);
             a.weightKg = w; a.flags = f;
             var name = MissionGraph.ResolvePortValue<NameSchema>(GetInputPortByName("Name"));
-            if (name != null) a.name = name.fixed32String.ToString();
+            if (name != null) a.name = name.fixed32String;
         }
     }
 

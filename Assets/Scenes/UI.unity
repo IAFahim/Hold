@@ -888,7 +888,6 @@ GameObject:
   m_Component:
   - component: {fileID: 721133016}
   - component: {fileID: 721133015}
-  - component: {fileID: 721133014}
   m_Layer: 0
   m_Name: GameObject.2
   m_TagString: Untagged
@@ -896,21 +895,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &721133014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 721133013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8355ed62a80d4952b3a38543399baa25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BovineLabs.Sample::MissionScreenController
-  locations:
-  - {fileID: 11400000, guid: 03eb1358c02e895cc8fdab46611e668f, type: 2}
-  mainScreenUXML: {fileID: 9197481963319205126, guid: e8be5b7ed26e4a8f965f4ee938524768, type: 3}
 --- !u!114 &721133015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -925,7 +909,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.UIElements.UIDocument
   m_PanelSettings: {fileID: 11400000, guid: 14307daa0807e4246992bba1e7c763ea, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: e8be5b7ed26e4a8f965f4ee938524768, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: cf06f4e1ccf20d4eab1f55094922a444, type: 3}
   m_SortingOrder: 0
   m_Position: 0
   m_WorldSpaceSizeMode: 1

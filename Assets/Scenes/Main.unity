@@ -5270,6 +5270,8 @@ MonoBehaviour:
   values:
   - Key: joystick
     Asset: {fileID: 9197481963319205126, guid: 5c656a0298064754913ca6e4614ff9b9, type: 3}
+  - Key: mission
+    Asset: {fileID: 9197481963319205126, guid: cf06f4e1ccf20d4eab1f55094922a444, type: 3}
   - Key: game
     Asset: {fileID: 9197481963319205126, guid: 3b868c074df2bca53a0c047ee54205a3, type: 3}
 --- !u!1 &1771981046
