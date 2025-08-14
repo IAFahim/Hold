@@ -31,7 +31,7 @@ public struct PlatformerCharacterUpdateContext
     }
 }
 
-public readonly partial struct PlatformerCharacterAspect : IAspect,
+public readonly partial struct PlatformerCharacterAspect :
     IKinematicCharacterProcessor<PlatformerCharacterUpdateContext>
 {
     public readonly KinematicCharacterAspect CharacterAspect;
