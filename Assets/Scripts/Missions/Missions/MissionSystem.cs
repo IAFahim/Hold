@@ -3,7 +3,6 @@ using BovineLabs.Sample.UI.ViewModels.Game;
 using Missions.Missions.Data;
 using Unity.Burst;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Missions.Missions
 {
@@ -24,7 +23,6 @@ namespace Missions.Missions
         {
             ref var binding = ref this.ui.Binding;
             binding.Gold = 10;
-            Debug.Log(binding.Gold);
         }
 
         [BurstCompile]

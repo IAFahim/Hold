@@ -1,3 +1,4 @@
+using BovineLabs.Essence.Data;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;

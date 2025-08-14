@@ -81,6 +81,7 @@ GameObject:
   - component: {fileID: 4054680451272068333}
   - component: {fileID: 5745564584817229127}
   - component: {fileID: 423493731091036209}
+  - component: {fileID: 2859461518996494161}
   - component: {fileID: 9214350057118364362}
   m_Layer: 0
   m_Name: PlatformerCharacter
@@ -634,6 +635,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d1839be73e81ae4c97132df4493e93f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BovineLabs.Core.Extensions.Authoring::BovineLabs.Core.Authoring.LifeCycle.LifeCycleAuthoring
+--- !u!114 &2859461518996494161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1692896102597148395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7305cdf55c354c0eb811d408fe38ad23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BovineLabs.Essence.Authoring::BovineLabs.Essence.Authoring.StatAuthoring
+  AddStats: 1
+  StatDefaults: []
+  StatDefaultGroups: []
+  StatsCanBeModified: 1
+  AddIntrinsics: 1
+  IntrinsicDefaults: []
+  IntrinsicDefaultGroups: []
+  Initialize:
+    CopyFrom: 3
 --- !u!114 &9214350057118364362
 MonoBehaviour:
   m_ObjectHideFlags: 0
