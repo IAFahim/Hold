@@ -42,6 +42,7 @@ public readonly partial struct PlatformerCharacterAspect : IAspect,
     public readonly RefRW<CustomGravity> CustomGravity;
     public readonly RefRO<CapsuleGeometryBlobComponent> CapsuleGeometry;
     public readonly RefRO<CarryingComponent> Carrying;
+    public readonly DynamicBuffer<Stat> Stats;
 
     public void PhysicsUpdate(ref PlatformerCharacterUpdateContext context,
         ref KinematicCharacterUpdateContext baseContext)
