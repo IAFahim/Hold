@@ -10,7 +10,7 @@ namespace Missions.Missions.Authoring.Schemas
     [
         AutoRef(
             nameof(GoalSettings), nameof(GoalSettings.schemas),
-            FieldName, TypeString + "/" + FieldName
+            FieldName, "Schemas/" + TypeString + "/" + FieldName
         )
     ]
     public class GoalSchema : BakingSchema<Goal>

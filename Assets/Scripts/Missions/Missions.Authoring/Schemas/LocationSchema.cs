@@ -10,7 +10,7 @@ namespace Missions.Missions.Authoring.Schemas
     [
         AutoRef(
             nameof(LocationSettings), nameof(LocationSettings.schemas),
-            FieldName, TypeString + "/" + FieldName
+            FieldName, "Schemas/" + TypeString + "/" + FieldName
         )
     ]
     public class LocationSchema : BakingSchema<Location>

@@ -10,7 +10,7 @@ namespace Missions.Missions.Authoring.Schemas
     [
         AutoRef(
             nameof(RewardSettings), nameof(RewardSettings.schemas),
-            FieldName, TypeString + "/" + FieldName
+            FieldName, "Schemas/" + TypeString + "/" + FieldName
         )
     ]
     public class RewardSchema : BakingSchema<Reward>

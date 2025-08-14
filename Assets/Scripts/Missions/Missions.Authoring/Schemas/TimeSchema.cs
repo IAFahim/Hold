@@ -9,7 +9,7 @@ namespace Missions.Missions.Authoring.Schemas
     [
         AutoRef(
             nameof(TimeSettings), nameof(TimeSettings.schemas),
-            FieldName, TypeString + "/" + FieldName
+            FieldName, "Schemas/" + TypeString + "/" + FieldName
         )
     ]
     public class TimeSchema : BakingSchema<TimeStruct>

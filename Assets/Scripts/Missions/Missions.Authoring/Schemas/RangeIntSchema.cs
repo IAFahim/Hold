@@ -12,7 +12,7 @@ namespace Missions.Missions.Authoring.Schemas
     [
         AutoRef(
             nameof(RangeIntSettings), nameof(RangeIntSettings.schemas),
-            FieldName, TypeString + "/" + FieldName
+            FieldName, "Schemas/" + TypeString + "/" + FieldName
         )
     ]
     public class RangeIntSchema : BakingSchema<RangeInt>
