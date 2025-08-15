@@ -1,4 +1,5 @@
 using BovineLabs.Anchor;
+using BovineLabs.Core.Utility;
 using BovineLabs.Sample.UI.ViewModels.Game;
 using Missions.Missions.Data;
 using Unity.Burst;
@@ -9,20 +10,21 @@ namespace Missions.Missions
     public partial struct MissionSystem : ISystem, ISystemStartStop
     {
         private UIHelper<GameViewModel, GameViewModel.Data> ui;
-
-        public void OnStartRunning(ref SystemState state) => this.ui.Bind();
-
+        
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             this.ui = new UIHelper<GameViewModel, GameViewModel.Data>(ref state, ComponentType.ReadOnly<GameScreenTag>());
         }
 
+        public void OnStartRunning(ref SystemState state) => this.ui.Bind();
+        
+
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            ref var binding = ref this.ui.Binding;
-            binding.Gold = 10;
+            ref var binding = ref ui.Binding;
+            binding.StarCount = GlobalRandom.NextFloat();
         }
 
         [BurstCompile]
