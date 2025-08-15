@@ -7,18 +7,17 @@
                 <ui:Button name="Pause" style="width: 64px; height: 64px;" />
             </ui:VisualElement>
             <ui:VisualElement style="flex-grow: 1; flex-direction: column; align-items: auto; justify-content: flex-start; align-self: stretch;">
-                <ui:Instance template="item_count" name="item_count" />
+                <ui:Instance template="item_count" name="gold_container" />
                 <ui:Button name="Powerups" style="width: 64px; height: 64px;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1;" />
         <ui:VisualElement style="flex-grow: 0; flex-direction: row; align-self: stretch; justify-content: space-between; align-items: auto; margin-bottom: 8px;">
             <ui:VisualElement style="flex-grow: 1;">
-                <ui:Button text="Hack" name="button_hack" style="width: 64px; height: 64px; -unity-text-align: lower-center;" />
+                <ui:Button text="Hack" name="hack-button" style="width: 64px; height: 64px; -unity-text-align: lower-center;" />
             </ui:VisualElement>
             <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: flex-end; align-self: auto; align-items: auto;">
-                <ui:Button text="Sneak" name="button_sneak" style="width: 64px; height: 64px; -unity-text-align: lower-center;" />
-                <ui:Button text="Run" name="button_run" style="width: 64px; height: 64px; -unity-text-align: lower-center;" />
+                <ui:Button text="Sneak" name="sneak-button" style="width: 64px; height: 64px; -unity-text-align: lower-center;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:Instance template="Joystick" style="flex-grow: 1;" />

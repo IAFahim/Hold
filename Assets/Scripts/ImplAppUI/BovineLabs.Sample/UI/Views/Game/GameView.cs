@@ -3,16 +3,13 @@
 // </copyright>
 
 using _src.Scripts.UiServices.UXMLs.Service;
-using Unity.AppUI.UI;
-using Unity.Collections;
 using Unity.Properties;
-using UnityEngine;
+using Unity.AppUI.UI;
 using UnityEngine.UIElements;
+using BovineLabs.Sample.UI.ViewModels.Game;
 
 namespace BovineLabs.Sample.UI.Views.Game
 {
-    using BovineLabs.Sample.UI.ViewModels.Game;
-
     public class GameView : GameBaseView<GameViewModel>
     {
         public GameView(GameViewModel viewModel, IUxmlService uxmlService) : base(viewModel)
@@ -20,9 +17,13 @@ namespace BovineLabs.Sample.UI.Views.Game
             var visualTreeAsset = uxmlService.GetAsset("game");
             var root = visualTreeAsset.Instantiate().contentContainer[0];
             Add(root);
-            // SetTime(root, "text_gold");
+            Bind(root);
         }
 
-        
+        private void Bind(VisualElement root)
+        {
+            var goldContainer = root.Q("gold_container");
+            goldContainer.BindText(nameof(GameViewModel.StarCount), ViewModel, "text");
+        }
     }
 }
