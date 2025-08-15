@@ -7,6 +7,7 @@ using Unity.Properties;
 using Unity.AppUI.UI;
 using UnityEngine.UIElements;
 using BovineLabs.Sample.UI.ViewModels.Game;
+using Unity.AppUI.Navigation;
 
 namespace BovineLabs.Sample.UI.Views.Game
 {
@@ -20,10 +21,25 @@ namespace BovineLabs.Sample.UI.Views.Game
             Bind(root);
         }
 
+        public override void OnEnter(NavController controller, NavDestination destination, Argument[] args)
+        {
+            base.OnEnter(controller, destination, args);
+            UIToolkitJoystick.Instance.enabled = true;
+        }
+
+        public override void OnExit(NavController controller, NavDestination destination, Argument[] args)
+        {
+            base.OnExit(controller, destination, args);
+            UIToolkitJoystick.Instance.enabled = false;
+        }
+
+
         private void Bind(VisualElement root)
         {
             var goldContainer = root.Q("gold_container");
             goldContainer.BindText(nameof(GameViewModel.StarCount), ViewModel, "text");
         }
+        
+        
     }
 }

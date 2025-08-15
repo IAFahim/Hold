@@ -36,14 +36,18 @@ public partial class PlatformerPlayerInputsSystem : SystemBase
 
         foreach (var (playerInputs, player) in SystemAPI.Query<RefRW<PlatformerPlayerInputs>, PlatformerPlayer>())
         {
+            playerInputs.ValueRW.TouchLocked = UIToolkitJoystick.Instance.IsLocked;   
             playerInputs.ValueRW.Move = Vector2.ClampMagnitude(_defaultActionsMap.Move.ReadValue<Vector2>(), 1f);
+            playerInputs.ValueRW.Move += UIToolkitJoystick.Instance.Value;
+
+
             // playerInputs.ValueRW.Look = _camActionsMap.Look.ReadValue<Vector2>();
             // if (math.lengthsq(_defaultActionsMap.Look.ReadValue<Vector2>()) >
             //     math.lengthsq(_camActionsMap.Look.ReadValue<Vector2>()))
             //     playerInputs.ValueRW.Look = _defaultActionsMap.Look.ReadValue<Vector2>() * SystemAPI.Time.DeltaTime;
 
             playerInputs.ValueRW.CameraZoom = _camActionsMap.Zoom.ReadValue<float>();
-            playerInputs.ValueRW.SprintHeld = _defaultActionsMap.Sprint.IsPressed();
+            playerInputs.ValueRW.SprintHeld = _defaultActionsMap.Sprint.IsPressed() | playerInputs.ValueRW.TouchLocked;
             playerInputs.ValueRW.RollHeld = _defaultActionsMap.Roll.IsPressed();
             playerInputs.ValueRW.JumpHeld = _defaultActionsMap.Jump.IsPressed();
 

@@ -20,7 +20,8 @@
         "Move.Data",
         "ProcessInput.Data",
         "Follows.Data",
-        "BovineLabs.Essence.Data"
+        "BovineLabs.Essence.Data",
+        "BovineLabs.Sample"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

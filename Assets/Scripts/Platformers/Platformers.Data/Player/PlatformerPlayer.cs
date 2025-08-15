@@ -17,6 +17,7 @@ public struct PlatformerPlayerInputs : IComponentData
     public float2 Look;
     public float CameraZoom;
 
+    public bool TouchLocked;
     public bool SprintHeld;
     public bool RollHeld;
     public bool JumpHeld;

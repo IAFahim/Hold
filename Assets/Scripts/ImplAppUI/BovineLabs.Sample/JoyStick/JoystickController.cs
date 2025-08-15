@@ -1,4 +1,4 @@
-using Eases.Ease.Data;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(UIDocument))]
 public class UIToolkitJoystick : MonoBehaviour
 {
-    [Header("Output")] public Vector2 Value;
+    [Header("Output")] public float2 Value;
     public bool IsPressed;
     public bool IsLocked;
 
@@ -23,37 +23,40 @@ public class UIToolkitJoystick : MonoBehaviour
     public UnityEvent<bool> onPressChanged;
 
     // UI
-    public UIDocument doc;
-    public VisualElement root, innerPad, knob, noLockRing;
+    private UIDocument doc;
+    private VisualElement root, innerPad, knob, noLockRing;
 
     // Geometry (innerPad local space)
-    public Vector2 center;
-    public float moveRadius; // clamp radius (px)
-    public float knobRadius;
-    public float noLockRadius; // px
+    private Vector2 center;
+    private float moveRadius; // clamp radius (px)
+    private float knobRadius;
+    private float noLockRadius; // px
 
     // Pointer state
-    public int activePointer = -1;
-    public bool dragging;
-    public float gap = 30;
+    private int activePointer = -1;
+    private bool dragging;
+    private float gap = 30;
 
     // Spring
-    public bool springing;
-    public Vector2 springStart, springTarget;
-    public float springT;
+    private bool springing;
+    private Vector2 springStart, springTarget;
+    private float springT;
 
     // Lock
-    public Vector2 lockLocalDir = Vector2.right; // local-space dir (y down)
-    public Vector2 lockAnchor => center + lockLocalDir.normalized * moveRadius;
+    private Vector2 lockLocalDir = Vector2.right; // local-space dir (y down)
+    private Vector2 lockAnchor => center + lockLocalDir.normalized * moveRadius;
 
     // Colors
-    public readonly Color baseKnob = new Color32(60, 60, 60, 255);
-    public readonly Color draggingKnob = new Color32(52, 52, 52, 255);
-    public readonly Color lockedKnob = new Color32(36, 36, 36, 255);
+    public Color baseKnob = new Color32(60, 60, 60, 255);
+    public Color draggingKnob = new Color32(52, 52, 52, 255);
+    public Color lockedKnob = new Color32(36, 36, 36, 255);
+
+    public static UIToolkitJoystick Instance;
+    
+    private void Awake() => Instance = this;
 
     public void OnEnable()
     {
-        
         doc = GetComponent<UIDocument>();
         root = doc.rootVisualElement.Q<VisualElement>("joystick");
         innerPad = root.Q<VisualElement>("pad");
@@ -71,7 +74,7 @@ public class UIToolkitJoystick : MonoBehaviour
         knob.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0), 0));
     }
 
-    public void OnDisable()
+    private void OnDisable()
     {
         root?.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
         innerPad?.UnregisterCallback<PointerDownEvent>(OnPointerDown);
@@ -80,7 +83,7 @@ public class UIToolkitJoystick : MonoBehaviour
         innerPad?.UnregisterCallback<PointerCancelEvent>(OnPointerCancel);
     }
 
-    public void OnGeometryChanged(GeometryChangedEvent e)
+    private void OnGeometryChanged(GeometryChangedEvent e)
     {
         var r = innerPad.contentRect; // local (0,0)
         center = new Vector2(r.width * 0.5f, r.height * 0.5f);
@@ -115,7 +118,7 @@ public class UIToolkitJoystick : MonoBehaviour
     }
 
     // ---------- Pointer handling ----------
-    public void OnPointerDown(PointerDownEvent evt)
+    private void OnPointerDown(PointerDownEvent evt)
     {
         if (activePointer != -1) return;
 
@@ -135,21 +138,21 @@ public class UIToolkitJoystick : MonoBehaviour
         evt.StopPropagation();
     }
 
-    public void OnPointerMove(PointerMoveEvent evt)
+    private void OnPointerMove(PointerMoveEvent evt)
     {
         if (!dragging || evt.pointerId != activePointer) return;
         MoveKnob(innerPad.WorldToLocal(evt.position));
         evt.StopPropagation();
     }
 
-    public void OnPointerUp(PointerUpEvent evt)
+    private void OnPointerUp(PointerUpEvent evt)
     {
         if (evt.pointerId != activePointer) return;
         EndPointer(innerPad.WorldToLocal(evt.position));
         evt.StopPropagation();
     }
 
-    public void OnPointerCancel(PointerCancelEvent evt)
+    private void OnPointerCancel(PointerCancelEvent evt)
     {
         if (evt.pointerId != activePointer) return;
         // Treat cancel like "let go" at last known position
@@ -157,7 +160,7 @@ public class UIToolkitJoystick : MonoBehaviour
         evt.StopPropagation();
     }
 
-    public void EndPointer(Vector2 localRelease)
+    private void EndPointer(Vector2 localRelease)
     {
         dragging = false;
         IsPressed = false;
@@ -187,7 +190,7 @@ public class UIToolkitJoystick : MonoBehaviour
     }
 
     // ---------- Core movement ----------
-    public void MoveKnob(Vector2 local)
+    private void MoveKnob(Vector2 local)
     {
         Vector2 offset = local - center;
         float max = moveRadius;
@@ -197,7 +200,7 @@ public class UIToolkitJoystick : MonoBehaviour
         // UpdateRings();
     }
 
-    public void SetKnobLocal(Vector2 local)
+    private void SetKnobLocal(Vector2 local)
     {
         // Position
         knob.style.left = local.x - knobRadius;
@@ -206,16 +209,15 @@ public class UIToolkitJoystick : MonoBehaviour
         // Output value (y up)
         Vector2 rel = local - center;
         Vector2 normLocal = rel / Mathf.Max(0.0001f, moveRadius); // y down
-        Vector2 value = new Vector2(
+        float2 value = new (
             Mathf.Clamp(normLocal.x, -1f, 1f),
             -Mathf.Clamp(normLocal.y, -1f, 1f) // invert to y up
         );
 
         // Dead zone only when not locked
-        if (!IsLocked && value.magnitude < deadZone)
-            value = Vector2.zero;
+        if (!IsLocked && math.length(value) < deadZone) value = Vector2.zero;
 
-        if (value != Value)
+        if (math.all(value != Value))
         {
             Value = value;
             onValueChanged?.Invoke(Value);
@@ -225,9 +227,9 @@ public class UIToolkitJoystick : MonoBehaviour
     }
 
     // ---------- Helpers ----------
-    public bool InsideNoLock(Vector2 local) => (local - center).sqrMagnitude <= noLockRadius * noLockRadius;
+    private bool InsideNoLock(Vector2 local) => (local - center).sqrMagnitude <= noLockRadius * noLockRadius;
 
-    public Vector2 knobPositionLocal()
+    private Vector2 knobPositionLocal()
     {
         // Reconstruct from style.left/top
         float x = knob.resolvedStyle.left + knobRadius;
@@ -235,7 +237,7 @@ public class UIToolkitJoystick : MonoBehaviour
         return new Vector2(x, y);
     }
 
-    public void SetLocked(bool locked)
+    private void SetLocked(bool locked)
     {
         if (IsLocked == locked) return;
         IsLocked = locked;
@@ -263,7 +265,7 @@ public class UIToolkitJoystick : MonoBehaviour
     //     }
     // }
 
-    public void UpdateKnobVisual()
+    private void UpdateKnobVisual()
     {
         Color c = IsLocked ? lockedKnob : (dragging ? draggingKnob : baseKnob);
         knob.style.backgroundColor = new StyleColor(c);

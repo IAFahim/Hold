@@ -245,6 +245,13 @@ public readonly partial struct PlatformerCharacterAspect : IAspect,
     public static void GetCommonMoveVectorFromPlayerInput(in PlatformerPlayerInputs inputs, quaternion cameraRotation,
         out float3 moveVector)
     {
+        // if (inputs.TouchLocked)
+        // {
+        //     var move = inputs.Move;
+        //     moveVector = new float3(move.x, 0, move.y);
+        //     return;
+        // }
+
         moveVector = math.mul(cameraRotation, math.right()) * inputs.Move.x +
                      math.mul(cameraRotation, math.forward()) * inputs.Move.y;
     }

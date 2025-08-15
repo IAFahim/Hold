@@ -195,6 +195,7 @@ GameObject:
   - component: {fileID: 4989222900548707762}
   - component: {fileID: 356941911040088482}
   - component: {fileID: 6542700849520420764}
+  - component: {fileID: 8458002326383420955}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -267,3 +268,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Settings: {fileID: 11400000, guid: 7c70722db82347e4b99cf04ef76ae6fd, type: 2}
+--- !u!114 &8458002326383420955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6223791108034719083}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce47cb5e694f48b7b796eee74855d4cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BovineLabs.Sample::UIToolkitJoystick
+  Value:
+    x: 0
+    y: 0
+  IsPressed: 0
+  IsLocked: 0
+  deadZone: 0.12
+  noLockRadiusRatio: 1.95
+  springTime: 0.14
+  useUnscaledTime: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onLockChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onPressChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  springing: 0
+  baseKnob: {r: 0.23529412, g: 0.23529412, b: 0.23529412, a: 1}
+  draggingKnob: {r: 0.20392157, g: 0.20392157, b: 0.20392157, a: 1}
+  lockedKnob: {r: 0.14117648, g: 0.14117648, b: 0.14117648, a: 1}
