@@ -167,6 +167,7 @@ MonoBehaviour:
   Active:
     trigger: 0
     cooldown: 0
+    cooldownAfterDuration: 0
     duration: 6
     cancellable: 0
   Conditions:

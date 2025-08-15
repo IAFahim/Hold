@@ -1,12 +1,10 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Template name="mission" src="project://database/Assets/UI%20Toolkit/mission.uxml?fileID=9197481963319205126&amp;guid=55ebf96552fc41a19aeea911170c98a9&amp;type=3#mission" />
-    <ui:Template name="city_selection" src="project://database/Assets/UI%20Toolkit/city_selection.uxml?fileID=9197481963319205126&amp;guid=b3099acd30249ad80923eb089069cb36&amp;type=3#city_selection" />
+    <ui:Template name="mission" src="project://database/Assets/UI%20Toolkit/components/mission_container.uxml?fileID=9197481963319205126&amp;guid=55ebf96552fc41a19aeea911170c98a9&amp;type=3#mission_container" />
+    <ui:Template name="city_selection" src="project://database/Assets/UI%20Toolkit/components/city_selection.uxml?fileID=9197481963319205126&amp;guid=b3099acd30249ad80923eb089069cb36&amp;type=3#city_selection" />
+    <ui:Template name="item_count" src="project://database/Assets/UI%20Toolkit/components/item_count.uxml?fileID=9197481963319205126&amp;guid=b312fdc543c9f3aebaaddcb849f42a39&amp;type=3#item_count" />
     <ui:VisualElement style="flex-grow: 1; margin-left: 8px; margin-right: 8px; flex-direction: column; margin-bottom: 0; padding-bottom: 20%;">
         <ui:VisualElement style="flex-direction: row-reverse;">
-            <ui:VisualElement style="background-color: rgb(153, 153, 153); height: 128px; width: 256px; align-items: stretch; justify-content: space-between; flex-direction: row;">
-                <Unity.AppUI.UI.Text text="{0}" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" enable-rich-text="false" emoji-fallback-support="false" style="color: rgb(0, 0, 0); font-size: 32px; -unity-font-style: bold; -unity-text-align: middle-center;" />
-                <ui:VisualElement style="flex-grow: 1;" />
-            </ui:VisualElement>
+            <ui:Instance template="item_count" name="Item-count" />
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1;" />
         <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between;">
