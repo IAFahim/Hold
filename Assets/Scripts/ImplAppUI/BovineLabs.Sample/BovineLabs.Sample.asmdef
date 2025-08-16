@@ -26,7 +26,8 @@
         "Unity.ResourceManager",
         "Unity.Transforms",
         "UXMLs.Service",
-        "Ease.Data"
+        "Ease.Data",
+        "Platformers.Data"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

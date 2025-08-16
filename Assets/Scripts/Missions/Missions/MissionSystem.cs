@@ -24,7 +24,6 @@ namespace Missions.Missions
         public void OnUpdate(ref SystemState state)
         {
             ref var binding = ref ui.Binding;
-            // binding.StarCount = GlobalRandom.NextFloat();
         }
 
         [BurstCompile]

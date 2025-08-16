@@ -19,6 +19,7 @@ namespace BovineLabs.Sample.UI.Views.Game
             var root = visualTreeAsset.Instantiate().contentContainer[0];
             Add(root);
             Bind(root);
+            MainGameObjectCamera.Instance.orthographic = false;
         }
 
         public override void OnEnter(NavController controller, NavDestination destination, Argument[] args)
