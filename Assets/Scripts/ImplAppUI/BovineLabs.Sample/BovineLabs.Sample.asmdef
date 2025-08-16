@@ -27,7 +27,8 @@
         "Unity.Transforms",
         "UXMLs.Service",
         "Ease.Data",
-        "Platformers.Data"
+        "Platformers.Data",
+        "JoySticks"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

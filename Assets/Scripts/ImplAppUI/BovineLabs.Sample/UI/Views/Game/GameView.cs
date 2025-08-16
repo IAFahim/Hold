@@ -40,7 +40,5 @@ namespace BovineLabs.Sample.UI.Views.Game
             var goldContainer = root.Q("gold_container");
             goldContainer.BindText(nameof(GameViewModel.StarCount), ViewModel, "text");
         }
-        
-        
     }
 }

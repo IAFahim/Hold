@@ -21,7 +21,7 @@
         "ProcessInput.Data",
         "Follows.Data",
         "BovineLabs.Essence.Data",
-        "BovineLabs.Sample"
+        "JoySticks"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
