@@ -12,14 +12,17 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement style="flex-grow: 1;" />
-        <ui:VisualElement style="flex-grow: 0; flex-direction: row; align-self: stretch; justify-content: space-between; align-items: auto; margin-bottom: 8px;">
-            <ui:VisualElement style="flex-grow: 1;">
-                <ui:Button text="Hack" name="hack-button" style="width: 64px; height: 64px; -unity-text-align: lower-center;" />
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row-reverse;">
+            <ui:VisualElement style="flex-grow: 0; flex-direction: column; align-self: stretch; justify-content: space-between; align-items: auto; margin-bottom: 8px; background-color: rgba(26, 26, 26, 0.5);">
+                <ui:VisualElement style="flex-grow: 1;">
+                    <ui:Button text="Hack" name="hack-button" style="width: 64px; height: 64px; -unity-text-align: lower-center;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: flex-end; align-self: auto; align-items: auto;">
+                    <ui:Button text="Sneak" name="sneak-button" style="width: 64px; height: 64px; -unity-text-align: lower-center;" />
+                </ui:VisualElement>
             </ui:VisualElement>
-            <ui:VisualElement style="flex-grow: 1; flex-direction: row; justify-content: flex-end; align-self: auto; align-items: auto;">
-                <ui:Button text="Sneak" name="sneak-button" style="width: 64px; height: 64px; -unity-text-align: lower-center;" />
-            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 0.1;" />
+            <ui:Instance template="Joystick" style="flex-grow: 1;" />
         </ui:VisualElement>
-        <ui:Instance template="Joystick" style="flex-grow: 1;" />
     </ui:VisualElement>
 </ui:UXML>

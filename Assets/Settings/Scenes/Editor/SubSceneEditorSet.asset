@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SubSceneEditorSet
   m_EditorClassIdentifier: BovineLabs.Core.Extensions.Authoring::BovineLabs.Core.Authoring.SubScenes.SubSceneEditorSet
   Scenes:
-  - {fileID: 102900000, guid: 7826639a4f45ea84b82e431cedbba575, type: 3}
+  - {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
   TargetWorld: 255
