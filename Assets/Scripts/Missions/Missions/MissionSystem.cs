@@ -1,36 +1,48 @@
+using System.Runtime.CompilerServices;
 using BovineLabs.Anchor;
-using BovineLabs.Core.Utility;
 using BovineLabs.Sample.UI.ViewModels.Game;
+using Missions.Missions.Authoring;
+using Missions.Missions.Authoring.Data;
 using Missions.Missions.Data;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 
-namespace Missions.Missions
+namespace _src.Scripts.Missions.Missions
 {
-    public partial struct MissionSystem : ISystem, ISystemStartStop
+    [BurstCompile]
+    public partial struct MissionSystem : ISystem
     {
-        private UIHelper<GameViewModel, GameViewModel.Data> ui;
+        private float _distance;
+        private NativeArray<Mission> _missions;
+        public NativeArray<RangeFloat> _goalFloat;
+        public NativeArray<RangeInt> _goalInt;
+        private NativeArray<RangeFloat> _time;
+
+        private UIHelper<GameViewModel, GameViewModel.Data> _uiHelper;
         
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            this.ui = new UIHelper<GameViewModel, GameViewModel.Data>(ref state, ComponentType.ReadOnly<GameScreenTag>());
+            _uiHelper = new UIHelper<GameViewModel, GameViewModel.Data>(ref state, ComponentType.ReadOnly<GameScreenTag>());
         }
 
-        public void OnStartRunning(ref SystemState state) => this.ui.Bind();
-        
+        public void OnStartRunning(ref SystemState state)
+        {
+            GatherInfoForTracking();
+            _uiHelper.Bind();
+        }
 
-        [BurstCompile]
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void GatherInfoForTracking()
+        {
+            
+        }
+
         public void OnUpdate(ref SystemState state)
         {
-            ref var binding = ref ui.Binding;
+            
         }
-
-        [BurstCompile]
-        public void OnDestroy(ref SystemState state)
-        {
-        }
-
-        public void OnStopRunning(ref SystemState state) => this.ui.Unbind();
     }
 }

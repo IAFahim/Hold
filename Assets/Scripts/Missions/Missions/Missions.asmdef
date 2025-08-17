@@ -19,7 +19,8 @@
         "Unity.Mathematics.Extensions",
         "Unity.Physics",
         "Unity.Transforms",
-        "BovineLabs.Sample"
+        "BovineLabs.Sample",
+        "Missions.Authoring"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
