@@ -16,5 +16,6 @@ MonoBehaviour:
   columns: 8
   hexWidth: 1.5
   hexLength: 0.4330127
-  layers: []
+  layers:
+  - {fileID: 11400000, guid: d2fa2c86c86cd0ccd9fc1e947af097d5, type: 2}
   csvImport: {fileID: 0}
