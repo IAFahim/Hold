@@ -1,66 +1,134 @@
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.Burst;
 using Unity.Mathematics;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Grids.Grids
 {
-    public class HexGrid : MonoBehaviour
+    [BurstCompile]
+    public static class HexGridUtils
     {
-        public GameObject hexPrefab;
-        public int row = 256;
-        public int column = 16;
-        public float hexHeight = 0.8660254f / 2;
-        public float midLineOffset = 0.7499999f;
-        public float hexSpacing = 1.5f;
-
-        [ContextMenu("Create")]
-        public void Create()
+        public static IEnumerable<float3> CreateGrid(int row, int column, float xOffset, float yOffset)
         {
-            float upper = row / 2f * hexHeight;
-            for (int y = 0; y < row; y++)
+            var positions = new List<float3>();
+            var startY = GridHeight(row, yOffset);
+
+            for (int r = 0; r < row; r++)
             {
-                if (y % 2 == 0) CreateLine(column, 0, upper, y, false);
-                else CreateLine(column, midLineOffset, upper, y, true);
-                upper -= hexHeight;
+                var y = startY - r * yOffset;
+                var xPositions = GetXArray(r, column, xOffset, yOffset, r % 2 != 0);
+
+                foreach (var x in xPositions)
+                {
+                    positions.Add(new float3(x, 0, y));
+                }
             }
+
+            return positions;
         }
 
-        /// <summary>
-        /// Creates a line of hex tiles spawning from center outward
-        /// </summary>
-        /// <param name="n">number of tiles in the line</param>
-        /// <param name="xOffset">horizontal offset from center</param>
-        /// <param name="y">vertical position</param>
-        /// <param name="rowIndex">current row index for tile ID generation</param>
-        public void CreateLine(int n, float xOffset, float y, int rowIndex, bool trimEnd)
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float GridHeight(int row, float hexHeight) => row / 2f * hexHeight;
+
+        // Calculate starting position to center the line of hex tiles
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float GridWidth(int column, float xOffset, float yOffset)
         {
-            // Calculate starting position to center the line
-            float startX = -(n - 1) * hexSpacing * 0.5f + xOffset;
+            return -(column - 1) * xOffset * 0.5f;
+        }
 
-            if (trimEnd) n--;
-            for (int i = 0; i < n; i++)
+        // Calculate the position of a hex tile
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float GetX(float xStart, int i, float offsetX) => xStart + i * offsetX;
+
+        [BurstCompile]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static IEnumerable<float> GetXArray(
+            int rowIndex, int column,
+            float xOffset, float yOffset,
+            bool isOddRow
+        )
+        {
+            float startX = GridWidth(column, xOffset, yOffset);
+            int actualColumns = isOddRow ? column - 1 : column;
+
+            // Offset odd rows by half the x spacing for hexagonal pattern
+            if (isOddRow) startX += xOffset * 0.5f;
+
+            var xArr = new List<float>();
+            for (int i = 0; i < actualColumns; i++)
             {
-                float x = startX + i * hexSpacing;
-                Vector3 position = new Vector3(x, 0, y);
+                xArr.Add(GetX(startX, i, xOffset));
+            }
 
-                GameObject hexTile = Instantiate(hexPrefab, position, Quaternion.identity, transform);
+            return xArr;
+        }
 
-                // Set up the tile component if it exists
-                HexGridTile tileComponent = hexTile.GetComponent<HexGridTile>();
-                if (tileComponent != null)
-                {
-                    tileComponent.id = rowIndex * column + i;
-                    tileComponent.height = 0; // Default height, you can modify this as needed
-                }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static GameObject InstantiateHexTile(int id, GameObject hexPrefab, Transform parent, float3 position)
+        {
+            GameObject hexTile = Object.Instantiate(hexPrefab, position, Quaternion.identity, parent);
+            var tileComponent = hexTile.GetComponent<HexGridTile>();
+            if (tileComponent != null)
+            {
+                tileComponent.id = id;
+                tileComponent.height = GetHeightInByte(position.y);
+            }
 
-                // Name the tile for easier debugging
-                hexTile.name = $"HexTile_R{rowIndex}_C{i}";
+            hexTile.name = $"HexTile {id}";
+            return hexTile;
+        }
+
+        public const float HexMinHeight = -2;
+        public const float HexMaxHeight = 2;
+
+        /// <summary>
+        /// Sets height from world position to normalized sbyte value
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static sbyte GetHeightInByte(float worldHeight)
+        {
+            return (sbyte)math.remap(HexMinHeight, HexMaxHeight, sbyte.MinValue, sbyte.MaxValue, worldHeight);
+        }
+    }
+
+    public class HexGrid : MonoBehaviour
+    {
+        [Header("Grid Settings")] public GameObject hexPrefab;
+        public int row = 128;
+        public int column = 8;
+        public float yOffset = 0.8660254f / 2; // sqrt(3)/2 for proper hex spacing
+        public float xOffset = 1.5f;
+
+        [Header("Data")] public HexMapsData gridDatas;
+
+        [ContextMenu("Create Grid")]
+        public void Create()
+        {
+            ClearGrid();
+            var positions = HexGridUtils.CreateGrid(row, column, xOffset, yOffset);
+            CreateTiles(positions);
+        }
+
+        private void CreateTiles(IEnumerable<float3> positions)
+        {
+            int i = 0;
+            foreach (var position in positions)
+            {
+                HexGridUtils.InstantiateHexTile(i, hexPrefab, transform, position);
+                i++;
             }
         }
 
         /// <summary>
         /// Clears all existing hex tiles (useful for OnValidate)
         /// </summary>
-        [ContextMenu("Clear")]
+        [ContextMenu("Clear Grid")]
         private void ClearGrid()
         {
             // Remove all children in editor
@@ -71,6 +139,15 @@ namespace Grids.Grids
                 else
                     DestroyImmediate(transform.GetChild(i).gameObject);
             }
+        }
+
+        private void OnValidate()
+        {
+            // Ensure positive values
+            row = Mathf.Max(1, row);
+            column = Mathf.Max(1, column);
+            yOffset = Mathf.Max(0.1f, yOffset);
+            xOffset = Mathf.Max(0.1f, xOffset);
         }
     }
 }

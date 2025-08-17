@@ -20,11 +20,9 @@ namespace Hacks.Hacks
         public void OnUpdate(ref SystemState state)
         {
             var mainEntity = SystemAPI.GetSingleton<FocusSingletonComponent>().Entity;
-            if (mainEntity != Entity.Null)
-            {
-                SystemAPI.GetComponentRW<HackActive>(mainEntity).ValueRW.Enable = false;
-            }
+            if (mainEntity == Entity.Null) return;
 
+            SystemAPI.GetComponentRW<HackActive>(mainEntity).ValueRW.Enable = false;
             new ActiveHackJob
             {
                 MainEntity = mainEntity,

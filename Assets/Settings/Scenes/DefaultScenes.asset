@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultScenes
   m_EditorClassIdentifier: 
   Scenes: []
-  TargetWorld: 1
+  TargetWorld: 0
   ID: 0
   IsRequired: 0
   WaitForLoad: 1
