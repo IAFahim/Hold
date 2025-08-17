@@ -37,6 +37,8 @@ public class HexMapsAuthoring : MonoBehaviour
             for (int mapIndex = 0; mapIndex < hexMaps.layers.Count; mapIndex++)
             {
                 var layer = hexMaps.layers[mapIndex];
+                if (layer == null) continue;
+
                 var rowsArray = builder.Allocate(ref mapsArray[mapIndex], hexMaps.rows);
 
                 for (int row = 0; row < hexMaps.rows; row++)

@@ -77,24 +77,28 @@ namespace Grids.Grids
             if (tileComponent != null)
             {
                 tileComponent.id = id;
-                tileComponent.height = GetHeightInByte(position.y);
+                tileComponent.height = GetHeightInSByte(position.y);
             }
 
             hexTile.name = $"HexTile {id}";
             return hexTile;
         }
 
-        public const float HexMinHeight = -2;
-        public const float HexMaxHeight = 2;
+        public const float HexMinHeight = -1;
+        public const float HexMaxHeight = 1;
 
         /// <summary>
         /// Sets height from world position to normalized sbyte value
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static sbyte GetHeightInByte(float worldHeight)
+        public static sbyte GetHeightInSByte(float worldHeight)
         {
-            return (sbyte)math.remap(HexMinHeight, HexMaxHeight, sbyte.MinValue, sbyte.MaxValue, worldHeight);
+            // Clamp the input to [-1, 1] to avoid out-of-range values
+            worldHeight = math.clamp(worldHeight, HexMinHeight, HexMaxHeight);
+            // Remap [-1, 1] to [-128, 127]
+            return (sbyte)math.round(math.remap(HexMinHeight, HexMaxHeight, sbyte.MinValue, sbyte.MaxValue, worldHeight));
         }
+
     }
 
     public class HexGrid : MonoBehaviour
@@ -105,7 +109,8 @@ namespace Grids.Grids
         public float yOffset = 0.8660254f / 2; // sqrt(3)/2 for proper hex spacing
         public float xOffset = 1.5f;
 
-        [Header("Data")] public HexMapsData gridDatas;
+        [Header("Data")] public HexMapLayerSO layer;
+        public int selectedLayer = 0;
 
         [ContextMenu("Create Grid")]
         public void Create()
@@ -114,6 +119,21 @@ namespace Grids.Grids
             var positions = HexGridUtils.CreateGrid(row, column, xOffset, yOffset);
             CreateTiles(positions);
         }
+
+        [ContextMenu("Transfer To Scriptable")]
+        public void TransferToScriptable()
+        {
+            layer.ResizeData(row, column);
+            int i = 0;
+            foreach (Transform child in transform)
+            {
+                var tile = child.GetComponent<HexGridTile>();
+                var pos = tile.transform.position;
+                layer.heightData[i] = HexGridUtils.GetHeightInSByte(pos.y);
+                i++;
+            }
+        }
+
 
         private void CreateTiles(IEnumerable<float3> positions)
         {

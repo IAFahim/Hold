@@ -19,7 +19,7 @@ public static class HexMapsUtilities
 
     public static void ImportFromCSV(HexMapsData data, string csvContent, int layerIndex = 0)
     {
-        if (layerIndex >= data.layers.Count) return;
+        if (layerIndex >= data.layers.Count || data.layers[layerIndex] == null) return;
 
         var lines = csvContent.Split('\n');
         var layer = data.layers[layerIndex];
@@ -39,7 +39,7 @@ public static class HexMapsUtilities
 
     public static string ExportToCSV(HexMapsData data, int layerIndex = 0)
     {
-        if (layerIndex >= data.layers.Count) return "";
+        if (layerIndex >= data.layers.Count || data.layers[layerIndex] == null) return "";
 
         var layer = data.layers[layerIndex];
         var csv = new System.Text.StringBuilder();
