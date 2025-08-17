@@ -10,11 +10,6 @@ namespace BovineLabs.Sample.UI.Views.Game
     public abstract class GameBaseView<T> : BaseScreen<T>
     {
         public const string GameClassName = "bl-game-view";
-
-        protected GameBaseView(T viewModel)
-            : base(viewModel)
-        {
-            this.AddToClassList(GameClassName);
-        }
+        protected GameBaseView(T viewModel) : base(viewModel) => AddToClassList(GameClassName);
     }
 }

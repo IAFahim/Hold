@@ -4,6 +4,7 @@
 
 using _src.Scripts.UiServices.UXMLs.Service;
 using BovineLabs.Core;
+using Unity.AppUI.Navigation.Generated;
 
 namespace BovineLabs.Sample.UI.Views.Menu
 {
@@ -55,7 +56,7 @@ namespace BovineLabs.Sample.UI.Views.Menu
 
             this.Add(hostButton);
 
-            var joinButton = new Button(this.JoinGame)
+            var joinButton = new Button(this.OpenMap)
             {
                 title = JoinText,
                 subtitle = JoinSubText,
@@ -79,6 +80,13 @@ namespace BovineLabs.Sample.UI.Views.Menu
             this.ToGoLoading();
         }
 
+        private void OpenMap()
+        {
+            this.ViewModel.Value.Join.TryProduce();
+            this.Navigate(Actions.go_to_map);
+            BovineLabsBootstrap.Instance.CreateGameWorld();
+        }
+        
         private void JoinGame()
         {
             this.ViewModel.Value.Join.TryProduce();

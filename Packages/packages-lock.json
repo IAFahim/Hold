@@ -35,13 +35,13 @@
       "hash": "63f7beff24d1709804108785470083e4fe5d64aa"
     },
     "com.bovinelabs.core": {
-      "version": "https://gitlab.com/tertle/com.bovinelabs.core.git#1.4.5",
+      "version": "https://gitlab.com/tertle/com.bovinelabs.core.git#1.4.6",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.entities": "1.4.0-pre.3"
       },
-      "hash": "d86a673046ff1fdd828118cd30417707d8b2130d"
+      "hash": "77aace9c6b0e86f5e6b3ce5b4790a781f9aec6fa"
     },
     "com.bovinelabs.essence": {
       "version": "https://gitlab.com/tertle/com.bovinelabs.essence.git",

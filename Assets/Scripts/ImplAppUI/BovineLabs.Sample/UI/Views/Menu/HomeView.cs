@@ -3,6 +3,7 @@
 // </copyright>
 
 using BovineLabs.Core;
+using Unity.AppUI.Navigation.Generated;
 
 namespace BovineLabs.Sample.UI.Views.Menu
 {

@@ -5,6 +5,7 @@
 using _src.Scripts.UiServices.UXMLs.Service;
 using BovineLabs.Core;
 using Unity.AppUI.Navigation;
+using Unity.AppUI.Navigation.Generated;
 
 namespace BovineLabs.Sample.UI.Views.Menu
 {
