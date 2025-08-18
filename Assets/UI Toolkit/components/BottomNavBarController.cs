@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 
 public enum IconAnimationType
 {
-    // Foundational & Foundational
+    // --- Foundational & Core (15) ---
     ElasticPop,
     Shake,
     Heartbeat,
@@ -22,8 +22,13 @@ public enum IconAnimationType
     JellyBounce,
     Slingshot,
     Unfold,
+    Boing,
+    SwipeIn,
+    DoubleTap,
+    Thump,
+    FadeOutAndIn,
 
-    // Physical & Material
+    // --- Physical & Material (15) ---
     SqueezeAndPop,
     Flip3D,
     PendulumSwing,
@@ -34,8 +39,13 @@ public enum IconAnimationType
     Shutter,
     OrigamiFold,
     Magnetize,
+    Melt,
+    PageTurn,
+    RubberBand,
+    WindGust,
+    Unfurl,
 
-    // Organic & Playful
+    // --- Organic & Playful (15) ---
     Wiggle,
     PeekABoo,
     Nod,
@@ -46,8 +56,13 @@ public enum IconAnimationType
     Float,
     Scurry,
     Exhale,
+    Dizzy,
+    Jitter,
+    Sneeze,
+    LookAround,
+    Sniff,
 
-    // Celebratory & Emphatic
+    // --- Celebratory & Emphatic (15) ---
     Fireworks,
     Spotlight,
     ConfettiPop,
@@ -58,8 +73,13 @@ public enum IconAnimationType
     Applause,
     PowerUp,
     Fanfare,
+    SpotlightSweep,
+    SonarPing,
+    Enthuse,
+    Triumph,
+    Present,
 
-    // Digital & Futuristic
+    // --- Digital & Futuristic (15) ---
     ScanlineReveal,
     Glitch,
     ChargingPulse,
@@ -69,7 +89,29 @@ public enum IconAnimationType
     FocusLock,
     DataStream,
     Reboot,
-    Voxelize
+    Voxelize,
+    SpiralIn,
+    Disassemble,
+    WarpIn,
+    CircuitTrace,
+    PowerDown,
+    
+    // --- Bonus & Abstract (15) ---
+    MorphToCircle,
+    Kaleidoscope,
+    InkBleed,
+    GravitySlam,
+    Orbital,
+    Sunbeam,
+    BlackHole,
+    Shatter,
+    Assemble,
+    Ghostly,
+    Burning,
+    Freezing,
+    Electric,
+    Vibrate,
+    BubblePop
 }
 
 #endregion
@@ -111,7 +153,7 @@ public class BottomNavBarController : MonoBehaviour
     {
         animationLibrary = new Dictionary<IconAnimationType, Func<VisualElement, Coroutine>>
         {
-            // Foundational
+            // --- Foundational ---
             { IconAnimationType.ElasticPop, icon => StartCoroutine(Animate_ElasticPop(icon)) },
             { IconAnimationType.Shake, icon => StartCoroutine(Animate_Shake(icon)) },
             { IconAnimationType.Heartbeat, icon => StartCoroutine(Animate_Heartbeat(icon)) },
@@ -122,32 +164,77 @@ public class BottomNavBarController : MonoBehaviour
             { IconAnimationType.JellyBounce, icon => StartCoroutine(Animate_JellyBounce(icon)) },
             { IconAnimationType.Slingshot, icon => StartCoroutine(Animate_SlingShot(icon)) },
             { IconAnimationType.Unfold, icon => StartCoroutine(Animate_Unfold(icon)) },
-            // Physical
+            { IconAnimationType.Boing, icon => StartCoroutine(Animate_Boing(icon)) },
+            { IconAnimationType.SwipeIn, icon => StartCoroutine(Animate_SwipeIn(icon)) },
+            { IconAnimationType.DoubleTap, icon => StartCoroutine(Animate_DoubleTap(icon)) },
+            { IconAnimationType.Thump, icon => StartCoroutine(Animate_Thump(icon)) },
+            { IconAnimationType.FadeOutAndIn, icon => StartCoroutine(Animate_FadeOutAndIn(icon)) },
+
+            // --- Physical ---
             { IconAnimationType.SqueezeAndPop, icon => StartCoroutine(Animate_SqueezeAndPop(icon)) },
             { IconAnimationType.Flip3D, icon => StartCoroutine(Animate_Flip3D(icon)) },
             { IconAnimationType.PendulumSwing, icon => StartCoroutine(Animate_PendulumSwing(icon)) },
             { IconAnimationType.RippleOut, icon => StartCoroutine(Animate_RippleOut(icon)) },
             { IconAnimationType.PaperToss, icon => StartCoroutine(Animate_PaperToss(icon)) },
-            // Organic
+            { IconAnimationType.NewtonsCradle, icon => StartCoroutine(Animate_NewtonsCradle(icon)) },
+            { IconAnimationType.LiquidFill, icon => StartCoroutine(Animate_LiquidFill(icon)) },
+            { IconAnimationType.Shutter, icon => StartCoroutine(Animate_Shutter(icon)) },
+            { IconAnimationType.OrigamiFold, icon => StartCoroutine(Animate_OrigamiFold(icon)) },
+            { IconAnimationType.Magnetize, icon => StartCoroutine(Animate_Magnetize(icon)) },
+            { IconAnimationType.Melt, icon => StartCoroutine(Animate_Melt(icon)) },
+            { IconAnimationType.PageTurn, icon => StartCoroutine(Animate_PageTurn(icon)) },
+            { IconAnimationType.RubberBand, icon => StartCoroutine(Animate_RubberBand(icon)) },
+            { IconAnimationType.WindGust, icon => StartCoroutine(Animate_WindGust(icon)) },
+            { IconAnimationType.Unfurl, icon => StartCoroutine(Animate_Unfurl(icon)) },
+
+            // --- Organic ---
             { IconAnimationType.Wiggle, icon => StartCoroutine(Animate_Wiggle(icon)) },
             { IconAnimationType.PeekABoo, icon => StartCoroutine(Animate_PeekABoo(icon)) },
             { IconAnimationType.Nod, icon => StartCoroutine(Animate_Nod(icon)) },
             { IconAnimationType.Blink, icon => StartCoroutine(Animate_Blink(icon)) },
-            // Celebratory
+            { IconAnimationType.TailWag, icon => StartCoroutine(Animate_TailWag(icon)) },
+            { IconAnimationType.Gasp, icon => StartCoroutine(Animate_Gasp(icon)) },
+            { IconAnimationType.Crawl, icon => StartCoroutine(Animate_Crawl(icon)) },
+            { IconAnimationType.Float, icon => StartCoroutine(Animate_Float(icon)) },
+            { IconAnimationType.Scurry, icon => StartCoroutine(Animate_Scurry(icon)) },
+            { IconAnimationType.Exhale, icon => StartCoroutine(Animate_Exhale(icon)) },
+            { IconAnimationType.Dizzy, icon => StartCoroutine(Animate_Dizzy(icon)) },
+            { IconAnimationType.Jitter, icon => StartCoroutine(Animate_Jitter(icon)) },
+
+            // --- Celebratory ---
             { IconAnimationType.Fireworks, icon => StartCoroutine(Animate_Fireworks(icon)) },
             { IconAnimationType.Spotlight, icon => StartCoroutine(Animate_Spotlight(icon)) },
             { IconAnimationType.ConfettiPop, icon => StartCoroutine(Animate_ConfettiPop(icon)) },
-            // Digital
+            { IconAnimationType.Crown, icon => StartCoroutine(Animate_Crown(icon)) },
+            { IconAnimationType.Shockwave, icon => StartCoroutine(Animate_Shockwave(icon)) },
+            { IconAnimationType.Stomp, icon => StartCoroutine(Animate_Stomp(icon)) },
+            { IconAnimationType.VictoryRise, icon => StartCoroutine(Animate_VictoryRise(icon)) },
+            { IconAnimationType.Applause, icon => StartCoroutine(Animate_Applause(icon)) },
+            { IconAnimationType.PowerUp, icon => StartCoroutine(Animate_PowerUp(icon)) },
+            { IconAnimationType.Fanfare, icon => StartCoroutine(Animate_Fanfare(icon)) },
+            { IconAnimationType.SpotlightSweep, icon => StartCoroutine(Animate_SpotlightSweep(icon)) },
+            { IconAnimationType.SonarPing, icon => StartCoroutine(Animate_SonarPing(icon)) },
+
+            // --- Digital ---
             { IconAnimationType.ScanlineReveal, icon => StartCoroutine(Animate_ScanlineReveal(icon)) },
             { IconAnimationType.Glitch, icon => StartCoroutine(Animate_Glitch(icon)) },
             { IconAnimationType.Pixelate, icon => StartCoroutine(Animate_Pixelate(icon)) },
+            { IconAnimationType.ChargingPulse, icon => StartCoroutine(Animate_ChargingPulse(icon)) },
+            { IconAnimationType.CodeMatrix, icon => StartCoroutine(Animate_CodeMatrix(icon)) },
+            { IconAnimationType.Hologram, icon => StartCoroutine(Animate_Hologram(icon)) },
+            { IconAnimationType.FocusLock, icon => StartCoroutine(Animate_FocusLock(icon)) },
+            { IconAnimationType.DataStream, icon => StartCoroutine(Animate_DataStream(icon)) },
+            { IconAnimationType.Reboot, icon => StartCoroutine(Animate_Reboot(icon)) },
+            { IconAnimationType.Voxelize, icon => StartCoroutine(Animate_Voxelize(icon)) },
+            { IconAnimationType.SpiralIn, icon => StartCoroutine(Animate_SpiralIn(icon)) },
+            { IconAnimationType.PowerDown, icon => StartCoroutine(Animate_PowerDown(icon)) },
         };
         animationKeys = animationLibrary.Keys.ToList();
     }
 
     private void OnGeometryChanged(GeometryChangedEvent evt)
     {
-        if (currentIndex == -1 && navButtons.Count > 0) SelectButton(navButtons.Count - 1, false);
+        if (currentIndex == -1 && navButtons.Count > 0) SelectButton(0, false);
         root.UnregisterCallback<GeometryChangedEvent>(OnGeometryChanged);
     }
 
@@ -186,33 +273,33 @@ public class BottomNavBarController : MonoBehaviour
         icon.style.scale = new StyleScale(new Scale(Vector3.one));
         icon.style.rotate = new StyleRotate(new Rotate(new Angle(0)));
         icon.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(0)));
-        icon.style.opacity = StyleKeyword.Null;
+        icon.style.opacity = 1;
         icon.style.transformOrigin = new StyleTransformOrigin(new TransformOrigin(new Length(50, LengthUnit.Percent),
             new Length(50, LengthUnit.Percent)));
+        icon.style.borderTopLeftRadius = icon.style.borderTopRightRadius = 
+            icon.style.borderBottomLeftRadius = icon.style.borderBottomRightRadius = 
+            new StyleLength(new Length(0));
+        icon.style.overflow = Overflow.Visible;
+            
 
         var container = icon.parent;
         if (container == null) return;
+        
+        // Clean up any dynamically created particle/effect elements
+        var particles = container.Query<VisualElement>(className: "particle-effect").ToList();
+        foreach (var particle in particles) particle.RemoveFromHierarchy();
 
-        var scanline = container.Q<VisualElement>(className: "scanline-effect");
-        if (scanline != null)
+        // Reset specific effect elements
+        Action<string, Action<VisualElement>> resetEffect = (className, styleAction) =>
         {
-            scanline.style.opacity = 0;
-            scanline.style.translate =
-                new StyleTranslate(new Translate(new Length(0), new Length(-100, LengthUnit.Percent)));
-        }
+            var effectElement = container.Q<VisualElement>(className: className);
+            if (effectElement != null) styleAction(effectElement);
+        };
 
-        var spotlight = container.Q<VisualElement>(className: "spotlight-effect");
-        if (spotlight != null)
-        {
-            spotlight.style.opacity = 0;
-        }
-
-        var ripple = container.Q<VisualElement>(className: "ripple-effect");
-        if (ripple != null)
-        {
-            ripple.style.opacity = 0;
-            ripple.style.scale = new StyleScale(new Scale(Vector2.zero));
-        }
+        resetEffect("scanline-effect", el => { el.style.opacity = 0; el.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(-100, LengthUnit.Percent))); });
+        resetEffect("spotlight-effect", el => el.style.opacity = 0);
+        resetEffect("ripple-effect", el => { el.style.opacity = 0; el.style.scale = new StyleScale(new Scale(Vector2.zero)); });
+        resetEffect("liquid-fill-effect", el => { el.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(100, LengthUnit.Percent))); });
     }
 
     #endregion
@@ -236,11 +323,11 @@ public class BottomNavBarController : MonoBehaviour
 
     private IEnumerator Animate_Shake(VisualElement icon)
     {
-        float duration = 0.3f, time = 0, shakeAmount = 8f;
+        float duration = 0.4f, time = 0, shakeAmount = 8f;
         while (time < duration)
         {
             float progress = time / duration;
-            float currentX = Mathf.Sin(progress * Mathf.PI * 8) * (shakeAmount * (1 - progress));
+            float currentX = Mathf.Sin(progress * Mathf.PI * 10) * (shakeAmount * (1 - progress));
             icon.style.translate =
                 new StyleTranslate(new Translate(new Length(currentX, LengthUnit.Pixel), new Length(0)));
             time += Time.deltaTime;
@@ -313,7 +400,7 @@ public class BottomNavBarController : MonoBehaviour
 
     private IEnumerator Animate_WindUpAndSpin(VisualElement icon)
     {
-        float duration = 0.5f, time = 0, windUpAngle = -30f, spinAngle = 360f + 45f;
+        float duration = 0.5f, time = 0, windUpAngle = -30f, spinAngle = 360f;
         float windUpDuration = duration * 0.3f;
         while (time < windUpDuration)
         {
@@ -355,30 +442,21 @@ public class BottomNavBarController : MonoBehaviour
 
     private IEnumerator Animate_JellyBounce(VisualElement icon)
     {
-        float duration = 0.6f, time = 0, squashFactor = 0.7f, stretchFactor = 1.3f;
+        float duration = 0.7f;
+        float time = 0f;
         while (time < duration)
         {
             float progress = time / duration;
-            float scaleX, scaleY;
-            if (progress < 0.5f)
-            {
-                scaleX = Mathf.Lerp(1, stretchFactor, Easing.OutQuad(progress * 2));
-                scaleY = Mathf.Lerp(1, squashFactor, Easing.OutQuad(progress * 2));
-            }
-            else
-            {
-                scaleX = Mathf.Lerp(stretchFactor, 1, Easing.InQuad((progress - 0.5f) * 2));
-                scaleY = Mathf.Lerp(squashFactor, 1, Easing.InQuad((progress - 0.5f) * 2));
-            }
-
-            icon.style.scale = new StyleScale(new Scale(new Vector2(scaleX, scaleY)));
+            float damp = 1 - Mathf.Pow(progress, 3);
+            float stretch = 1 + 0.3f * damp * Mathf.Sin(progress * Mathf.PI * 3.5f);
+            float squash = 1 - 0.3f * damp * Mathf.Sin(progress * Mathf.PI * 3.5f);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(squash, stretch)));
             time += Time.deltaTime;
             yield return null;
         }
-
         ResetIconStyle(icon);
     }
-
+    
     private IEnumerator Animate_SlingShot(VisualElement icon)
     {
         float duration = 0.5f, time = 0, pullBackDist = -20f;
@@ -408,9 +486,13 @@ public class BottomNavBarController : MonoBehaviour
 
     private IEnumerator Animate_Unfold(VisualElement icon)
     {
-        float duration = 0.4f, time = 0;
+        float duration = 0.4f;
+        float time = 0f;
+        float halfDuration = duration / 2f;
+        
         icon.style.scale = new StyleScale(new Scale(new Vector2(0, 1)));
-        float halfDuration = duration / 2;
+        icon.style.transformOrigin = new StyleTransformOrigin(new TransformOrigin(new Length(0, LengthUnit.Percent), new Length(50, LengthUnit.Percent)));
+
         while (time < halfDuration)
         {
             float progress = Easing.OutCubic(time / halfDuration);
@@ -419,8 +501,10 @@ public class BottomNavBarController : MonoBehaviour
             yield return null;
         }
 
+        time = 0f;
+        icon.style.transformOrigin = new StyleTransformOrigin(new TransformOrigin(new Length(50, LengthUnit.Percent), new Length(0, LengthUnit.Percent)));
         icon.style.scale = new StyleScale(new Scale(new Vector2(1, 0)));
-        time = 0;
+
         while (time < halfDuration)
         {
             float progress = Easing.OutCubic(time / halfDuration);
@@ -429,6 +513,109 @@ public class BottomNavBarController : MonoBehaviour
             yield return null;
         }
 
+        ResetIconStyle(icon);
+    }
+    
+    private IEnumerator Animate_Boing(VisualElement icon)
+    {
+        float duration = 0.6f, time = 0, squashY = 0.7f, stretchY = 1.3f;
+        float squashDuration = duration * 0.3f;
+
+        while (time < squashDuration)
+        {
+            float progress = Easing.OutCubic(time / squashDuration);
+            float scaleY = Mathf.Lerp(1f, squashY, progress);
+            float scaleX = Mathf.Lerp(1f, 1 + (1 - scaleY), progress);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(scaleX, scaleY)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        time = 0;
+        float bounceDuration = duration * 0.7f;
+        while (time < bounceDuration)
+        {
+            float progress = EasingExtra.OutElastic(time / bounceDuration, 1.2f, 0.4f);
+            float scaleY = Mathf.Lerp(squashY, 1f, progress);
+            float scaleX = Mathf.Lerp(1 + (1-squashY), 1f, progress);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(scaleX, scaleY)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_SwipeIn(VisualElement icon)
+    {
+        float duration = 0.5f, time = 0, startX = -80f;
+        while (time < duration)
+        {
+            float progress = Easing.OutBack(time / duration, 1.5f);
+            icon.style.translate = new StyleTranslate(new Translate(new Length(Mathf.Lerp(startX, 0, progress), LengthUnit.Pixel), new Length(0)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+    
+    private IEnumerator Animate_DoubleTap(VisualElement icon)
+    {
+        float duration = 0.3f;
+        yield return Animate_QuickTap(icon, 0.8f, duration / 2f);
+        yield return new WaitForSeconds(0.05f);
+        yield return Animate_QuickTap(icon, 0.8f, duration / 2f);
+        ResetIconStyle(icon);
+    }
+    
+    private IEnumerator Animate_QuickTap(VisualElement icon, float scale, float duration)
+    {
+        float time = 0f;
+        float half = duration / 2f;
+        while(time < half)
+        {
+            icon.style.scale = new StyleScale(new Scale(new Vector2(Mathf.Lerp(1f, scale, time/half), Mathf.Lerp(1f, scale, time/half))));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        while(time < duration)
+        {
+            icon.style.scale = new StyleScale(new Scale(new Vector2(Mathf.Lerp(scale, 1f, (time-half)/half), Mathf.Lerp(scale, 1f, (time-half)/half))));
+            time += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private IEnumerator Animate_Thump(VisualElement icon)
+    {
+        float duration = 0.25f, time = 0, scale = 1.15f;
+        while (time < duration)
+        {
+            float progress = Easing.OutCubic(time / duration);
+            float currentScale = 1f + (scale - 1f) * Mathf.Sin(progress * Mathf.PI);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(currentScale, currentScale)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_FadeOutAndIn(VisualElement icon)
+    {
+        float duration = 0.6f, time = 0;
+        float half = duration / 2f;
+        while (time < half)
+        {
+            icon.style.opacity = 1 - (time / half);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        time = 0f;
+        while (time < half)
+        {
+            icon.style.opacity = time / half;
+            time += Time.deltaTime;
+            yield return null;
+        }
         ResetIconStyle(icon);
     }
 
@@ -466,13 +653,13 @@ public class BottomNavBarController : MonoBehaviour
         float duration = 0.5f, time = 0;
         while (time < duration)
         {
-            float progress = Easing.InOutCubic(time / duration);
-            float scaleX = Mathf.Cos(progress * Mathf.PI);
-            icon.style.scale = new StyleScale(new Scale(new Vector2(scaleX, 1)));
+            float progress = time / duration;
+            float angle = Mathf.Lerp(0, 180, progress);
+            // We can't do a true 3D rotate, so we simulate it with scale
+            icon.style.scale = new StyleScale(new Scale(new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), 1)));
             time += Time.deltaTime;
             yield return null;
         }
-
         ResetIconStyle(icon);
     }
 
@@ -495,11 +682,9 @@ public class BottomNavBarController : MonoBehaviour
 
     private IEnumerator Animate_RippleOut(VisualElement icon)
     {
+        // NOTE: Requires a child <VisualElement class="ripple-effect" />
         var ripple = icon.parent?.Q<VisualElement>(className: "ripple-effect");
-        if (ripple == null)
-        {
-            yield break;
-        }
+        if (ripple == null) { yield return Animate_ElasticPop(icon); yield break; }
 
         float duration = 0.5f, time = 0;
         while (time < duration)
@@ -517,6 +702,7 @@ public class BottomNavBarController : MonoBehaviour
     private IEnumerator Animate_PaperToss(VisualElement icon)
     {
         float duration = 0.6f, time = 0;
+        icon.style.opacity = 1;
         while (time < duration)
         {
             float progress = Easing.InCubic(time / duration);
@@ -530,6 +716,184 @@ public class BottomNavBarController : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.2f);
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_NewtonsCradle(VisualElement icon)
+    {
+        float duration = 0.8f, time = 0, maxAngle = 45f;
+        icon.style.transformOrigin = new StyleTransformOrigin(new TransformOrigin(new Length(50, LengthUnit.Percent), new Length(-100, LengthUnit.Percent)));
+        while (time < duration)
+        {
+            float progress = time / duration;
+            float damp = Mathf.Exp(-progress * 4f);
+            float angle = maxAngle * Mathf.Sin(progress * Mathf.PI * 4) * damp;
+            icon.style.rotate = new StyleRotate(new Rotate(new Angle(angle, AngleUnit.Degree)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_LiquidFill(VisualElement icon)
+    {
+        // NOTE: Requires a child <VisualElement class="liquid-fill-effect" /> and `overflow: hidden` on the icon's USS.
+        var liquid = icon.parent?.Q<VisualElement>(className: "liquid-fill-effect");
+        if (liquid == null) { yield return Animate_ElasticPop(icon); yield break; }
+        
+        icon.style.overflow = Overflow.Hidden;
+        float duration = 0.7f, time = 0;
+        while (time < duration)
+        {
+            float progress = Easing.OutCubic(time / duration);
+            liquid.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(Mathf.Lerp(100, 0, progress), LengthUnit.Percent)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_Shutter(VisualElement icon)
+    {
+        float duration = 0.3f, time = 0;
+        float half = duration / 2f;
+        while (time < half)
+        {
+            float progress = time / half;
+            icon.style.scale = new StyleScale(new Scale(new Vector2(1, 1 - progress)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        time = 0;
+        while (time < half)
+        {
+            float progress = time / half;
+            icon.style.scale = new StyleScale(new Scale(new Vector2(1, progress)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_OrigamiFold(VisualElement icon)
+    {
+        float duration = 0.5f, time = 0;
+        float half = duration / 2f;
+        icon.style.transformOrigin = new StyleTransformOrigin(new TransformOrigin(new Length(0), new Length(0)));
+        while (time < half)
+        {
+            float progress = Easing.OutCubic(time / half);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(1 - progress, 1)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        time = 0;
+        while (time < half)
+        {
+            float progress = Easing.OutCubic(time / half);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(progress, 1)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_Magnetize(VisualElement icon)
+    {
+        float duration = 0.5f, time = 0;
+        Vector2 startPos = Random.insideUnitCircle * 40f;
+        while (time < duration)
+        {
+            float progress = Easing.OutBack(time / duration, 2.5f);
+            icon.style.translate = new StyleTranslate(new Translate(new Length(Mathf.Lerp(startPos.x, 0, progress), LengthUnit.Pixel), new Length(Mathf.Lerp(startPos.y, 0, progress), LengthUnit.Pixel)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_Melt(VisualElement icon)
+    {
+        float duration = 0.8f, time = 0;
+        icon.style.transformOrigin = new StyleTransformOrigin(new TransformOrigin(new Length(50, LengthUnit.Percent), new Length(100, LengthUnit.Percent)));
+        float half = duration / 2f;
+        while (time < half)
+        {
+            float progress = Easing.InCubic(time / half);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(1f, 1 - progress * 0.7f)));
+            icon.style.borderBottomLeftRadius = icon.style.borderBottomRightRadius = new StyleLength(new Length(progress * 50, LengthUnit.Percent));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        time = 0;
+        while (time < half)
+        {
+            float progress = Easing.OutElastic(time / half);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(1f, Mathf.Lerp(0.3f, 1f, progress))));
+            icon.style.borderBottomLeftRadius = icon.style.borderBottomRightRadius = new StyleLength(new Length(Mathf.Lerp(50, 0, progress), LengthUnit.Percent));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_PageTurn(VisualElement icon)
+    {
+        float duration = 0.5f, time = 0;
+        icon.style.transformOrigin = new StyleTransformOrigin(new TransformOrigin(new Length(100, LengthUnit.Percent), new Length(100, LengthUnit.Percent)));
+        while (time < duration)
+        {
+            float progress = Easing.InOutCubic(time / duration);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(Mathf.Cos(progress * Mathf.PI * 0.5f), 1)));
+            icon.style.opacity = 1 - progress;
+            time += Time.deltaTime;
+            yield return null;
+        }
+        yield return new WaitForSeconds(0.1f);
+        ResetIconStyle(icon);
+    }
+    
+    private IEnumerator Animate_RubberBand(VisualElement icon)
+    {
+        float duration = 0.7f, time = 0, stretch = 1.5f;
+        while (time < duration)
+        {
+            float progress = EasingExtra.OutElastic(time / duration, 1.5f, 0.3f);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(Mathf.Lerp(stretch, 1f, progress), Mathf.Lerp(1 / stretch, 1f, progress))));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_WindGust(VisualElement icon)
+    {
+        float duration = 0.8f, time = 0, angle = 10f, xOffset = 20f;
+        while (time < duration)
+        {
+            float progress = time / duration;
+            float wave = Mathf.Sin(progress * Mathf.PI * 4);
+            float damp = 1 - progress;
+            icon.style.rotate = new StyleRotate(new Rotate(new Angle(wave * angle * damp, AngleUnit.Degree)));
+            icon.style.translate = new StyleTranslate(new Translate(new Length(wave * xOffset * damp, LengthUnit.Pixel), new Length(0)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+    
+    private IEnumerator Animate_Unfurl(VisualElement icon)
+    {
+        float duration = 0.6f, time = 0;
+        icon.style.transformOrigin = new StyleTransformOrigin(new TransformOrigin(new Length(50, LengthUnit.Percent), new Length(0, LengthUnit.Percent)));
+        while (time < duration)
+        {
+            float progress = Easing.OutCubic(time / duration);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(1, progress)));
+            icon.style.opacity = progress;
+            time += Time.deltaTime;
+            yield return null;
+        }
         ResetIconStyle(icon);
     }
 
@@ -607,6 +971,132 @@ public class BottomNavBarController : MonoBehaviour
 
         ResetIconStyle(icon);
     }
+    
+    private IEnumerator Animate_TailWag(VisualElement icon)
+    {
+        float duration = 0.6f, time = 0, maxAngle = 25f;
+        icon.style.transformOrigin = new StyleTransformOrigin(new TransformOrigin(new Length(0, LengthUnit.Percent), new Length(50, LengthUnit.Percent)));
+        while (time < duration)
+        {
+            float progress = time / duration;
+            float angle = Mathf.Sin(progress * Mathf.PI * 5) * (maxAngle * (1-progress));
+            icon.style.rotate = new StyleRotate(new Rotate(new Angle(angle, AngleUnit.Degree)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_Gasp(VisualElement icon)
+    {
+        float duration = 0.4f, time = 0;
+        float gaspDuration = duration * 0.3f;
+        while (time < gaspDuration)
+        {
+            float progress = Easing.OutCubic(time / gaspDuration);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(Mathf.Lerp(1, 1.3f, progress), Mathf.Lerp(1, 1.3f, progress))));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        time = 0;
+        float releaseDuration = duration * 0.7f;
+        while (time < releaseDuration)
+        {
+            float progress = Easing.OutBounce(time / releaseDuration);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(Mathf.Lerp(1.3f, 1f, progress), Mathf.Lerp(1.3f, 1f, progress))));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_Crawl(VisualElement icon)
+    {
+        float duration = 1.0f, time = 0;
+        while (time < duration)
+        {
+            float progress = time / duration;
+            float xPos = (progress - 0.5f) * 40f;
+            float yPos = Mathf.Abs(Mathf.Sin(progress * Mathf.PI * 4)) * 5f;
+            icon.style.translate = new StyleTranslate(new Translate(new Length(xPos, LengthUnit.Pixel), new Length(yPos, LengthUnit.Pixel)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_Float(VisualElement icon)
+    {
+        float duration = 1.5f, time = 0, height = 8f;
+        while (time < duration)
+        {
+            float yPos = Mathf.Sin(Time.time * 4f) * height;
+            icon.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(yPos, LengthUnit.Pixel)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_Scurry(VisualElement icon)
+    {
+        float duration = 0.4f, time = 0;
+        while (time < duration)
+        {
+            float xPos = (Random.value - 0.5f) * 10f;
+            float yPos = (Random.value - 0.5f) * 4f;
+            icon.style.translate = new StyleTranslate(new Translate(new Length(xPos, LengthUnit.Pixel), new Length(yPos, LengthUnit.Pixel)));
+            time += Time.deltaTime;
+            yield return new WaitForSeconds(0.02f);
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_Exhale(VisualElement icon)
+    {
+        float duration = 0.8f, time = 0;
+        while (time < duration)
+        {
+            float progress = time / duration;
+            float scale = 1 - 0.2f * Easing.OutCubic(progress);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(scale, scale)));
+            icon.style.opacity = 1 - 0.5f * Easing.OutCubic(progress);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        yield return Animate_ElasticPop(icon);
+    }
+
+    private IEnumerator Animate_Dizzy(VisualElement icon)
+    {
+        float duration = 1.0f, time = 0;
+        while (time < duration)
+        {
+            float progress = time / duration;
+            float angle = progress * 360f * 2;
+            float xOffset = Mathf.Sin(progress * Mathf.PI * 6) * 10 * (1 - progress);
+            icon.style.rotate = new StyleRotate(new Rotate(new Angle(angle, AngleUnit.Degree)));
+            icon.style.translate = new StyleTranslate(new Translate(new Length(xOffset, LengthUnit.Pixel), new Length(0)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_Jitter(VisualElement icon)
+    {
+        float duration = 0.3f, time = 0;
+        while (time < duration)
+        {
+            icon.style.translate = new StyleTranslate(new Translate(
+                new Length(Random.Range(-2f, 2f), LengthUnit.Pixel),
+                new Length(Random.Range(-2f, 2f), LengthUnit.Pixel)
+            ));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
 
     // --- Category: Celebratory & Emphatic ---
     private IEnumerator Animate_Fireworks(VisualElement icon)
@@ -617,6 +1107,7 @@ public class BottomNavBarController : MonoBehaviour
         for (int i = 0; i < particleCount; i++)
         {
             var particle = new VisualElement();
+            particle.AddToClassList("particle-effect"); // For easy cleanup
             particle.style.position = Position.Absolute;
             particle.style.width = 5;
             particle.style.height = 5;
@@ -652,11 +1143,9 @@ public class BottomNavBarController : MonoBehaviour
 
     private IEnumerator Animate_Spotlight(VisualElement icon)
     {
+        // NOTE: Requires a child <VisualElement class="spotlight-effect" />
         var spotlight = icon.parent?.Q<VisualElement>(className: "spotlight-effect");
-        if (spotlight == null)
-        {
-            yield break;
-        }
+        if (spotlight == null) { yield return Animate_ElasticPop(icon); yield break; }
 
         float duration = 0.7f, time = 0;
         spotlight.style.opacity = 1;
@@ -671,7 +1160,7 @@ public class BottomNavBarController : MonoBehaviour
 
         ResetIconStyle(icon);
     }
-
+    
     private IEnumerator Animate_ConfettiPop(VisualElement icon)
     {
         var container = icon.parent;
@@ -686,6 +1175,7 @@ public class BottomNavBarController : MonoBehaviour
                     backgroundColor = Color.HSVToRGB(Random.value, 0.8f, 1f)
                 }
             };
+            particle.AddToClassList("particle-effect");
             container.Add(particle);
             StartCoroutine(AnimateConfettiParticle(particle, 1.0f));
         }
@@ -714,14 +1204,153 @@ public class BottomNavBarController : MonoBehaviour
         particle.RemoveFromHierarchy();
     }
 
+    private IEnumerator Animate_Crown(VisualElement icon)
+    {
+        float duration = 0.8f, time = 0;
+        while (time < duration)
+        {
+            float progress = Easing.OutBounce(time/duration);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(Mathf.Lerp(1.5f, 1f, progress), Mathf.Lerp(1.5f, 1f, progress))));
+            icon.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(Mathf.Lerp(-30f, 0, progress), LengthUnit.Pixel)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_Shockwave(VisualElement icon)
+    {
+        // Use the ripple effect element for this
+        yield return Animate_RippleOut(icon);
+        yield return Animate_Thump(icon);
+    }
+
+    private IEnumerator Animate_Stomp(VisualElement icon)
+    {
+        float duration = 0.5f, time = 0;
+        float fallDuration = duration * 0.2f;
+        while (time < fallDuration)
+        {
+            float progress = Easing.InCubic(time / fallDuration);
+            icon.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(Mathf.Lerp(-30, 0, progress), LengthUnit.Pixel)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        
+        yield return Animate_SqueezeAndPop(icon);
+    }
+
+    private IEnumerator Animate_VictoryRise(VisualElement icon)
+    {
+        float duration = 0.7f, time = 0;
+        while (time < duration)
+        {
+            float progress = Easing.OutCubic(time/duration);
+            icon.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(Mathf.Lerp(0, -20, progress), LengthUnit.Pixel)));
+            icon.style.scale = new StyleScale(new Scale(new Vector2(1 + 0.2f * progress, 1 + 0.2f * progress)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        yield return Animate_ElasticPop(icon);
+    }
+
+    private IEnumerator Animate_Applause(VisualElement icon)
+    {
+        float duration = 0.5f, time = 0;
+        while (time < duration)
+        {
+            float progress = time / duration;
+            float offset = Mathf.Sin(progress * Mathf.PI * 12) * 5 * (1 - progress);
+            icon.style.translate = new StyleTranslate(new Translate(new Length(offset, LengthUnit.Pixel), new Length(0)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_PowerUp(VisualElement icon)
+    {
+        yield return Animate_QuickTap(icon, 1.2f, 0.15f);
+        yield return Animate_QuickTap(icon, 1.3f, 0.15f);
+        yield return Animate_ElasticPop(icon);
+    }
+
+    private IEnumerator Animate_Fanfare(VisualElement icon)
+    {
+        float duration = 0.6f, time = 0, angle = 15f;
+        while (time < duration)
+        {
+            float progress = Easing.OutElastic(time / duration);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(progress, progress)));
+            icon.style.rotate = new StyleRotate(new Rotate(new Angle(Mathf.Lerp(-angle, 0, progress), AngleUnit.Degree)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_SpotlightSweep(VisualElement icon)
+    {
+        var spotlight = icon.parent?.Q<VisualElement>(className: "spotlight-effect");
+        if (spotlight == null) { yield return Animate_ElasticPop(icon); yield break; }
+
+        float duration = 1.0f, time = 0;
+        spotlight.style.opacity = 1;
+        while (time < duration)
+        {
+            float progress = time / duration;
+            float angle = Mathf.Sin(progress * Mathf.PI * 2) * 45f;
+            spotlight.style.rotate = new StyleRotate(new Rotate(new Angle(angle, AngleUnit.Degree)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_SonarPing(VisualElement icon)
+    {
+        var container = icon.parent;
+        if (container == null) yield break;
+        
+        for (int i = 0; i < 3; i++)
+        {
+            var ping = new VisualElement { name = "ping" };
+            ping.AddToClassList("particle-effect");
+            ping.style.position = Position.Absolute;
+            ping.style.width = ping.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
+            ping.style.borderTopWidth = ping.style.borderBottomWidth = ping.style.borderLeftWidth = ping.style.borderRightWidth = 2;
+            ping.style.borderTopColor = ping.style.borderBottomColor = ping.style.borderLeftColor = ping.style.borderRightColor = Color.white;
+            ping.style.borderTopLeftRadius = ping.style.borderTopRightRadius = ping.style.borderBottomLeftRadius = ping.style.borderBottomRightRadius = new StyleLength(new Length(50, LengthUnit.Percent));
+
+            container.Add(ping);
+            StartCoroutine(AnimatePingParticle(ping, 0.8f));
+            yield return new WaitForSeconds(0.15f);
+        }
+        yield return new WaitForSeconds(0.5f);
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator AnimatePingParticle(VisualElement ping, float duration)
+    {
+        float time = 0f;
+        while (time < duration)
+        {
+            float progress = Easing.OutCubic(time / duration);
+            ping.style.scale = new StyleScale(new Scale(new Vector2(1 + progress * 2f, 1 + progress * 2f)));
+            ping.style.opacity = 1 - progress;
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ping.RemoveFromHierarchy();
+    }
+
+
     // --- Category: Digital & Futuristic ---
     private IEnumerator Animate_ScanlineReveal(VisualElement icon)
     {
+        // NOTE: Requires a child <VisualElement class="scanline-effect" />
         var scanline = icon.parent?.Q<VisualElement>(className: "scanline-effect");
-        if (scanline == null)
-        {
-            yield break;
-        }
+        if (scanline == null) { yield return Animate_ElasticPop(icon); yield break; }
 
         float duration = 0.4f, time = 0;
         scanline.style.opacity = 1;
@@ -734,7 +1363,6 @@ public class BottomNavBarController : MonoBehaviour
             time += Time.deltaTime;
             yield return null;
         }
-
         ResetIconStyle(icon);
     }
 
@@ -753,11 +1381,261 @@ public class BottomNavBarController : MonoBehaviour
 
         ResetIconStyle(icon);
     }
-
+    
+    // Placeholder - true pixelation requires shaders or asset swapping.
     private IEnumerator Animate_Pixelate(VisualElement icon)
     {
+        float duration = 0.4f, time = 0;
+        float half = duration / 2f;
+        while(time < half)
+        {
+            float progress = Easing.InCubic(time / half);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(1, 1 - progress)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        time = 0;
+        while(time < half)
+        {
+            float progress = Easing.OutCubic(time / half);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(1, progress)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_ChargingPulse(VisualElement icon)
+    {
+        float duration = 1.2f, time = 0, maxScale = 1.1f;
+        while (time < duration)
+        {
+            float scale = 1 + (maxScale - 1) * Mathf.Sin(Time.time * 8f) * 0.5f + 0.5f;
+            icon.style.scale = new StyleScale(new Scale(new Vector2(scale, scale)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_CodeMatrix(VisualElement icon)
+    {
+        yield return Animate_DataStream(icon, true);
+    }
+
+    private IEnumerator Animate_Hologram(VisualElement icon)
+    {
+        float duration = 0.8f, time = 0;
+        var scanline = icon.parent?.Q<VisualElement>(className: "scanline-effect");
+        if (scanline != null) scanline.style.opacity = 0.5f;
+
+        while (time < duration)
+        {
+            icon.style.opacity = Random.Range(0.7f, 1.0f);
+            icon.style.translate = new StyleTranslate(new Translate(new Length(Random.Range(-1f,1f), LengthUnit.Pixel), new Length(0)));
+            if (scanline != null)
+            {
+                scanline.style.translate = new StyleTranslate(new Translate(new Length(0), new Length(Random.Range(-50, 50), LengthUnit.Percent)));
+            }
+            time += Time.deltaTime;
+            yield return new WaitForSeconds(0.05f);
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_FocusLock(VisualElement icon)
+    {
+        float duration = 0.4f, time = 0;
+        while (time < duration)
+        {
+            float progress = Easing.OutCubic(time / duration);
+            float scale = Mathf.Lerp(1.5f, 1f, progress);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(scale, scale)));
+            icon.style.opacity = progress;
+            time += Time.deltaTime;
+            yield return null;
+        }
+        yield return Animate_Thump(icon);
+    }
+
+    private IEnumerator Animate_DataStream(VisualElement icon, bool vertical = false)
+    {
+        var container = icon.parent;
+        if (container == null) yield break;
+        icon.style.opacity = 0;
+        for (int i = 0; i < 15; i++)
+        {
+            var bit = new VisualElement();
+            bit.AddToClassList("particle-effect");
+            bit.style.position = Position.Absolute;
+            bit.style.backgroundColor = Color.green;
+            bit.style.width = 5;
+            bit.style.height = 5;
+            container.Add(bit);
+            StartCoroutine(AnimateDataBit(bit, 0.5f, vertical));
+            yield return new WaitForSeconds(0.02f);
+        }
+        icon.style.opacity = 1;
+        ResetIconStyle(icon);
+    }
+    
+    private IEnumerator AnimateDataBit(VisualElement bit, float duration, bool vertical)
+    {
+        float time = 0;
+        float startX = vertical ? Random.Range(-20f, 20f) : -40f;
+        float startY = vertical ? -40f : Random.Range(-20f, 20f);
+        float endX = vertical ? startX : 40f;
+        float endY = vertical ? 40f : startY;
+
+        while (time < duration)
+        {
+            float progress = Easing.InCubic(time / duration);
+            bit.style.translate = new StyleTranslate(new Translate(
+                new Length(Mathf.Lerp(startX, endX, progress), LengthUnit.Pixel), 
+                new Length(Mathf.Lerp(startY, endY, progress), LengthUnit.Pixel)));
+            bit.style.opacity = 1 - progress;
+            time += Time.deltaTime;
+            yield return null;
+        }
+        bit.RemoveFromHierarchy();
+    }
+
+    private IEnumerator Animate_Reboot(VisualElement icon)
+    {
+        yield return Animate_FadeOutAndIn(icon);
         yield return Animate_ElasticPop(icon);
-    } // Placeholder as it requires asset swapping
+    }
+
+    private IEnumerator Animate_Voxelize(VisualElement icon)
+    {
+        // Stand-in effect for true voxelization
+        float duration = 0.5f, time = 0;
+        float half = duration / 2f;
+        icon.style.scale = new StyleScale(new Scale(new Vector2(0,0)));
+        while(time < half)
+        {
+            float progress = Easing.OutCubic(time/half);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(progress, 0.1f)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        time = 0;
+        while(time < half)
+        {
+            float progress = Easing.OutCubic(time/half);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(1, Mathf.Lerp(0.1f, 1, progress))));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+    
+    private IEnumerator Animate_SpiralIn(VisualElement icon)
+    {
+        float duration = 0.6f, time = 0, startRadius = 80f, rotations = 2f;
+        while (time < duration)
+        {
+            float progress = Easing.OutCubic(time / duration);
+            float angle = progress * 360f * rotations;
+            float radius = Mathf.Lerp(startRadius, 0, progress);
+            float x = Mathf.Cos(angle * Mathf.Deg2Rad) * radius;
+            float y = Mathf.Sin(angle * Mathf.Deg2Rad) * radius;
+            icon.style.translate = new StyleTranslate(new Translate(new Length(x, LengthUnit.Pixel), new Length(y, LengthUnit.Pixel)));
+            icon.style.scale = new StyleScale(new Scale(new Vector2(progress, progress)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+        ResetIconStyle(icon);
+    }
+
+    private IEnumerator Animate_PowerDown(VisualElement icon)
+    {
+        float duration = 0.5f, time = 0;
+        while (time < duration)
+        {
+            float progress = Easing.InCubic(time / duration);
+            icon.style.scale = new StyleScale(new Scale(new Vector2(1, 1 - progress)));
+            icon.style.opacity = 1 - progress;
+            time += Time.deltaTime;
+            yield return null;
+        }
+        yield return new WaitForSeconds(0.2f);
+        ResetIconStyle(icon);
+    }
+
 
     #endregion
 }
+
+
+#region Easing Class
+/// <summary>
+/// A utility class for easing functions.
+/// Functions are based on the equations from http://robertpenner.com/easing/
+/// </summary>
+public static class EasingExtra
+{
+    public static float InQuad(float k) => k * k;
+    public static float OutQuad(float k) => k * (2f - k);
+    public static float InOutQuad(float k)
+    {
+        if ((k *= 2f) < 1f) return 0.5f * k * k;
+        return -0.5f * ((k -= 1f) * (k - 2f) - 1f);
+    }
+
+    public static float InCubic(float k) => k * k * k;
+    public static float OutCubic(float k) => 1f + ((k -= 1f) * k * k);
+
+    public static float InOutCubic(float k)
+    {
+        if ((k *= 2f) < 1f) return 0.5f * k * k * k;
+        return 0.5f * ((k -= 2f) * k * k + 2f);
+    }
+
+    public static float InBack(float k, float s = 1.70158f) => k * k * ((s + 1f) * k - s);
+    public static float OutBack(float k, float s = 1.70158f) => (k -= 1f) * k * ((s + 1f) * k + s) + 1f;
+
+    public static float InOutBack(float k, float s = 1.70158f)
+    {
+        s *= 1.525f;
+        if ((k *= 2f) < 1f) return 0.5f * (k * k * ((s + 1f) * k - s));
+        return 0.5f * ((k -= 2f) * k * ((s + 1f) * k + s) + 2f);
+    }
+    
+    public static float OutBounce(float k)
+    {
+        if (k < (1f / 2.75f))
+        {
+            return 7.5625f * k * k;
+        }
+        if (k < (2f / 2.75f))
+        {
+            return 7.5625f * (k -= (1.5f / 2.75f)) * k + 0.75f;
+        }
+        if (k < (2.5f / 2.75f))
+        {
+            return 7.5625f * (k -= (2.25f / 2.75f)) * k + 0.9375f;
+        }
+        return 7.5625f * (k -= (2.625f / 2.75f)) * k + 0.984375f;
+    }
+
+    public static float OutElastic(float k, float amplitude = 1f, float period = 0.3f)
+    {
+        if (k == 0) return 0;
+        if (k == 1) return 1;
+
+        float s;
+        if (amplitude < 1)
+        {
+            amplitude = 1;
+            s = period / 4f;
+        }
+        else
+        {
+            s = period / (2f * Mathf.PI) * Mathf.Asin(1f / amplitude);
+        }
+
+        return (amplitude * Mathf.Pow(2f, -10f * k) * Mathf.Sin((k - s) * (2f * Mathf.PI) / period) + 1f);
+    }
+}
+#endregion
