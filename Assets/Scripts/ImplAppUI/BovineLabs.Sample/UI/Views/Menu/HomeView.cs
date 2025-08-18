@@ -22,18 +22,9 @@ namespace BovineLabs.Sample.UI.Views.Menu
         public HomeView(IUxmlService uxmlService, HomeViewModel viewModel)
             : base(viewModel)
         {
-            
-            
-#if UNITY_STANDALONE
-            var quitButton = new ActionButton
-            {
-                label = QuitText,
-            };
-
-            quitButton.AddToClassList(ButtonClassName);
-            quitButton.clickable.clickedWithEventInfo += Quit;
-            left.Add(quitButton);
-#endif
+            var root = uxmlService.GetAsset("mission").Instantiate().contentContainer[0];
+            Add(root);
+            root.Q<UnityEngine.UIElements.Button>("play-button").clicked += Play;
         }
 
         public override void OnEnter(NavController controller, NavDestination destination, Argument[] args)
@@ -41,38 +32,10 @@ namespace BovineLabs.Sample.UI.Views.Menu
             base.OnEnter(controller, destination, args);
         }
 
-#if UNITY_STANDALONE
-        private static void Quit(EventBase evt)
-        {
-            if (evt.target is ExVisualElement btn)
-            {
-                var dialog = new AlertDialog
-                {
-                    description = QuitDescriptionText,
-                    variant = AlertSemantic.Destructive,
-                    title = QuitTitleText,
-                };
-
-                dialog.SetPrimaryAction(99, QuitText, () =>
-                {
-#if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-#else
-                    UnityEngine.Application.Quit();
-#endif
-                });
-
-                dialog.SetCancelAction(1, QuitCancelText);
-
-                var modal = Modal.Build(btn, dialog);
-                modal.Show();
-            }
-        }
-
-#endif
         private void Play()
         {
             this.Navigate(Actions.home_to_play);
+            BovineLabsBootstrap.Instance.CreateGameWorld();
         }
 
         private void Load()

@@ -4,6 +4,7 @@
 
 using BovineLabs.Core;
 using Unity.AppUI.Navigation.Generated;
+using UnityEngine;
 
 namespace BovineLabs.Sample.UI.Views.Menu
 {
@@ -21,17 +22,16 @@ namespace BovineLabs.Sample.UI.Views.Menu
         private const string JoinText = "@UI:joinGame";
         private const string JoinSubText = "@UI:joinGameSub";
 
-        public PlayView(HomeViewModel viewModel)
-            : base(viewModel)
+        public PlayView(HomeViewModel viewModel) : base(viewModel)
         {
             
+            Camera.main.orthographic = false;
         }
 
         private void JoinGame()
         {
             this.ViewModel.Value.Join.TryProduce();
             this.Navigate(Actions.go_to_game);
-            BovineLabsBootstrap.Instance.CreateGameWorld();
         }
     }
 }

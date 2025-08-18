@@ -274,6 +274,9 @@ PlayerSettings:
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
+  androidAppCategory: 3
+  useAndroidAppCategory: 1
+  androidAppCategoryOther: 
   AndroidEnableTango: 0
   androidEnableBanner: 1
   androidUseLowAccuracyLocation: 0
@@ -823,7 +826,7 @@ PlayerSettings:
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
     Android: BL_CORE_EXTENSIONS;BL_ENTITIES_CUSTOM;UNITY_BURST_EXPERIMENTAL_ATOMIC_INTRINSICS;UNITY_PHYSICS_CUSTOM;BL_BAKE_SPLINE
-    Standalone: BL_DISABLE_TOOLBAR;BL_DISABLE_ENTROPY;BL_CORE_EXTENSIONS;BL_DISABLE_PHYSICS_STATES;BL_DISABLE_STRIP;BL_DISABLE_ANALYZERS;BL_ENTITIES_CUSTOM;BL_BAKE_SPLINE
+    Standalone: BL_DISABLE_TOOLBAR;BL_DISABLE_ENTROPY;BL_CORE_EXTENSIONS;BL_DISABLE_ANALYZERS;BL_ENTITIES_CUSTOM;BL_BAKE_SPLINE;UNITY_BURST_EXPERIMENTAL_ATOMIC_INTRINSICS;UNITY_PHYSICS_CUSTOM
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: RequiredServer
   m_EditorClassIdentifier: 
   Scenes:
-  - {fileID: 102900000, guid: 7826639a4f45ea84b82e431cedbba575, type: 3}
   - {fileID: 102900000, guid: 73e85a973cc88cf4baa62974e69b4115, type: 3}
   TargetWorld: 0
-  ID: 5
+  ID: 6
   IsRequired: 1
   WaitForLoad: 1
   AutoLoad: 0

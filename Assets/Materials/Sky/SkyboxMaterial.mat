@@ -51,8 +51,8 @@ Material:
     - _horizonColorNight: {r: 0, g: 0, b: 0, a: 1}
     - _skyColorDay: {r: 0, g: 0.32941175, b: 1, a: 1}
     - _skyColorNight: {r: 0.10196077, g: 0, b: 0.25490198, a: 1}
-    - _sunColor: {r: 3.5057344, g: 2.9126782, b: 1.9144894, a: 1}
-    - _sunDirection: {r: 0.41500446, g: -0.37317365, b: -0.82976675, a: 0}
+    - _sunColor: {r: 3.9999998, g: 3.8858984, b: 2.6608455, a: 1}
+    - _sunDirection: {r: 0.21134508, g: -0.58845437, b: -0.7804198, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &2096921384559983649
