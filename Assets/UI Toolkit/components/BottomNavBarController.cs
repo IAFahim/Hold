@@ -58,9 +58,6 @@ public enum IconAnimationType
     Exhale,
     Dizzy,
     Jitter,
-    Sneeze,
-    LookAround,
-    Sniff,
 
     // --- Celebratory & Emphatic (15) ---
     Fireworks,
@@ -75,9 +72,6 @@ public enum IconAnimationType
     Fanfare,
     SpotlightSweep,
     SonarPing,
-    Enthuse,
-    Triumph,
-    Present,
 
     // --- Digital & Futuristic (15) ---
     ScanlineReveal,
@@ -91,27 +85,9 @@ public enum IconAnimationType
     Reboot,
     Voxelize,
     SpiralIn,
-    Disassemble,
-    WarpIn,
-    CircuitTrace,
     PowerDown,
-    
-    // --- Bonus & Abstract (15) ---
-    MorphToCircle,
-    Kaleidoscope,
-    InkBleed,
-    GravitySlam,
-    Orbital,
-    Sunbeam,
-    BlackHole,
-    Shatter,
-    Assemble,
-    Ghostly,
-    Burning,
-    Freezing,
-    Electric,
-    Vibrate,
-    BubblePop
+    KineticChain,
+    FlywheelSpin
 }
 
 #endregion
@@ -142,6 +118,7 @@ public class BottomNavBarController : MonoBehaviour
         {
             int index = i;
             navButtons[i].RegisterCallback<ClickEvent>(evt => SelectButton(index));
+            ResetIconStyle(navIcons[i]);
         }
 
         root.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
@@ -228,6 +205,8 @@ public class BottomNavBarController : MonoBehaviour
             { IconAnimationType.Voxelize, icon => StartCoroutine(Animate_Voxelize(icon)) },
             { IconAnimationType.SpiralIn, icon => StartCoroutine(Animate_SpiralIn(icon)) },
             { IconAnimationType.PowerDown, icon => StartCoroutine(Animate_PowerDown(icon)) },
+            { IconAnimationType.KineticChain, icon => StartCoroutine(Animate_KineticChain(icon)) },
+            { IconAnimationType.FlywheelSpin, icon => StartCoroutine(Animate_FlywheelSpin(icon)) },
         };
         animationKeys = animationLibrary.Keys.ToList();
     }
@@ -1563,6 +1542,64 @@ public class BottomNavBarController : MonoBehaviour
         ResetIconStyle(icon);
     }
 
+    
+    private IEnumerator Animate_KineticChain(VisualElement icon)
+    {
+        float duration = 0.6f, time = 0;
+        float segmentCount = 5f;
+
+        while (time < duration)
+        {
+            float progress = Easing.OutElastic(time / duration);
+            float totalAngle = 45f * progress;
+
+            for (int i = 0; i < (int)segmentCount; i++)
+            {
+                float segmentProgress = (float)i / segmentCount;
+                float angle = totalAngle * (1 - segmentProgress);
+
+                if (i == 0)
+                {
+                    icon.style.rotate = new StyleRotate(new Rotate(new Angle(angle, AngleUnit.Degree)));
+                }
+                else
+                {
+                    var segment = icon.parent?.Q<VisualElement>($"segment-{i}");
+                    if (segment != null)
+                    {
+                        segment.style.rotate = new StyleRotate(new Rotate(new Angle(angle, AngleUnit.Degree)));
+                    }
+                }
+            }
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        ResetIconStyle(icon);
+    }
+    
+    private IEnumerator Animate_FlywheelSpin(VisualElement icon)
+    {
+        float duration = 0.6f, time = 0;
+        float spinSpeed = 1080f;
+
+        while (time < duration)
+        {
+            float progress = Easing.OutCubic(time / duration);
+            float rotation = spinSpeed * time;
+
+            icon.style.rotate = new StyleRotate(new Rotate(new Angle(rotation, AngleUnit.Degree)));
+            icon.style.scale = new StyleScale(new Scale(new Vector2(
+                1f + progress * 0.1f, 1f + progress * 0.1f
+            )));
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        ResetIconStyle(icon);
+    }
 
     #endregion
 }
