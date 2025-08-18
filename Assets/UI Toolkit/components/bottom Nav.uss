@@ -1,12 +1,13 @@
+/* Main container for the navigation bar */
 .bottom-nav-bar {
     flex-grow: 1;
     justify-content: center;
     align-items: flex-end;
     margin-bottom: 20px;
 }
+/* Container that holds the buttons and aligns them in a row */
 .button-container {
-    position: relative;
-
+    position: relative; /* Crucial for positioning the absolute indicator */
     flex-direction: row;
     justify-content: center;
     align-items: center;
@@ -14,6 +15,7 @@
     border-radius: 15px;
     padding: 10px;
 }
+/* Style for each individual navigation button */
 .nav-button {
     width: 80px;
     height: 80px;
@@ -21,25 +23,41 @@
     border-width: 0;
     background-color: transparent;
     -unity-background-scale-mode: scale-to-fit;
+    /* Button is just a container; icon handles visual states */
+    justify-content: center;
+    align-items: center;
+}
+/* NEW: Style for the icon element INSIDE the button */
+.nav-button__icon {
+    width: 100%;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+    /* Set the pivot for our C# animations */
+    transform-origin: center;
+    /* Default unselected state */
     opacity: 0.6;
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
+    /* This transition is ONLY for the opacity and the press-down effect */
     transition-property: opacity, transform;
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
 }
-.nav-button:active {
-    transform: scale(0.9);
+/* The :active state now targets the icon to scale it down */
+.nav-button:active .nav-button__icon {
+    transform: scale(0.9) rotate(0deg);
     transition-duration: 0.1s;
 }
-.nav-button--selected {
+/* The selected class will be applied to the ICON, not the button */
+.nav-button__icon--selected {
     opacity: 1;
 }
+/* The moving selection indicator */
 .selection-indicator {
     position: absolute;
     width: 100px;
     height: 100px;
+    /* The slide animation */
     transition-property: left;
     transition-duration: 0.4s;
     transition-timing-function: ease-in-out;
 }
-
