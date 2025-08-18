@@ -2,7 +2,6 @@
 //     Copyright (c) BovineLabs. All rights reserved.
 // </copyright>
 
-using _src.Scripts.UiServices.UXMLs.Service;
 using BovineLabs.Core;
 using Unity.AppUI.Navigation.Generated;
 
@@ -10,9 +9,6 @@ namespace BovineLabs.Sample.UI.Views.Menu
 {
     using BovineLabs.Anchor;
     using BovineLabs.Sample.UI.ViewModels.Menu;
-    using Unity.Properties;
-    using UnityEngine.UIElements;
-    using Button = Unity.AppUI.UI.Button;
 
     public class PlayView : MenuBaseView<HomeViewModel>
     {
@@ -28,75 +24,14 @@ namespace BovineLabs.Sample.UI.Views.Menu
         public PlayView(HomeViewModel viewModel)
             : base(viewModel)
         {
-            this.AddToClassList(UssClassName);
-
-            var privateButton = new Button(this.PrivateGame)
-            {
-                title = PrivateText,
-                subtitle = PrivateSubText,
-            };
-
-            this.Add(privateButton);
-
-            var onlineDataBinding = new DataBinding
-            {
-                bindingMode = BindingMode.ToTarget,
-                updateTrigger = BindingUpdateTrigger.EveryUpdate,
-                dataSourcePath = new PropertyPath(nameof(HomeViewModel.OnlineAvailable)),
-            };
-
-            var hostButton = new Button(this.HostGame)
-            {
-                title = HostText,
-                subtitle = HostSubText,
-                dataSource = this.ViewModel,
-            };
-
-            hostButton.SetBinding(nameof(this.enabledSelf), onlineDataBinding);
-
-            this.Add(hostButton);
-
-            var joinButton = new Button(this.OpenMap)
-            {
-                title = JoinText,
-                subtitle = JoinSubText,
-                dataSource = this.ViewModel,
-            };
-
-            joinButton.SetBinding(nameof(this.enabledSelf), onlineDataBinding);
-
-            this.Add(joinButton);
+            
         }
 
-        private void PrivateGame()
-        {
-            this.ViewModel.Value.Private.TryProduce();
-            this.ToGoLoading();
-        }
-
-        private void HostGame()
-        {
-            this.ViewModel.Value.Host.TryProduce();
-            this.ToGoLoading();
-        }
-
-        private void OpenMap()
-        {
-            this.ViewModel.Value.Join.TryProduce();
-            this.Navigate(Actions.go_to_map);
-            BovineLabsBootstrap.Instance.CreateGameWorld();
-        }
-        
         private void JoinGame()
         {
             this.ViewModel.Value.Join.TryProduce();
             this.Navigate(Actions.go_to_game);
             BovineLabsBootstrap.Instance.CreateGameWorld();
-        }
-
-        private void ToGoLoading()
-        {
-            this.Navigate(Actions.go_to_loading);
         }
     }
 }

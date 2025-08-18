@@ -1,5 +1,5 @@
 // This file is auto-generated. Do not edit it directly.
-// Date: 2025-08-18 02:47:18
+// Date: 2025-08-18 10:54:57
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +14,6 @@ namespace Unity.AppUI.Navigation.Generated
         public const string go_to_options = "go_to_options";
         public const string home_to_play = "home_to_play";
         public const string go_to_loading = "go_to_loading";
-        public const string go_to_map = "go_to_map";
     }
     public static partial class Destinations
     {
@@ -24,7 +23,6 @@ namespace Unity.AppUI.Navigation.Generated
         public const string options = "options";
         public const string play = "play";
         public const string loading = "loading";
-        public const string map = "map";
     }
     public static partial class Graphs
     {
@@ -33,6 +31,5 @@ namespace Unity.AppUI.Navigation.Generated
         public const string game_graph = "game_graph";
         public const string option_graph = "option_graph";
         public const string loading = "loading";
-        public const string map_graph = "map_graph";
     }
 }
