@@ -1,19 +1,43 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:engine="UnityEngine.UIElements" editor-extension-mode="False">
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:engine="UnityEngine.UIElements">
     <Style src="project://database/Assets/UI%20Toolkit/components/bottom%20Nav.uss?fileID=7433441132597879392&amp;guid=f39532c48bc14ed298d91836c1630ad3&amp;type=3#bottom Nav" />
     <ui:VisualElement name="BottomNavBar" class="bottom-nav-bar">
         <ui:VisualElement name="ButtonContainer" class="button-container">
             <ui:VisualElement name="SelectionIndicator" picking-mode="Ignore" class="selection-indicator" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Rounded%20rectangle.png?fileID=2800000&amp;guid=37e17be834f5d84c09ffdab9569872fd&amp;type=3#Rounded rectangle&quot;); -unity-slice-left: 16; -unity-slice-right: 16;" />
+            
+            <!-- Button 1 with new Icon Container and Effect Elements -->
             <ui:Button name="Button1" class="nav-button" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Button.png?fileID=2800000&amp;guid=be0581b9e1bc62758bbf0677c6de7bc7&amp;type=3#Button&quot;);">
-                <ui:VisualElement name="Icon1" class="nav-button__icon" style="background-image: url(&quot;project://database/Assets/Lana%20Studio/Hyper%20Casual%20FX/Textures/drop_green.png?fileID=2800000&amp;guid=94ea43556dfb347439e67a9da6005b9a&amp;type=3#drop_green&quot;);" />
+                <ui:VisualElement name="IconContainer1" class="nav-button__icon-container">
+                    <ui:VisualElement name="Icon1" class="nav-button__icon" style="background-image: url(&quot;project://database/Assets/Lana%20Studio/Hyper%20Casual%20FX/Textures/drop_green.png?fileID=2800000&amp;guid=94ea43556dfb347439e67a9da6005b9a&amp;type=3#drop_green&quot;);" />
+                    <ui:VisualElement name="IconEffect_Scanline1" class="scanline-effect" />
+                    <ui:VisualElement name="IconEffect_Spotlight1" class="spotlight-effect" />
+                </ui:VisualElement>
             </ui:Button>
+
+            <!-- Button 2 with new Icon Container and Effect Elements -->
             <ui:Button name="Button2" class="nav-button" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Button.png?fileID=2800000&amp;guid=be0581b9e1bc62758bbf0677c6de7bc7&amp;type=3#Button&quot;);">
-                <ui:VisualElement name="Icon2" class="nav-button__icon" style="background-image: url(&quot;project://database/Assets/Lana%20Studio/Hyper%20Casual%20FX/Textures/drop_green.png?fileID=2800000&amp;guid=94ea43556dfb347439e67a9da6005b9a&amp;type=3#drop_green&quot;);" />
+                <ui:VisualElement name="IconContainer2" class="nav-button__icon-container">
+                    <ui:VisualElement name="Icon2" class="nav-button__icon" style="background-image: url(&quot;project://database/Assets/Lana%20Studio/Hyper%20Casual%20FX/Textures/drop_green.png?fileID=2800000&amp;guid=94ea43556dfb347439e67a9da6005b9a&amp;type=3#drop_green&quot;);" />
+                    <ui:VisualElement name="IconEffect_Scanline2" class="scanline-effect" />
+                    <ui:VisualElement name="IconEffect_Spotlight2" class="spotlight-effect" />
+                </ui:VisualElement>
             </ui:Button>
+
+            <!-- Button 3 with new Icon Container and Effect Elements -->
             <ui:Button name="Button3" class="nav-button" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Button.png?fileID=2800000&amp;guid=be0581b9e1bc62758bbf0677c6de7bc7&amp;type=3#Button&quot;);">
-                <ui:VisualElement name="Icon3" class="nav-button__icon" style="background-image: url(&quot;project://database/Assets/Lana%20Studio/Hyper%20Casual%20FX/Textures/drop_green.png?fileID=2800000&amp;guid=94ea43556dfb347439e67a9da6005b9a&amp;type=3#drop_green&quot;);" />
+                <ui:VisualElement name="IconContainer3" class="nav-button__icon-container">
+                    <ui:VisualElement name="Icon3" class="nav-button__icon" style="background-image: url(&quot;project://database/Assets/Lana%20Studio/Hyper%20Casual%20FX/Textures/drop_green.png?fileID=2800000&amp;guid=94ea43556dfb347439e67a9da6005b9a&amp;type=3#drop_green&quot;);" />
+                    <ui:VisualElement name="IconEffect_Scanline3" class="scanline-effect" />
+                    <ui:VisualElement name="IconEffect_Spotlight3" class="spotlight-effect" />
+                </ui:VisualElement>
             </ui:Button>
+
+            <!-- Button 4 with new Icon Container and Effect Elements -->
             <ui:Button name="Button4" class="nav-button" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Button.png?fileID=2800000&amp;guid=be0581b9e1bc62758bbf0677c6de7bc7&amp;type=3#Button&quot;);">
-                <ui:VisualElement name="Icon4" class="nav-button__icon" style="background-image: url(&quot;project://database/Assets/Lana%20Studio/Hyper%20Casual%20FX/Textures/drop_green.png?fileID=2800000&amp;guid=94ea43556dfb347439e67a9da6005b9a&amp;type=3#drop_green&quot;);" />
+                <ui:VisualElement name="IconContainer4" class="nav-button__icon-container">
+                    <ui:VisualElement name="Icon4" class="nav-button__icon" style="background-image: url(&quot;project://database/Assets/Lana%20Studio/Hyper%20Casual%20FX/Textures/drop_green.png?fileID=2800000&amp;guid=94ea43556dfb347439e67a9da6005b9a&amp;type=3#drop_green&quot;);" />
+                    <ui:VisualElement name="IconEffect_Scanline4" class="scanline-effect" />
+                    <ui:VisualElement name="IconEffect_Spotlight4" class="spotlight-effect" />
+                </ui:VisualElement>
             </ui:Button>
         </ui:VisualElement>
     </ui:VisualElement>

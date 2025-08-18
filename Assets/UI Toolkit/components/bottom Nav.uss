@@ -5,6 +5,7 @@
     align-items: flex-end;
     margin-bottom: 20px;
 }
+
 /* Container that holds the buttons and aligns them in a row */
 .button-container {
     position: relative; /* Crucial for positioning the absolute indicator */
@@ -15,6 +16,7 @@
     border-radius: 15px;
     padding: 10px;
 }
+
 /* Style for each individual navigation button */
 .nav-button {
     width: 80px;
@@ -23,41 +25,85 @@
     border-width: 0;
     background-color: transparent;
     -unity-background-scale-mode: scale-to-fit;
-    /* Button is just a container; icon handles visual states */
     justify-content: center;
     align-items: center;
 }
-/* NEW: Style for the icon element INSIDE the button */
+
+/* 
+  NEW: Container for the icon and its effects.
+  This is the "stage" for our animations.
+*/
+.nav-button__icon-container {
+    width: 100%;
+    height: 100%;
+    position: relative; /* Establishes positioning context for absolute children */
+    overflow: hidden; /* Ensures effects don't draw outside the icon area */
+    justify-content: center;
+    align-items: center;
+}
+
+/* The main icon element INSIDE the container */
 .nav-button__icon {
     width: 100%;
     height: 100%;
     -unity-background-scale-mode: scale-to-fit;
-    /* Set the pivot for our C# animations */
     transform-origin: center;
-    /* Default unselected state */
     opacity: 0.6;
-    transform: scale(1) rotate(0deg);
-    /* This transition is ONLY for the opacity and the press-down effect */
+    /* Transitions are for basic state changes, C# handles complex animations */
     transition-property: opacity, transform;
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
 }
-/* The :active state now targets the icon to scale it down */
+
+/* The :active state provides immediate feedback on press */
 .nav-button:active .nav-button__icon {
-    transform: scale(0.9) rotate(0deg);
+    transform: scale(0.9);
     transition-duration: 0.1s;
 }
-/* The selected class will be applied to the ICON, not the button */
+
+/* The selected class makes the icon fully visible */
 .nav-button__icon--selected {
     opacity: 1;
 }
+
 /* The moving selection indicator */
 .selection-indicator {
     position: absolute;
     width: 100px;
     height: 100px;
-    /* The slide animation */
     transition-property: left;
     transition-duration: 0.4s;
     transition-timing-function: ease-in-out;
+}
+
+/* 
+  NEW: Effect layers.
+  These are hidden by default and controlled by C#.
+*/
+.scanline-effect {
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.7);
+    opacity: 0;
+    translate: 0 -100%; /* Start hidden above the container */
+}
+
+.spotlight-effect {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    opacity: 0;
+}
+
+.ripple-effect {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border-width: 2px;
+    border-color: white;
+    scale: 0;
+    opacity: 0;
 }
