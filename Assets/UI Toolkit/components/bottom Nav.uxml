@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:engine="UnityEngine.UIElements">
+    <Style src="project://database/Assets/UI%20Toolkit/components/bottom%20Nav.uss?fileID=7433441132597879392&amp;guid=f39532c48bc14ed298d91836c1630ad3&amp;type=3#bottom Nav" />
+    <ui:VisualElement name="BottomNavBar" class="bottom-nav-bar">
+        <!-- The ButtonContainer now holds BOTH the indicator and the buttons -->
+        <ui:VisualElement name="ButtonContainer" class="button-container">
+            <!-- The moving indicator is now the FIRST child here -->
+            <ui:VisualElement name="SelectionIndicator" class="selection-indicator" picking-mode="Ignore" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Rounded%20rectangle.png?fileID=2800000&amp;guid=37e17be834f5d84c09ffdab9569872fd&amp;type=3#Rounded rectangle&quot;); -unity-slice-left: 16; -unity-slice-right: 16;"  />
+
+            <!-- The buttons follow, so they draw on top of the indicator -->
+            <ui:Button name="Button1" class="nav-button" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Button.png?fileID=2800000&amp;guid=be0581b9e1bc62758bbf0677c6de7bc7&amp;type=3#Button&quot;);"/>
+            <ui:Button name="Button2" class="nav-button" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Button.png?fileID=2800000&amp;guid=be0581b9e1bc62758bbf0677c6de7bc7&amp;type=3#Button&quot;);"/>
+            <ui:Button name="Button3" class="nav-button" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Button.png?fileID=2800000&amp;guid=be0581b9e1bc62758bbf0677c6de7bc7&amp;type=3#Button&quot;);"/>
+            <ui:Button name="Button4" class="nav-button" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Button.png?fileID=2800000&amp;guid=be0581b9e1bc62758bbf0677c6de7bc7&amp;type=3#Button&quot;);"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

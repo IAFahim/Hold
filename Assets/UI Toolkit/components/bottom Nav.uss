@@ -1,0 +1,45 @@
+.bottom-nav-bar {
+    flex-grow: 1;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}
+.button-container {
+    position: relative;
+
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    padding: 10px;
+}
+.nav-button {
+    width: 80px;
+    height: 80px;
+    margin: 0 10px;
+    border-width: 0;
+    background-color: transparent;
+    -unity-background-scale-mode: scale-to-fit;
+    opacity: 0.6;
+    transform: scale(1);
+    transition-property: opacity, transform;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
+}
+.nav-button:active {
+    transform: scale(0.9);
+    transition-duration: 0.1s;
+}
+.nav-button--selected {
+    opacity: 1;
+}
+.selection-indicator {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    transition-property: left;
+    transition-duration: 0.4s;
+    transition-timing-function: ease-in-out;
+}
+
