@@ -25,7 +25,8 @@
         "Unity.Physics",
         "Unity.ResourceManager",
         "Unity.Transforms",
-        "UXMLs.Service"
+        "UXMLs.Service",
+        "Ease.Data"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

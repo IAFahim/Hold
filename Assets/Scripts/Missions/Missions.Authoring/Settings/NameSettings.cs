@@ -1,12 +1,20 @@
-using System;
-using BovineLabs.Core.Settings;
+using BovineLabs.Core.Authoring.Settings;
+using Missions.Missions.Authoring.BlobComponents;
 using Missions.Missions.Authoring.Schemas;
-using UnityEngine;
+using Unity.Entities;
 
 namespace Missions.Missions.Authoring.Settings
 {
-    public class NameSettings : ScriptableObject, ISettings
+    public class NameSettings : SettingsSchema<NameSchema>
     {
-        public NameSchema[] schemas = Array.Empty<NameSchema>();
+        public override void Bake(Baker<SettingsAuthoring> baker)
+        {
+            var blobAssetReference = NameSchema.ToAssetRef(schemas);
+            var entity = baker.GetEntity(TransformUsageFlags.None);
+            baker.AddComponent<NameBlob>(entity, new NameBlob()
+            {
+                BlobAssetRef = blobAssetReference
+            });
+        }
     }
 }

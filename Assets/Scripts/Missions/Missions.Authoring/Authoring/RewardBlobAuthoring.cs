@@ -14,7 +14,7 @@ namespace Missions.Missions.Authoring
             public override void Bake(RewardBlobAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                var blobAssetRef = BakingSchema<Reward>.ToBlobAssetRef(authoring.rewardSchemas);
+                var blobAssetRef = BakingSchema<Reward>.ToAssetRef(authoring.rewardSchemas);
                 AddComponent(entity, new RewardBlob
                 {
                     BlobAssetRef = blobAssetRef

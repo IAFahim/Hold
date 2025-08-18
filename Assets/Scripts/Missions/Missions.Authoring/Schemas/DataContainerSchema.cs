@@ -9,7 +9,7 @@ namespace Missions.Missions.Authoring.Schemas
     [
         AutoRef(
             nameof(DataContainerSettings), nameof(DataContainerSettings.schemas),
-            FieldName, TypeString + "/" + FieldName
+            FieldName, "Schemas/" + TypeString + "/" + FieldName
         )
     ]
     public class DataContainerSchema : BakingSchema<DataContainer>

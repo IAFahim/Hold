@@ -8,6 +8,7 @@ using Unity.Collections;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(PhysicsShapeAuthoring))]
+[RequireComponent(typeof(CarryingComponentAuthoring))]
 public class PlatformerCharacterAuthoring : MonoBehaviour
 {
     public AuthoringKinematicCharacterProperties CharacterProperties =
@@ -29,11 +30,6 @@ public class PlatformerCharacterAuthoring : MonoBehaviour
     public GameObject SwimmingDetectionPoint;
     public GameObject LedgeDetectionPoint;
 
-    [Header("Carrying")] public bool UseCarrying;
-    public CarryingComponent carryingComponent = CarryingComponentExt.Default();
-    public float CarryingCapacity = 1f;
-    public float CurrentWeight = 0;
-    [Range(0f, 1f)] public float CarryingMinSpeedAtMaxLoad = 0.2f;
 
     [Header("Debug")] public bool DebugStandingGeometry;
     public bool DebugCrouchingGeometry;
@@ -71,33 +67,8 @@ public class PlatformerCharacterAuthoring : MonoBehaviour
             AddComponent(entity, new PlatformerCharacterControl());
             AddComponent(entity, new PlatformerCharacterStateMachine());
             AddComponentObject(entity, new PlatformerCharacterHybridData { MeshPrefab = authoring.MeshPrefab });
-
-            if (authoring.UseCarrying)
-            {
-                AddComponent(entity, new CarryingComponent
-                {
-                    capacity = authoring.CarryingCapacity,
-                    minSpeedAtMaxLoad = authoring.CarryingMinSpeedAtMaxLoad,
-                    currentWeight = authoring.CurrentWeight
-                });
-            }
         }
     }
-
-
-    public static class CarryingComponentExt
-    {
-        public static CarryingComponent Default()
-        {
-            return new CarryingComponent
-            {
-                capacity = 1,
-                currentWeight = 0,
-                minSpeedAtMaxLoad = .2f
-            };
-        }
-    }
-
 
     private void OnDrawGizmosSelected()
     {

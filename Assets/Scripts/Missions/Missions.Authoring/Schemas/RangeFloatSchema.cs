@@ -9,7 +9,7 @@ namespace Missions.Missions.Authoring.Schemas
     [
         AutoRef(
             nameof(RangeFloatSettings), nameof(RangeFloatSettings.schemas),
-            FieldName, TypeString + "/" + FieldName
+            FieldName, "Schemas/" + TypeString + "/" + FieldName
         )
     ]
     public class RangeFloatSchema : BakingSchema<RangeFloat>

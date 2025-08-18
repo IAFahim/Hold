@@ -41,7 +41,7 @@
       "dependencies": {
         "com.unity.entities": "1.4.0-pre.3"
       },
-      "hash": "ea0857b5a40395052a473fc0beb00b5bf7c553a6"
+      "hash": "d86a673046ff1fdd828118cd30417707d8b2130d"
     },
     "com.bovinelabs.essence": {
       "version": "https://gitlab.com/tertle/com.bovinelabs.essence.git",
@@ -51,7 +51,7 @@
         "com.bovinelabs.core": "1.4.4",
         "com.bovinelabs.reaction": "0.5.0"
       },
-      "hash": "db20447fc4024b67ae71f6978bfe6578a4c1b330"
+      "hash": "1b60ab04b50a769ccb92296de25edaa81815b6f7"
     },
     "com.bovinelabs.reaction": {
       "version": "https://gitlab.com/tertle/com.bovinelabs.reaction.git",
@@ -60,7 +60,7 @@
       "dependencies": {
         "com.bovinelabs.core": "1.4.3"
       },
-      "hash": "69d08c1b647dcc2957558ccba8db6aabb44ec0ad"
+      "hash": "b4dbfc5c0b4ea53e325aa57dd144abf7ad770889"
     },
     "com.bovinelabs.timeline": {
       "version": "https://gitlab.com/tertle/com.bovinelabs.timeline.git",
@@ -108,6 +108,15 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.bindings.openimageio": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.collections": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.burst": {
       "version": "1.8.23",
       "depth": 1,
@@ -119,12 +128,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.charactercontroller": {
-      "version": "1.3.11",
+      "version": "1.3.12",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.physics": "1.3.2",
-        "com.unity.entities": "1.3.2",
+        "com.unity.physics": "1.3.14",
+        "com.unity.entities": "1.3.14",
         "com.unity.modules.physics": "1.0.0",
         "com.unity.modules.uielements": "1.0.0"
       },
@@ -213,7 +222,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.14.1",
+      "version": "1.14.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -292,6 +301,17 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.recorder": {
+      "version": "5.1.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.timeline": "1.8.7",
+        "com.unity.collections": "1.2.4",
+        "com.unity.bindings.openimageio": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {

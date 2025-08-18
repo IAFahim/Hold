@@ -10,30 +10,54 @@ using Unity.CharacterController;
 [Serializable]
 public struct PlatformerCharacterAnimation : IComponentData
 {
+    // Animation clip indices
     public const int IdleClip = 0;
     public const int RunClip = 1;
     public const int SprintClip = 2;
     public const int InAirClip = 3;
     public const int LedgeGrabMoveClip = 4;
-    public const int LedgeStandUpClip =5;
-    public const int WallRunLeftClip=6;
-    public const int WallRunRightClip=7;
-    public const int CrouchIdleClip=8;
-    public const int CrouchMoveClip=9;
-    public const int ClimbingMoveClip=10;
-    public const int SwimmingIdleClip=11;
-    public const int SwimmingMoveClip=12;
-    public const int DashClip=13;
-    public const int RopeHangClip=14;
-    public const int SlidingClip=15;
-    public const int HitClip = 14;
+    public const int LedgeStandUpClip = 5;
+    public const int WallRunLeftClip = 6;
+    public const int WallRunRightClip = 7;
+    public const int CrouchIdleClip = 8;
+    public const int CrouchMoveClip = 9;
+    public const int ClimbingMoveClip = 10;
+    public const int SwimmingIdleClip = 11;
+    public const int SwimmingMoveClip = 12;
+    public const int DashClip = 13;
+    public const int RopeHangClip = 14;
+    public const int SlidingClip = 15;
+    public const int HitClip = 16;
 
     [HideInInspector] public CharacterState LastAnimationCharacterState;
+    [HideInInspector] public float LastLoadRatio;
+    
+    // Animation modifiers for carrying
+    public float breathingIntensityThreshold; // Load ratio where breathing becomes noticeable
+    public float heavyBreathingLoadRatio; // Load ratio for heavy breathing animations
+}
+
+[BurstCompile]
+public struct AnimationData
+{
+    public int clipIndex;
+    public float baseSpeed;
+    public float velocityBasedSpeed;
+    
+    public AnimationData(int clip, float speed = 1f, float velocitySpeed = 0f)
+    {
+        clipIndex = clip;
+        baseSpeed = speed;
+        velocityBasedSpeed = velocitySpeed;
+    }
 }
 
 public static class PlatformerCharacterAnimationHandler
 {
     private static readonly int ClipIndex = Animator.StringToHash("ClipIndex");
+    private static readonly int LoadRatio = Animator.StringToHash("LoadRatio");
+    private static readonly int IsBreathingHeavy = Animator.StringToHash("IsBreathingHeavy");
+    private static readonly int CarryingWeight = Animator.StringToHash("CarryingWeight");
 
     public static void UpdateAnimation(
         Animator animator,
@@ -43,155 +67,197 @@ public static class PlatformerCharacterAnimationHandler
         in PlatformerCharacterStateMachine characterStateMachine,
         in PlatformerCharacterControl characterControl,
         in LocalTransform localTransform,
-        in FollowEnableComponent followEnableComponent
+        in FollowEnableComponent followEnableComponent,
+        in CarryingComponent carryingComponent
     )
     {
-        float speed = 1;
-        var clipId = 0;
+        // Handle special states first
         if (followEnableComponent.Reached)
         {
-            clipId = PlatformerCharacterAnimation.HitClip;
-            speed = 1;
-            SetAnimationToGameobject(animator, clipId, speed, ref characterAnimation, characterStateMachine);
+            SetAnimation(animator, ref characterAnimation, characterStateMachine, carryingComponent,
+                new AnimationData(PlatformerCharacterAnimation.HitClip, 1f));
             return;
         }
 
-        var velocityMagnitude = math.length(characterBody.RelativeVelocity);
-        switch (characterStateMachine.CurrentState)
-        {
-            case CharacterState.GroundMove:
-            {
-                if (math.length(characterControl.MoveVector) < 0.01f)
-                {
-                    speed = 1f;
-                    clipId = PlatformerCharacterAnimation.IdleClip;
-                }
-                else
-                {
-                    if (characterComponent.IsSprinting)
-                    {
-                        var velocityRatio = velocityMagnitude / characterComponent.GroundSprintMaxSpeed;
-                        speed = velocityRatio;
-                        clipId = PlatformerCharacterAnimation.SprintClip;
-                    }
-                    else
-                    {
-                        var velocityRatio = velocityMagnitude / characterComponent.GroundRunMaxSpeed;
-                        speed = velocityRatio;
-                        clipId = PlatformerCharacterAnimation.RunClip;
-                    }
-                }
-            }
-                break;
-            case CharacterState.Crouched:
-            {
-                if (math.length(characterControl.MoveVector) < 0.01f)
-                {
-                    speed = 1f;
-                    clipId = PlatformerCharacterAnimation.CrouchIdleClip;
-                }
-                else
-                {
-                    var velocityRatio = velocityMagnitude / characterComponent.CrouchedMaxSpeed;
-                    speed = velocityRatio;
-                    clipId = PlatformerCharacterAnimation.CrouchMoveClip;
-                }
-            }
-                break;
-            case CharacterState.AirMove:
-            {
-                speed = 1f;
-                clipId = PlatformerCharacterAnimation.InAirClip;
-            }
-                break;
-            case CharacterState.Dashing:
-            {
-                speed = 1f;
-                clipId = PlatformerCharacterAnimation.DashClip;
-            }
-                break;
-            case CharacterState.WallRun:
-            {
-                var wallIsOnTheLeft = math.dot(MathUtilities.GetRightFromRotation(localTransform.Rotation),
-                    characterComponent.LastKnownWallNormal) > 0f;
-                speed = 1f;
-                clipId =
-                    wallIsOnTheLeft ? PlatformerCharacterAnimation.WallRunLeftClip : PlatformerCharacterAnimation.WallRunRightClip;
-            }
-                break;
-            case CharacterState.RopeSwing:
-            {
-                speed = 1f;
-                clipId = PlatformerCharacterAnimation.RopeHangClip;
-            }
-                break;
-            case CharacterState.Climbing:
-            {
-                var velocityRatio = velocityMagnitude / characterComponent.ClimbingSpeed;
-                speed = velocityRatio;
-                clipId = PlatformerCharacterAnimation.ClimbingMoveClip;
-            }
-                break;
-            case CharacterState.LedgeGrab:
-            {
-                var velocityRatio = velocityMagnitude / characterComponent.LedgeMoveSpeed;
-                speed = velocityRatio;
-                clipId = PlatformerCharacterAnimation.LedgeGrabMoveClip;
-            }
-                break;
-            case CharacterState.LedgeStandingUp:
-            {
-                speed = 1f;
-                clipId = PlatformerCharacterAnimation.LedgeStandUpClip;
-            }
-                break;
-            case CharacterState.Swimming:
-            {
-                var velocityRatio = velocityMagnitude / characterComponent.SwimmingMaxSpeed;
-                if (velocityRatio < 0.1f)
-                {
-                    speed = 1f;
-                    clipId = PlatformerCharacterAnimation.SwimmingIdleClip;
-                }
-                else
-                {
-                    speed = velocityRatio;
-                    clipId = PlatformerCharacterAnimation.SwimmingMoveClip;
-                }
-            }
-                break;
-            case CharacterState.Sliding:
-            {
-                speed = 1f;
-                clipId = PlatformerCharacterAnimation.SlidingClip;
-            }
-                break;
-            case CharacterState.Rolling:
-            case CharacterState.FlyingNoCollisions:
-            {
-                speed = 1f;
-                clipId = PlatformerCharacterAnimation.IdleClip;
-            }
-                break;
-        }
+        // Calculate base animation data based on character state
+        var animationData = GetAnimationDataForState(
+            characterStateMachine.CurrentState,
+            characterComponent,
+            characterControl,
+            characterBody,
+            localTransform
+        );
 
-        SetAnimationToGameobject(animator, clipId, speed, ref characterAnimation, characterStateMachine);
+        // Apply animation with carrying modifiers
+        SetAnimation(animator, ref characterAnimation, characterStateMachine, carryingComponent, animationData);
     }
 
-    private static void SetAnimationToGameobject(
-        Animator animator, int clipId, float speed,
-        ref PlatformerCharacterAnimation characterAnimation,
-        PlatformerCharacterStateMachine characterStateMachine
-    )
+    [BurstCompile]
+    private static AnimationData GetAnimationDataForState(
+        CharacterState state,
+        in PlatformerCharacterComponent characterComponent,
+        in PlatformerCharacterControl characterControl,
+        in KinematicCharacterBody characterBody,
+        in LocalTransform localTransform)
     {
-        // var stateUnChanged = characterStateMachine.CurrentState == characterAnimation.LastAnimationCharacterState;
-        // if (stateUnChanged)
-        // {
-        //     animator.speed = speed * stopMotionFactor;
-        //     return;
-        // }
-        animator.speed = speed;
-        animator.SetInteger(ClipIndex, clipId);
+        var velocityMagnitude = math.length(characterBody.RelativeVelocity);
+        var moveVectorLength = math.length(characterControl.MoveVector);
+        
+        return state switch
+        {
+            CharacterState.GroundMove => GetGroundMoveAnimation(
+                characterComponent, moveVectorLength, velocityMagnitude),
+                
+            CharacterState.Crouched => GetCrouchedAnimation(
+                characterComponent, moveVectorLength, velocityMagnitude),
+                
+            CharacterState.Swimming => GetSwimmingAnimation(
+                characterComponent, velocityMagnitude),
+                
+            CharacterState.Climbing => new AnimationData(
+                PlatformerCharacterAnimation.ClimbingMoveClip, 
+                velocityMagnitude / characterComponent.ClimbingSpeed),
+                
+            CharacterState.LedgeGrab => new AnimationData(
+                PlatformerCharacterAnimation.LedgeGrabMoveClip,
+                velocityMagnitude / characterComponent.LedgeMoveSpeed),
+                
+            CharacterState.WallRun => GetWallRunAnimation(localTransform, characterComponent),
+            
+            CharacterState.AirMove => new AnimationData(PlatformerCharacterAnimation.InAirClip),
+            CharacterState.Dashing => new AnimationData(PlatformerCharacterAnimation.DashClip),
+            CharacterState.RopeSwing => new AnimationData(PlatformerCharacterAnimation.RopeHangClip),
+            CharacterState.LedgeStandingUp => new AnimationData(PlatformerCharacterAnimation.LedgeStandUpClip),
+            CharacterState.Sliding => new AnimationData(PlatformerCharacterAnimation.SlidingClip),
+            CharacterState.Rolling or CharacterState.FlyingNoCollisions => 
+                new AnimationData(PlatformerCharacterAnimation.IdleClip),
+            
+            _ => new AnimationData(PlatformerCharacterAnimation.IdleClip)
+        };
+    }
+
+    [BurstCompile]
+    private static AnimationData GetGroundMoveAnimation(
+        in PlatformerCharacterComponent characterComponent,
+        float moveVectorLength,
+        float velocityMagnitude)
+    {
+        if (moveVectorLength < 0.01f)
+        {
+            return new AnimationData(PlatformerCharacterAnimation.IdleClip);
+        }
+
+        if (characterComponent.IsSprinting)
+        {
+            var velocityRatio = velocityMagnitude / characterComponent.GroundSprintMaxSpeed;
+            return new AnimationData(PlatformerCharacterAnimation.SprintClip, velocityRatio);
+        }
+        else
+        {
+            var velocityRatio = velocityMagnitude / characterComponent.GroundRunMaxSpeed;
+            return new AnimationData(PlatformerCharacterAnimation.RunClip, velocityRatio);
+        }
+    }
+
+    [BurstCompile]
+    private static AnimationData GetCrouchedAnimation(
+        in PlatformerCharacterComponent characterComponent,
+        float moveVectorLength,
+        float velocityMagnitude)
+    {
+        if (moveVectorLength < 0.01f)
+        {
+            return new AnimationData(PlatformerCharacterAnimation.CrouchIdleClip);
+        }
+
+        var velocityRatio = velocityMagnitude / characterComponent.CrouchedMaxSpeed;
+        return new AnimationData(PlatformerCharacterAnimation.CrouchMoveClip, velocityRatio);
+    }
+
+    [BurstCompile]
+    private static AnimationData GetSwimmingAnimation(
+        in PlatformerCharacterComponent characterComponent,
+        float velocityMagnitude)
+    {
+        var velocityRatio = velocityMagnitude / characterComponent.SwimmingMaxSpeed;
+        
+        if (velocityRatio < 0.1f)
+        {
+            return new AnimationData(PlatformerCharacterAnimation.SwimmingIdleClip);
+        }
+        
+        return new AnimationData(PlatformerCharacterAnimation.SwimmingMoveClip, velocityRatio);
+    }
+
+    [BurstCompile]
+    private static AnimationData GetWallRunAnimation(
+        in LocalTransform localTransform,
+        in PlatformerCharacterComponent characterComponent)
+    {
+        var wallIsOnTheLeft = math.dot(
+            MathUtilities.GetRightFromRotation(localTransform.Rotation),
+            characterComponent.LastKnownWallNormal) > 0f;
+            
+        var clipId = wallIsOnTheLeft 
+            ? PlatformerCharacterAnimation.WallRunLeftClip 
+            : PlatformerCharacterAnimation.WallRunRightClip;
+            
+        return new AnimationData(clipId);
+    }
+
+    private static void SetAnimation(
+        Animator animator,
+        ref PlatformerCharacterAnimation characterAnimation,
+        in PlatformerCharacterStateMachine characterStateMachine,
+        in CarryingComponent carryingComponent,
+        in AnimationData animationData)
+    {
+        // Calculate carrying modifiers
+        var loadRatio = carryingComponent.GetLoadRatio();
+        var animationSpeedMultiplier = carryingComponent.ComputeAnimationSpeedMultiplier();
+        var finalSpeed = animationData.baseSpeed * animationSpeedMultiplier;
+        
+        // Set basic animation parameters
+        animator.SetInteger(ClipIndex, animationData.clipIndex);
+        animator.speed = finalSpeed;
+        
+        // Set carrying-related parameters for animator
+        animator.SetFloat(LoadRatio, loadRatio);
+        animator.SetFloat(CarryingWeight, carryingComponent.currentWeight);
+        
+        // Set breathing state based on load
+        var isBreathingHeavy = loadRatio >= characterAnimation.heavyBreathingLoadRatio;
+        animator.SetBool(IsBreathingHeavy, isBreathingHeavy);
+        
+        // Update tracking variables
         characterAnimation.LastAnimationCharacterState = characterStateMachine.CurrentState;
+        characterAnimation.LastLoadRatio = loadRatio;
+        
+        // Optional: Add debug info in development builds
+        #if UNITY_EDITOR || DEVELOPMENT_BUILD
+        if (math.abs(loadRatio - characterAnimation.LastLoadRatio) > 0.1f)
+        {
+            Debug.Log($"Load ratio changed significantly: {characterAnimation.LastLoadRatio:F2} -> {loadRatio:F2}, Speed modifier: {animationSpeedMultiplier:F2}");
+        }
+        #endif
+    }
+
+    // Utility methods for external systems
+    [BurstCompile]
+    public static bool ShouldPlayBreathingSound(in CarryingComponent carryingComponent, in PlatformerCharacterAnimation characterAnimation)
+    {
+        return carryingComponent.GetLoadRatio() >= characterAnimation.breathingIntensityThreshold;
+    }
+
+    [BurstCompile]
+    public static float GetBreathingIntensity(in CarryingComponent carryingComponent)
+    {
+        return carryingComponent.ComputeBreathingIntensity();
+    }
+
+    [BurstCompile]
+    public static float GetFootstepVolumeMultiplier(in CarryingComponent carryingComponent)
+    {
+        return carryingComponent.ComputeFootstepVolume();
     }
 }

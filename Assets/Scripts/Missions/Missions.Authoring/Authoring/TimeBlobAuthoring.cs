@@ -14,7 +14,7 @@ namespace Missions.Missions.Authoring
             public override void Bake(TimeBlobAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                var blobAssetRef = BakingSchema<TimeStruct>.ToBlobAssetRef(authoring.timeSchemas);
+                var blobAssetRef = BakingSchema<TimeStruct>.ToAssetRef(authoring.timeSchemas);
                 AddComponent(entity, new TimeBlob
                 {
                     BlobAssetRef = blobAssetRef

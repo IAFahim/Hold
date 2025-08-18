@@ -10,7 +10,7 @@ namespace Missions.Missions.Authoring.Schemas
     [
         AutoRef(
             nameof(DescriptionSettings), nameof(DescriptionSettings.schemas),
-            FieldName, TypeString + "/" + FieldName
+            FieldName, "Schemas/" + TypeString + "/" + FieldName
         )
     ]
     public class DescriptionSchema : BakingSchema<Description>

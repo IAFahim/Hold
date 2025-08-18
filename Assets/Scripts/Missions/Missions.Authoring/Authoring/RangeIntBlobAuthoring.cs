@@ -15,7 +15,7 @@ namespace Missions.Missions.Authoring
             public override void Bake(RangeIntBlobAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                var blobAssetRef = BakingSchema<RangeInt>.ToBlobAssetRef(authoring.rangeIntSchemas);
+                var blobAssetRef = BakingSchema<RangeInt>.ToAssetRef(authoring.rangeIntSchemas);
                 AddComponent(entity, new RangeIntBlob
                 {
                     BlobAssetRef = blobAssetRef

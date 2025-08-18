@@ -1,3 +1,4 @@
+using Eases.Ease.Data;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -9,15 +10,15 @@ public class UIToolkitJoystick : MonoBehaviour
     public bool IsPressed;
     public bool IsLocked;
 
-    [Header("Tuning")]
-    [Range(0.0f, 0.6f)] public float deadZone = 0.12f;
-    [Tooltip("Fraction of max radius that is the 'no-lock' bound. Release outside = lock.")]
-    [Range(0.1f, 1.95f)] public float noLockRadiusRatio = 0.95f;
+    [Header("Tuning")] [Range(0.0f, 0.6f)] public float deadZone = 0.12f;
+
+    [Tooltip("Fraction of max radius that is the 'no-lock' bound. Release outside = lock.")] [Range(0.1f, 1.95f)]
+    public float noLockRadiusRatio = 0.95f;
+
     [Range(0.05f, 0.35f)] public float springTime = 0.14f;
     public bool useUnscaledTime = true;
 
-    [Header("Events")]
-    public UnityEvent<Vector2> onValueChanged;
+    [Header("Events")] public UnityEvent<Vector2> onValueChanged;
     public UnityEvent<bool> onLockChanged;
     public UnityEvent<bool> onPressChanged;
 
@@ -27,7 +28,7 @@ public class UIToolkitJoystick : MonoBehaviour
 
     // Geometry (innerPad local space)
     public Vector2 center;
-    public float moveRadius;   // clamp radius (px)
+    public float moveRadius; // clamp radius (px)
     public float knobRadius;
     public float noLockRadius; // px
 
@@ -52,6 +53,7 @@ public class UIToolkitJoystick : MonoBehaviour
 
     public void OnEnable()
     {
+        
         doc = GetComponent<UIDocument>();
         root = doc.rootVisualElement.Q<VisualElement>("joystick");
         innerPad = root.Q<VisualElement>("pad");
@@ -92,6 +94,7 @@ public class UIToolkitJoystick : MonoBehaviour
         // UpdateRings();
         UpdateKnobVisual();
     }
+
 
     public void Update()
     {
@@ -198,14 +201,14 @@ public class UIToolkitJoystick : MonoBehaviour
     {
         // Position
         knob.style.left = local.x - knobRadius;
-        knob.style.top  = local.y - knobRadius;
+        knob.style.top = local.y - knobRadius;
 
         // Output value (y up)
         Vector2 rel = local - center;
-        Vector2 normLocal = rel / Mathf.Max(0.0001f, moveRadius);   // y down
+        Vector2 normLocal = rel / Mathf.Max(0.0001f, moveRadius); // y down
         Vector2 value = new Vector2(
             Mathf.Clamp(normLocal.x, -1f, 1f),
-            -Mathf.Clamp(normLocal.y, -1f, 1f)                       // invert to y up
+            -Mathf.Clamp(normLocal.y, -1f, 1f) // invert to y up
         );
 
         // Dead zone only when not locked

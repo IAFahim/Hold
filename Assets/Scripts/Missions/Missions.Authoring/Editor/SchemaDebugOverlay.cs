@@ -152,7 +152,7 @@ namespace Missions.Missions.Authoring.Editor
                         $"Item\nID: {isch.ID}\nName: {SafeName(isch.nameSchema)}\nWeight: {isch.weightKg} kg\n";
                     break;
                 case NameSchema n:
-                    _detailsLabel.text = $"Name\nID: {n.ID}\nText: {n.fixed32}";
+                    _detailsLabel.text = $"Name\nID: {n.ID}\nText: {n.fixed32String}";
                     break;
                 default:
                     _detailsLabel.text = $"{schema.GetType().Name}\nID: {schema.ID}\n{schema.name}";

@@ -5,7 +5,7 @@ namespace Missions.Missions.Authoring.Scriptable
 {
     public abstract class BaseSchema : ScriptableObject, IUID
     {
-        [SerializeField] private ushort id;
+        [SerializeField] protected ushort id;
 
         public int ID
         {

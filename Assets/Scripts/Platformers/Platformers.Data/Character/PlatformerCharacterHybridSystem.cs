@@ -59,6 +59,7 @@ public partial class PlatformerCharacterHybridSystem : SystemBase
                 var meshRootLTW = SystemAPI.GetComponent<LocalToWorld>(characterComponent.MeshRootEntity);
                 hybridLink.Object.transform.SetLocalPositionAndRotation(meshRootLTW.Position, meshRootLTW.Rotation);
                 var followEnableComponent = SystemAPI.GetComponentRO<FollowEnableComponent>(entity);
+                var carry = SystemAPI.GetComponentRO<CarryingComponent>(entity);
 
                 // Animation
                 PlatformerCharacterAnimationHandler.UpdateAnimation(
@@ -69,7 +70,8 @@ public partial class PlatformerCharacterHybridSystem : SystemBase
                     in characterStateMachine,
                     in characterControl,
                     in characterTransform,
-                    in followEnableComponent.ValueRO
+                    in followEnableComponent.ValueRO,
+                    in carry.ValueRO
                     );
 
                 // Mesh enabling

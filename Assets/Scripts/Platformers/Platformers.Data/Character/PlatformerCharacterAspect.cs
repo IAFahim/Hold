@@ -1,3 +1,4 @@
+using BovineLabs.Essence.Data;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -41,6 +42,7 @@ public readonly partial struct PlatformerCharacterAspect : IAspect,
     public readonly RefRW<CustomGravity> CustomGravity;
     public readonly RefRO<CapsuleGeometryBlobComponent> CapsuleGeometry;
     public readonly RefRO<CarryingComponent> Carrying;
+    public readonly DynamicBuffer<Stat> Stats;
 
     public void PhysicsUpdate(ref PlatformerCharacterUpdateContext context,
         ref KinematicCharacterUpdateContext baseContext)
@@ -124,12 +126,9 @@ public readonly partial struct PlatformerCharacterAspect : IAspect,
                 stateMachine.TransitionToState(CharacterState.AirMove, ref context, ref baseContext, in this);
                 return true;
             }
-            else
-            {
-                stateMachine.TransitionToState(CharacterState.FlyingNoCollisions, ref context, ref baseContext,
-                    in this);
-                return true;
-            }
+
+            stateMachine.TransitionToState(CharacterState.FlyingNoCollisions, ref context, ref baseContext, in this);
+            return true;
         }
 
         return false;
@@ -204,7 +203,6 @@ public readonly partial struct PlatformerCharacterAspect : IAspect,
         ref KinematicCharacterUpdateContext baseContext)
     {
         ref var physicsCollider = ref CharacterAspect.PhysicsCollider.ValueRW;
-        ref var character = ref Character.ValueRW;
         ref var characterPosition = ref CharacterAspect.LocalTransform.ValueRW.Position;
         ref var characterRotation = ref CharacterAspect.LocalTransform.ValueRW.Rotation;
         var characterScale = CharacterAspect.LocalTransform.ValueRO.Scale;

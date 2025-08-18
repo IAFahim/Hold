@@ -7,7 +7,7 @@ namespace Missions.Missions.Authoring.Data
     public struct Mission : IHasID, IEquatable<ushort>
     {
         public ushort id;
-        public ushort stationId;
+        public ushort locationId;
         public ushort nameId;
         public BlobArray<ushort> Goals;
 

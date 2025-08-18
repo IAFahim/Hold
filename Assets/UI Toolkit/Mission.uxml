@@ -1,0 +1,19 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="mission" src="project://database/Assets/UI%20Toolkit/components/mission_container.uxml?fileID=9197481963319205126&amp;guid=55ebf96552fc41a19aeea911170c98a9&amp;type=3#mission_container" />
+    <ui:Template name="city_selection" src="project://database/Assets/UI%20Toolkit/components/city_selection.uxml?fileID=9197481963319205126&amp;guid=b3099acd30249ad80923eb089069cb36&amp;type=3#city_selection" />
+    <ui:Template name="item_count" src="project://database/Assets/UI%20Toolkit/components/item_count.uxml?fileID=9197481963319205126&amp;guid=b312fdc543c9f3aebaaddcb849f42a39&amp;type=3#item_count" />
+    <ui:VisualElement style="flex-grow: 1; margin-left: 8px; margin-right: 8px; flex-direction: column; margin-bottom: 0; padding-bottom: 20%;">
+        <ui:VisualElement style="flex-direction: row-reverse;">
+            <ui:Instance template="item_count" name="Item-count" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1;" />
+        <ui:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: space-between;">
+            <ui:Button enable-rich-text="false" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" name="button_station_left" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Rounded%20rectangle.png?fileID=2800000&amp;guid=37e17be834f5d84c09ffdab9569872fd&amp;type=3#Rounded rectangle&quot;); background-color: rgba(255, 255, 255, 0); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-background-scale-mode: scale-to-fit; -unity-text-align: middle-center; height: 64px; width: 34px;" />
+            <ui:Button enable-rich-text="false" emoji-fallback-support="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" name="button_station_right" style="background-image: url(&quot;project://database/Assets/Sprites/Ui/Rounded%20rectangle.png?fileID=2800000&amp;guid=37e17be834f5d84c09ffdab9569872fd&amp;type=3#Rounded rectangle&quot;); background-color: rgba(255, 255, 255, 0); margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; border-left-color: rgba(0, 0, 0, 0); border-right-color: rgba(0, 0, 0, 0); border-top-color: rgba(0, 0, 0, 0); border-bottom-color: rgba(0, 0, 0, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; -unity-background-scale-mode: scale-to-fit; -unity-text-align: middle-center; height: 64px; width: 34px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement style="flex-grow: 1; margin-left: 16px; margin-right: 16px; flex-shrink: 1;">
+        <ui:Instance template="mission" name="mission_info" style="flex-grow: 1;" />
+        <ui:Instance template="city_selection" name="city_selection" style="flex-grow: 0.2;" />
+    </ui:VisualElement>
+</ui:UXML>

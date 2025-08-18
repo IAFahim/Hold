@@ -4,6 +4,8 @@
 
 using _src.Scripts.UiServices.UXMLs.Service;
 using Unity.AppUI.UI;
+using Unity.Collections;
+using Unity.Properties;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,14 +15,14 @@ namespace BovineLabs.Sample.UI.Views.Game
 
     public class GameView : GameBaseView<GameViewModel>
     {
-        public GameView(IUxmlService uxmlService)
-            : base(new GameViewModel())
+        public GameView(GameViewModel viewModel, IUxmlService uxmlService) : base(viewModel)
         {
-            /*this.Add(abilityToolbarView);*/
             var visualTreeAsset = uxmlService.GetAsset("game");
             var root = visualTreeAsset.Instantiate().contentContainer[0];
             Add(root);
-            var text = root.Q<Text>("text_gold");
+            // SetTime(root, "text_gold");
         }
+
+        
     }
 }

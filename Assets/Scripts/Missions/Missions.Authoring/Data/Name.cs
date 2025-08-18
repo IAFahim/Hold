@@ -7,7 +7,7 @@ namespace Missions.Missions.Authoring
     public struct Name : IHasID, IEquatable<ushort>
     {
         public ushort id;
-        public FixedString32Bytes name;
+        public FixedString32Bytes fixedString32;
 
         public int ID
         {

@@ -19,7 +19,8 @@
         "Unity.Physics.Hybrid",
         "Move.Data",
         "ProcessInput.Data",
-        "Follows.Data"
+        "Follows.Data",
+        "BovineLabs.Essence.Data"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -5,7 +5,7 @@ using UnityEngine;
 using Unity.CharacterController;
 using Unity.Mathematics;
 
-public enum CharacterState
+public enum CharacterState : byte
 {
     Uninitialized,
 
