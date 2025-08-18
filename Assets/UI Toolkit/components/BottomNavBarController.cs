@@ -86,7 +86,9 @@ public enum IconAnimationType
     SlideInRight,
     SlideInUp,
     SlideInDown,
-    ZoomIn
+    ZoomIn,
+    KineticChain,
+    FlywheelSpin
 }
 
 #endregion
@@ -198,7 +200,9 @@ public class BottomNavBarController : MonoBehaviour
             { IconAnimationType.SlideInRight, icon => StartCoroutine(Animate_SlideInRight(icon)) },
             { IconAnimationType.SlideInUp, icon => StartCoroutine(Animate_SlideInUp(icon)) },
             { IconAnimationType.SlideInDown, icon => StartCoroutine(Animate_SlideInDown(icon)) },
-            { IconAnimationType.ZoomIn, icon => StartCoroutine(Animate_ZoomIn(icon)) }
+            { IconAnimationType.ZoomIn, icon => StartCoroutine(Animate_ZoomIn(icon)) },
+            { IconAnimationType.KineticChain, icon => StartCoroutine(Animate_KineticChain(icon)) },
+            { IconAnimationType.FlywheelSpin, icon => StartCoroutine(Animate_FlywheelSpin(icon)) },
         };
         animationKeys = animationLibrary.Keys.ToList();
     }
@@ -860,11 +864,16 @@ public class BottomNavBarController : MonoBehaviour
         int particleCount = 10;
         for (int i = 0; i < particleCount; i++)
         {
-            var particle = new VisualElement();
-            particle.style.position = Position.Absolute;
-            particle.style.width = 5;
-            particle.style.height = 5;
-            particle.style.backgroundColor = Color.HSVToRGB(Random.value, 0.8f, 1f);
+            var particle = new VisualElement
+            {
+                style =
+                {
+                    position = Position.Absolute,
+                    width = 5,
+                    height = 5,
+                    backgroundColor = Color.HSVToRGB(Random.value, 0.8f, 1f)
+                }
+            };
             var radius = new StyleLength(new Length(50, LengthUnit.Percent));
             particle.style.borderTopLeftRadius = particle.style.borderTopRightRadius =
                 particle.style.borderBottomLeftRadius = particle.style.borderBottomRightRadius = radius;
@@ -909,6 +918,64 @@ public class BottomNavBarController : MonoBehaviour
             float progress = Easing.InOutCubic(time / duration);
             spotlight.style.rotate =
                 new StyleRotate(new Rotate(new Angle(Mathf.Lerp(-45, 45, progress), AngleUnit.Degree)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        ResetIconStyle(icon);
+    }
+    
+    private IEnumerator Animate_KineticChain(VisualElement icon)
+    {
+        float duration = 0.6f, time = 0;
+        float segmentCount = 5f;
+
+        while (time < duration)
+        {
+            float progress = Easing.OutElastic(time / duration);
+            float totalAngle = 45f * progress;
+
+            for (int i = 0; i < (int)segmentCount; i++)
+            {
+                float segmentProgress = (float)i / segmentCount;
+                float angle = totalAngle * (1 - segmentProgress);
+
+                if (i == 0)
+                {
+                    icon.style.rotate = new StyleRotate(new Rotate(new Angle(angle, AngleUnit.Degree)));
+                }
+                else
+                {
+                    var segment = icon.parent?.Q<VisualElement>($"segment-{i}");
+                    if (segment != null)
+                    {
+                        segment.style.rotate = new StyleRotate(new Rotate(new Angle(angle, AngleUnit.Degree)));
+                    }
+                }
+            }
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        ResetIconStyle(icon);
+    }
+    
+    private IEnumerator Animate_FlywheelSpin(VisualElement icon)
+    {
+        float duration = 0.6f, time = 0;
+        float spinSpeed = 1080f;
+
+        while (time < duration)
+        {
+            float progress = Easing.OutCubic(time / duration);
+            float rotation = spinSpeed * time;
+
+            icon.style.rotate = new StyleRotate(new Rotate(new Angle(rotation, AngleUnit.Degree)));
+            icon.style.scale = new StyleScale(new Scale(new Vector2(
+                1f + progress * 0.1f, 1f + progress * 0.1f
+            )));
+
             time += Time.deltaTime;
             yield return null;
         }
@@ -1119,11 +1186,12 @@ public class BottomNavBarController : MonoBehaviour
 
     private IEnumerator Animate_ChargingPulse(VisualElement icon)
     {
-        float duration = 1.0f, time = 0, pulseCount = 5;
+        float duration = 1.0f;
+        float pulseCount = 5;
         for (int i = 0; i < pulseCount; i++)
         {
             float pulseDuration = duration / pulseCount * (1 - (float)i / pulseCount);
-            time = 0;
+            float time = 0;
             while (time < pulseDuration / 2)
             {
                 float progress = time / (pulseDuration / 2);

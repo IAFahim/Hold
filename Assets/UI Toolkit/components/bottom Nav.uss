@@ -1,10 +1,4 @@
-/* Main container for the navigation bar */
-.bottom-nav-bar {
-    flex-grow: 1;
-    justify-content: center;
-    align-items: flex-end;
-    margin-bottom: 20px;
-}
+
 
 /* Container that holds the buttons and aligns them in a row */
 .button-container {
